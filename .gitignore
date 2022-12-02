@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+vector_tests
+.vscode

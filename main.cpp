@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/26 01:27:43 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/26 02:15:55 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,11 +130,34 @@ void	copyConstructorTests(void)
 	printVec(vec4, "Printing vec4 (should be empty)");
 }
 
+/**
+ * @brief Tests where the template type of a vector is another vector
+ * 
+ */
+void	vectorInVectorTests(void)
+{
+	ft::vector<std::vector<int> > a(10);
+	a[0] = std::vector<int>(10, 9);
+	a[1] = std::vector<int>(10, 9);
+	a[2] = std::vector<int>(10, 9);
+
+	ft::vector<ft::vector<int> > b(10);
+	b[0] = ft::vector<int>(10, 9);
+	b[1] = ft::vector<int>(10, 9);
+	b[2] = ft::vector<int>(10, 9);
+
+	ft::vector<ft::vector<int> > c(0);
+	ft::vector<std::vector<int> > d(100);
+
+	std::vector<ft::vector<int> > e(100);
+	e[10] = ft::vector<int>(8);
+}
+
 int	main(void)
 {
 	defaultConstructorTests();
 	fillConstructorTests();
 	copyConstructorTests();
-	
+	vectorInVectorTests();
 
 }

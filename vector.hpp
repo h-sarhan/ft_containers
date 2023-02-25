@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/26 01:26:23 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/26 02:03:18 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ namespace ft
 		// * Operator overloads
 		reference	operator[](size_type i);
 		const_reference	operator[](size_type i) const;
+		vector &operator=(const vector &x);
+		
+		// * Destructor
+		~vector(void);
 	};
 };
 
@@ -75,11 +79,12 @@ ft::vector<T, Allocator>::vector(const allocator_type& alloc) : _alloc(alloc), _
  * @param old The vector to copy from
  */
 template <class T, class Allocator >
-ft::vector<T, Allocator>::vector(const vector& old) : _alloc(old._alloc), _size(old._size), _capacity(old._capacity)
+ft::vector<T, Allocator>::vector(const vector& old)
+	: _alloc(old._alloc), _array(_alloc.allocate(old._capacity)), _size(old._size), _capacity(old._capacity)
 {
-	_array = _alloc.allocate(_capacity);
-	for (size_type i = 0; i < _size; i++) {
-		_array[i] = old._array[i];
+	for (size_type i = 0; i < _size; i++)
+	{
+		_alloc.construct(&_array[i], old._array[i]);
 	}
 }
 
@@ -96,9 +101,47 @@ ft::vector<T, Allocator>::vector(size_type n, const value_type& val, const alloc
 {
 	for (size_type i = 0; i < n; i++)
 	{
-		_array[i] = val;
+		_alloc.construct(&_array[i], val);
 	}
 }
+
+template <class T, class Allocator>
+ft::vector<T, Allocator>& ft::vector<T, Allocator>::operator=(const ft::vector<T, Allocator>& rhs)
+{
+	if (this == &rhs)
+	{
+		return (*this);
+	}
+	for (size_type i = 0; i < _size; i++)
+	{
+		_alloc.destroy(&_array[i]);
+	}
+	_alloc.deallocate(_array, _capacity);
+	_capacity = rhs.capacity();
+	_size = rhs.size();
+	_array = _alloc.allocate(_capacity * sizeof(value_type));
+	for (size_type i = 0; i < _size; i++)
+	{
+		_alloc.construct(&_array[i], rhs._array[i]);
+	}
+	return (*this);
+}
+
+/**
+ * @brief Destructor for ft::vector. Destroys the container elements and frees the memory
+ * allocated for the underlying array
+ * 
+ */
+template <class T, class Allocator>
+ft::vector<T, Allocator>::~vector(void)
+{
+	for (size_type i = 0; i < _size; i++)
+	{
+		_alloc.destroy(&_array[i]);
+	}
+	_alloc.deallocate(_array, _capacity);
+}
+
 
 /**
  * @brief Returns the number of elements in the vector

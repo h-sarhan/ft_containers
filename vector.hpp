@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/26 02:03:18 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/26 02:57:49 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,26 +35,28 @@ namespace ft
 		// typedef my_const_reverse_iterator_type	const_reverse_iterator;
 	private:
 		// * Private attributes
-		allocator_type _alloc;
-		value_type*	_array;
-		size_type	_size;
-		size_type	_capacity;
+		allocator_type	_alloc;
+		value_type		*_array;
+		size_type		_size;
+		size_type		_capacity;
 
 
 	public:
 		// * Constructors
-		explicit vector(const allocator_type& alloc = allocator_type());
-		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
+		explicit		vector(const allocator_type& alloc = allocator_type());
+		explicit 		vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
 		vector(const vector& old);
 
-		// * Getters
-		size_type	size(void) const;
-		size_type	capacity(void) const;
-	
+		// * Properties
+		size_type		size(void) const;
+		size_type		capacity(void) const;
+		size_type		max_size(void) const;
+		bool			empty() const;
+
 		// * Operator overloads
-		reference	operator[](size_type i);
+		reference		operator[](size_type i);
 		const_reference	operator[](size_type i) const;
-		vector &operator=(const vector &x);
+		vector			&operator=(const vector &x);
 		
 		// * Destructor
 		~vector(void);
@@ -105,6 +107,12 @@ ft::vector<T, Allocator>::vector(size_type n, const value_type& val, const alloc
 	}
 }
 
+/**
+ * @brief Copy assignment constructor for ft::vector. The copy is a deep copy
+ * 
+ * @param rhs Vector to copy from
+ * @return Reference to itself
+ */
 template <class T, class Allocator>
 ft::vector<T, Allocator>& ft::vector<T, Allocator>::operator=(const ft::vector<T, Allocator>& rhs)
 {
@@ -163,6 +171,23 @@ template <class T, class Allocator >
 typename ft::vector<T, Allocator>::size_type	ft::vector<T, Allocator>::capacity(void) const
 {
 	return	_capacity;
+}
+
+/**
+ * @brief Returns the maximum amount of elements that can be held by this vector
+ * 
+ * @return Max number of elements
+ */
+template <class T, class Allocator>
+typename ft::vector<T, Allocator>::size_type	ft::vector<T, Allocator>::max_size() const
+{
+	return _alloc.max_size();
+}
+
+template <class T, class Allocator>
+bool	ft::vector<T, Allocator>::empty() const
+{
+	return _size == 0;
 }
 
 /**

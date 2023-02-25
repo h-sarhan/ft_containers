@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/26 02:15:55 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/26 03:01:03 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,11 +153,48 @@ void	vectorInVectorTests(void)
 	e[10] = ft::vector<int>(8);
 }
 
+/**
+ * @brief vector.max_size() tests
+ * 
+ * @test Compare max_size method with ft and std vectors
+ */
+void	maxSizeTests(void)
+{
+	std::vector<int>	stdVec;
+	ft::vector<int>		ftVec;
+
+	std::cout << "std max_size() = " << stdVec.max_size() << std::endl;
+	std::cout << "ft max_size() =  " << ftVec.max_size() << std::endl;
+}
+
+/**
+ * @brief vector.empty() tests
+ * 
+ * @test Check vec.empty() with empty and non-empty vectors
+ */
+void	emptyTest(void)
+{
+	ft::vector<int>		ftVec;
+	std::vector<int>	stdVec;
+	if (stdVec.empty() && ftVec.empty())
+	{
+		std::cout << "Both vectors are empty: √" << std::endl;
+	}
+
+	ft::vector<int>		ftVec2(10);
+	std::vector<int>	stdVec2(10);
+	if (!stdVec2.empty() && !ftVec2.empty())
+	{
+		std::cout << "Both vectors are not empty: √" << std::endl;
+	}
+}
+
 int	main(void)
 {
 	defaultConstructorTests();
 	fillConstructorTests();
 	copyConstructorTests();
 	vectorInVectorTests();
-
+	maxSizeTests();
+	emptyTest();
 }

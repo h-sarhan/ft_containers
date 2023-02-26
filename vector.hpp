@@ -6,10 +6,11 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/26 02:57:49 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/26 14:53:14 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdexcept>
 #ifndef VECTOR_HPP
 
 # include <memory>
@@ -52,6 +53,11 @@ namespace ft
 		size_type		capacity(void) const;
 		size_type		max_size(void) const;
 		bool			empty() const;
+
+
+		// * Member functions
+		reference		at(size_type n);
+		const_reference	at(size_type n) const;
 
 		// * Operator overloads
 		reference		operator[](size_type i);
@@ -212,6 +218,36 @@ template <class T, class Allocator >
 typename ft::vector<T, Allocator>::const_reference	ft::vector<T, Allocator>::operator[](size_type i) const
 {
 	return _array[i];
+}
+
+/**
+ * @brief Returns a reference to the vector element at index n.
+ * Similar to subscript operator but throws an exception when n is out of range
+ * 
+ * @param n Index
+ * @return The element at index i in the vector
+ */
+template <class T, class Allocator>
+typename ft::vector<T, Allocator>::reference		ft::vector<T, Allocator>::at(size_type n)
+{
+	if (n >= _size)
+		throw std::out_of_range("Index is out of range");
+	return (_array[n]);
+}
+
+/**
+ * @brief Returns a const reference to the vector element at index n.
+ * Similar to subscript operator but throws an exception when n is out of range
+ * 
+ * @param n Index
+ * @return The element at index i in the vector
+ */
+template <class T, class Allocator>
+typename ft::vector<T, Allocator>::const_reference		ft::vector<T, Allocator>::at(size_type n) const
+{
+	if (n >= _size)
+		throw std::out_of_range("Index is out of range");
+	return (_array[n]);
 }
 
 #endif

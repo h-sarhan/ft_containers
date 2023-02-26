@@ -6,10 +6,11 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/26 03:01:03 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/26 14:50:57 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdexcept>
 #include <vector>
 #include <iostream>
 #include "vector.hpp"
@@ -189,6 +190,54 @@ void	emptyTest(void)
 	}
 }
 
+/**
+ * @brief vector.at() tests
+ * 
+ * @test Check vec.at() when n is in or out of range
+ */
+void	atTests()
+{
+	try
+	{
+		std::vector<int> a(10, 3);
+		std::cout << a.at(10) << std::endl;
+	}
+	catch (const std::out_of_range &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
+	try
+	{
+		ft::vector<int> a(10, 3);
+		std::cout << a.at(10) << std::endl;
+	}
+	catch (const std::out_of_range &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
+	try
+	{
+		std::vector<int> a(10, 3);
+		std::cout << a.at(9) << std::endl;
+	}
+	catch (const std::out_of_range &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+
+	try
+	{
+		ft::vector<int> a(10, 3);
+		std::cout << a.at(9) << std::endl;
+	}
+	catch (const std::out_of_range &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+}
+
 int	main(void)
 {
 	defaultConstructorTests();
@@ -197,4 +246,5 @@ int	main(void)
 	vectorInVectorTests();
 	maxSizeTests();
 	emptyTest();
+	atTests();
 }

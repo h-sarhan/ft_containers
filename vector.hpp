@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/26 14:53:14 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/26 15:27:13 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,14 @@ namespace ft
 		size_type		size(void) const;
 		size_type		capacity(void) const;
 		size_type		max_size(void) const;
-		bool			empty() const;
+		bool			empty(void) const;
 
 
 		// * Member functions
 		reference		at(size_type n);
 		const_reference	at(size_type n) const;
+		reference		front(void);
+		const_reference	front(void) const;
 
 		// * Operator overloads
 		reference		operator[](size_type i);
@@ -248,6 +250,30 @@ typename ft::vector<T, Allocator>::const_reference		ft::vector<T, Allocator>::at
 	if (n >= _size)
 		throw std::out_of_range("Index is out of range");
 	return (_array[n]);
+}
+
+/**
+ * @brief Returns a reference to the first element of the vector.
+ * Behaviour is undefined when the vector is empty
+ * 
+ * @return The element at index i in the vector
+ */
+template <class T, class Allocator>
+typename ft::vector<T, Allocator>::reference		ft::vector<T, Allocator>::front(void)
+{
+	return _array[0];
+}
+
+/**
+ * @brief Returns a const reference to the first element of the vector.
+ * Behaviour is undefined when the vector is empty
+ * 
+ * @return The element at index i in the vector
+ */
+template <class T, class Allocator>
+typename ft::vector<T, Allocator>::reference		ft::vector<T, Allocator>::front(void)
+{
+	return _array[0];
 }
 
 #endif

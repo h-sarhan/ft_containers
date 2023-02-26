@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/26 15:27:13 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/26 15:28:55 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,7 +271,7 @@ typename ft::vector<T, Allocator>::reference		ft::vector<T, Allocator>::front(vo
  * @return The element at index i in the vector
  */
 template <class T, class Allocator>
-typename ft::vector<T, Allocator>::reference		ft::vector<T, Allocator>::front(void)
+typename ft::vector<T, Allocator>::const_reference		ft::vector<T, Allocator>::front(void) const
 {
 	return _array[0];
 }

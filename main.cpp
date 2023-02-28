@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/26 14:50:57 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 06:37:19 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <vector>
 #include <iostream>
 #include "vector.hpp"
-
 
 /**
  * @brief Prints the contents of a std::vector or ft::vector
@@ -238,6 +237,39 @@ void	atTests()
 	}
 }
 
+/**
+ * @brief Tests for vec::front() and vec::back() methods
+ * 
+ * @test Check front with filled vector
+ * @test Check front with empty vector
+ * @test Check back with filled vector
+ * @test Check back with empty vector
+ * 
+ */
+void	frontBackTests(void)
+{
+	ft::vector<int>	ftVec(200, 10);
+	ftVec[0] = 1;
+	ftVec[199] = 2;
+	std::cout << "ftVec.front() == " << ftVec.front() << std::endl;
+	std::cout << "ftVec.back() == " << ftVec.back() << std::endl;
+
+	std::vector<int>	stdVec(200, 10);
+	stdVec[0] = 1;
+	stdVec[199] = 2;
+	std::cout << "stdVec.front() == " << stdVec.front() << std::endl;
+	std::cout << "stdVec.back() == " << stdVec.back() << std::endl;
+
+	// ! Invalid reads
+	// ft::vector<int>	ftVecEmpty;
+	// std::cout << "ftVecEmpty.front()" << ftVecEmpty.front() << std::endl;
+	// std::cout << "ftVecEmpty.back()" << ftVecEmpty.back() << std::endl;
+
+	// std::vector<int>	stdVecEmpty;
+	// std::cout << "stdVecEmpty.front()" << stdVecEmpty.front() << std::endl;
+	// std::cout << "stdVecEmpty.back()" << stdVecEmpty.back() << std::endl;
+}
+
 int	main(void)
 {
 	defaultConstructorTests();
@@ -247,4 +279,5 @@ int	main(void)
 	maxSizeTests();
 	emptyTest();
 	atTests();
+	frontBackTests();
 }

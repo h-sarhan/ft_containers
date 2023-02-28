@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 06:21:18 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 06:30:46 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ namespace ft
 		const_reference		at(size_type n) const;
 		reference			front(void);
 		const_reference		front(void) const;
-		// reference		back(void);
-		// const_reference	back(void) const;
+		reference			back(void);
+		const_reference		back(void) const;
 		// value_type*			data(void);
 		// const value_type*	data(void) const;
 
@@ -230,7 +230,6 @@ typename ft::vector<T, Allocator>::size_type	ft::vector<T, Allocator>::max_size(
 	return _alloc.max_size();
 }
 
-
 /**
  * @brief Returns the number of elements vector can hold
  * 
@@ -242,6 +241,11 @@ typename ft::vector<T, Allocator>::size_type	ft::vector<T, Allocator>::capacity(
 	return	_capacity;
 }
 
+/**
+ * @brief Tests whether the vector is empty
+ * 
+ * @return true if the vector is empty, false otherwise
+ */
 template <class T, class Allocator>
 bool	ft::vector<T, Allocator>::empty() const
 {
@@ -274,13 +278,12 @@ typename ft::vector<T, Allocator>::const_reference	ft::vector<T, Allocator>::ope
 	return _array[i];
 }
 
-
 /**
  * @brief Returns a reference to the vector element at index n.
  * Similar to subscript operator but throws an exception when n is out of range
  * 
  * @param n Index
- * @return The element at index i in the vector
+ * @return The element at index n in the vector
  */
 template <class T, class Allocator>
 typename ft::vector<T, Allocator>::reference		ft::vector<T, Allocator>::at(size_type n)
@@ -295,7 +298,7 @@ typename ft::vector<T, Allocator>::reference		ft::vector<T, Allocator>::at(size_
  * Similar to subscript operator but throws an exception when n is out of range
  * 
  * @param n Index
- * @return The element at index i in the vector
+ * @return The element at index n in the vector
  */
 template <class T, class Allocator>
 typename ft::vector<T, Allocator>::const_reference		ft::vector<T, Allocator>::at(size_type n) const
@@ -309,7 +312,7 @@ typename ft::vector<T, Allocator>::const_reference		ft::vector<T, Allocator>::at
  * @brief Returns a reference to the first element of the vector.
  * Behaviour is undefined when the vector is empty
  * 
- * @return The element at index i in the vector
+ * @return The first element of the vector
  */
 template <class T, class Allocator>
 typename ft::vector<T, Allocator>::reference		ft::vector<T, Allocator>::front(void)
@@ -321,12 +324,36 @@ typename ft::vector<T, Allocator>::reference		ft::vector<T, Allocator>::front(vo
  * @brief Returns a const reference to the first element of the vector.
  * Behaviour is undefined when the vector is empty
  * 
- * @return The element at index i in the vector
+ * @return The first element of the vector
  */
 template <class T, class Allocator>
 typename ft::vector<T, Allocator>::const_reference		ft::vector<T, Allocator>::front(void) const
 {
 	return _array[0];
+}
+
+/**
+ * @brief Returns a reference to the last element of the vector.
+ * Behaviour is undefined when the vector is empty
+ * 
+ * @return The last element of the vector
+ */
+template <class T, class Allocator>
+typename ft::vector<T, Allocator>::reference		ft::vector<T, Allocator>::back(void)
+{
+	return _array[_size - 1];
+}
+
+/**
+ * @brief Returns a const reference to the last element of the vector.
+ * Behaviour is undefined when the vector is empty
+ * 
+ * @return The last element of the vector
+ */
+template <class T, class Allocator>
+typename ft::vector<T, Allocator>::const_reference		ft::vector<T, Allocator>::back(void) const
+{
+	return _array[_size - 1];
 }
 
 #endif

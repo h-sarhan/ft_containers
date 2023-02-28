@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:44:24 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 20:53:43 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 21:19:21 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ namespace ft
 		value_type			&operator[](const difference_type b);
 		
 		// * Iterator arithmetic
-		vector_iterator		operator+(const vector_iterator &rhs) const;
 		vector_iterator		operator-(const vector_iterator &rhs) const;
 		vector_iterator		operator+(const difference_type rhs) const;
 		vector_iterator		operator-(const difference_type rhs) const;
@@ -184,12 +183,6 @@ template <class T>
 typename ft::vector_iterator<T>::value_type			&ft::vector_iterator<T>::operator[](const difference_type i)
 {
 	return _ptr[i];
-}
-
-template <class T>
-ft::vector_iterator<T>								ft::vector_iterator<T>::operator+(const vector_iterator &rhs) const
-{
-	return vector_iterator<T>(_ptr + rhs._ptr);	
 }
 
 template <class T>

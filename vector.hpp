@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 20:52:36 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 21:34:17 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdexcept>
 # include <iostream>
 # include "iterator.hpp"
+# include "reverse_iterator.hpp"
 # include "utils.hpp"
 
 // ! REPLACE ALL INSTANCES OF std::iterator WITH MY OWN ITERATOR CLASS
@@ -59,74 +60,74 @@ namespace ft
 		// vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 		vector(const vector &old);
 		~vector(void);
-		vector				&operator=(const vector &x);
+		vector							&operator=(const vector &x);
 
 		// * Iterators
-		// iterator			begin(void);
-		// const_iterator		begin(void) const;
-		// iterator			end(void);
-		// const_iterator		end(void) const;
+		// iterator						begin(void);
+		// const_iterator				begin(void) const;
+		// iterator						end(void);
+		// const_iterator				end(void) const;
 		// reverse_iterator				rbegin(void);
 		// const_reverse_iterator		rbegin(void) const;
 		// reverse_iterator				rend(void);
 		// const_reverse_iterator		rend(void) const;
 		
 		// * Capacity
-		size_type			size(void) const;
-		size_type			max_size(void) const;
-		void				resize(size_type n, value_type val = value_type());
-		size_type			capacity(void) const;
-		bool				empty(void) const;
-		void				reserve(size_type n);
+		size_type						size(void) const;
+		size_type						max_size(void) const;
+		void							resize(size_type n, value_type val = value_type());
+		size_type						capacity(void) const;
+		bool							empty(void) const;
+		void							reserve(size_type n);
 
 		// * Element access
-		reference			operator[](size_type i);
-		const_reference		operator[](size_type i) const;
-		reference			at(size_type n);
-		const_reference		at(size_type n) const;
-		reference			front(void);
-		const_reference		front(void) const;
-		reference			back(void);
-		const_reference		back(void) const;
-		value_type			*data(void);
-		const value_type	*data(void) const;
+		reference						operator[](size_type i);
+		const_reference					operator[](size_type i) const;
+		reference						at(size_type n);
+		const_reference					at(size_type n) const;
+		reference						front(void);
+		const_reference					front(void) const;
+		reference						back(void);
+		const_reference					back(void) const;
+		value_type						*data(void);
+		const value_type				*data(void) const;
 
 		// * Modifiers
 		// template <class InputIterator>
-		// void				assign(InputIterator first, InputIterator last);
-		// void				assign(size_type n, const value_type& val);
-		// void				push_back(const value_type& val);
-		// void				pop_back(void);
-		// iterator			insert(iterator position, const value_type& val);
-		// void				insert(iterator position, size_type n, const value_type& val);
+		// void							assign(InputIterator first, InputIterator last);
+		// void							assign(size_type n, const value_type& val);
+		// void							push_back(const value_type& val);
+		// void							pop_back(void);
+		// iterator						insert(iterator position, const value_type& val);
+		// void							insert(iterator position, size_type n, const value_type& val);
 		// template <class InputIterator>
-		// void				insert(iterator position, InputIterator first, InputIterator last);
-		// iterator			erase(iterator position);
-		// iterator			erase(iterator first, iterator last);
-		void				swap(vector &x);
-		void				clear(void);
+		// void							insert(iterator position, InputIterator first, InputIterator last);
+		// iterator						erase(iterator position);
+		// iterator						erase(iterator first, iterator last);
+		void							swap(vector &x);
+		void							clear(void);
 
 		// * Allocators
-		allocator_type	get_allocator(void) const;
+		allocator_type					get_allocator(void) const;
 	
 	private:
 		// * Private helper methods
-		void	_realloc(size_type new_capacity);
+		void							_realloc(size_type new_capacity);
 	
 	};
 	// * Relational operators
 	template <class T, class Alloc>
 	bool								operator==(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs);
 	// template <class T, class Alloc>
-	// ? bool								operator!=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs);
+	// ? bool							operator!=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs);
 	// template <class T, class Alloc>
-	// ? bool								operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	// ? bool							operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 	// template <class T, class Alloc>
-	// ? bool								operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	// ? bool							operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 	// template <class T, class Alloc>
-	// ? bool								operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	// ? bool							operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 	// template <class T, class Alloc>
-	// ? bool								operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	// ? bool							operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 
 	// * Non-member functions
 	template <class T, class Alloc>

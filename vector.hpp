@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 08:48:15 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 08:55:40 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ namespace ft
 		void				clear(void);
 
 		// * Allocators
-		// ? allocator_type	get_allocator() const;
+		allocator_type	get_allocator(void) const;
 	};
 	// * Relational operators
 	// template <class T, class Alloc>
@@ -426,6 +426,19 @@ template <class T, class Alloc>
 void												ft::swap(ft::vector<T,Alloc> &x, ft::vector<T,Alloc> &y)
 {
 	x.swap(y);
+}
+
+// ** Allocators
+
+/**
+ * @brief Returns the allocator object that is used by the vector class
+ * 
+ * @return ft::vector<T, Alloc>::allocator_type 
+ */
+template <class T, class Alloc>
+typename ft::vector<T, Alloc>::allocator_type		ft::vector<T, Alloc>::get_allocator(void) const
+{
+	return _alloc;
 }
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 06:37:19 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 07:05:58 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,6 +270,25 @@ void	frontBackTests(void)
 	// std::cout << "stdVecEmpty.back()" << stdVecEmpty.back() << std::endl;
 }
 
+/**
+ * @brief Tests for vec::data()
+ *
+ * @test Check data pointer with filled vector
+ * @test Check data pointer with empty vector
+ * 
+ */
+void	dataTest(void)
+{
+	ft::vector<int>	ftVecFull(10, 10);
+	int	*dataPtr = ftVecFull.data();
+	std::cout << "Full data pointer == " << *dataPtr;
+
+	// ! invalid read
+	// ft::vector<int>	ftVecEmpty;
+	// int	*emptyDataPtr = ftVecEmpty.data();
+	// std::cout << "Empty data pointer == " << *emptyDataPtr;
+}
+
 int	main(void)
 {
 	defaultConstructorTests();
@@ -280,4 +299,5 @@ int	main(void)
 	emptyTest();
 	atTests();
 	frontBackTests();
+	dataTest();
 }

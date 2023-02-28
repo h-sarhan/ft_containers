@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:44:24 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 20:49:16 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 20:53:43 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,19 +187,19 @@ typename ft::vector_iterator<T>::value_type			&ft::vector_iterator<T>::operator[
 }
 
 template <class T>
-ft::vector_iterator<T>		ft::vector_iterator<T>::operator+(const vector_iterator &rhs) const
+ft::vector_iterator<T>								ft::vector_iterator<T>::operator+(const vector_iterator &rhs) const
 {
 	return vector_iterator<T>(_ptr + rhs._ptr);	
 }
 
 template <class T>
-ft::vector_iterator<T>		ft::vector_iterator<T>::operator-(const vector_iterator &rhs) const
+ft::vector_iterator<T>								ft::vector_iterator<T>::operator-(const vector_iterator &rhs) const
 {
 	return vector_iterator<T>(_ptr - rhs._ptr);	
 }
 
 template <class T>
-ft::vector_iterator<T>		ft::vector_iterator<T>::operator+(const difference_type rhs) const
+ft::vector_iterator<T>								ft::vector_iterator<T>::operator+(const difference_type rhs) const
 {
 	return vector_iterator<T>(_ptr + rhs);	
 }

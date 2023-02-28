@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 20:32:34 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 20:52:36 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,9 @@ namespace ft
 		typedef typename Alloc::pointer							pointer;
 		typedef typename Alloc::const_pointer					const_pointer;
 
-		// ! REPLACE THIS
 		typedef ft::vector_iterator<T>							iterator;
-		// // ! REPLACE THIS
 		typedef ft::vector_iterator<const T>					const_iterator;
-		// // ! REPLACE THIS
 		// typedef std::reverse_iterator<iterator>					reverse_iterator;
-		// // ! REPLACE THIS
 		// typedef std::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 	private:

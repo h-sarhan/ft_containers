@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 08:55:40 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 11:40:03 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 # include <memory>
 # include <stdexcept>
-
+# include <iostream>
 # define VECTOR_HPP
 namespace ft
 {
@@ -26,8 +26,8 @@ namespace ft
 		typedef Alloc							allocator_type;
 		typedef typename Alloc::size_type		size_type;
 		typedef typename Alloc::difference_type	difference_type;
-		typedef value_type&						reference;
-		typedef const value_type&				const_reference;
+		typedef value_type						&reference;
+		typedef const value_type				&const_reference;
 		typedef typename Alloc::pointer			pointer;
 		typedef typename Alloc::const_pointer	const_pointer;
 		// typedef my_iterator_type					iterator;
@@ -44,11 +44,11 @@ namespace ft
 
 	public:
 		// * Constructors and destructors
-		explicit vector(const allocator_type& alloc = allocator_type());
-		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
+		explicit vector(const allocator_type &alloc = allocator_type());
+		explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type());
 		// template <class InputIterator>
 		// vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
-		vector(const vector& old);
+		vector(const vector &old);
 		~vector(void);
 		vector				&operator=(const vector &x);
 
@@ -65,7 +65,7 @@ namespace ft
 		// * Capacity
 		size_type			size(void) const;
 		size_type			max_size(void) const;
-		// void				resize (size_type n, value_type val = value_type());
+		void				resize(size_type n, value_type val = value_type());
 		size_type			capacity(void) const;
 		bool				empty(void) const;
 		// void				reserve (size_type n);
@@ -79,8 +79,8 @@ namespace ft
 		const_reference		front(void) const;
 		reference			back(void);
 		const_reference		back(void) const;
-		value_type*			data(void);
-		const value_type*	data(void) const;
+		value_type			*data(void);
+		const value_type	*data(void) const;
 
 		// * Modifiers
 		// template <class InputIterator>
@@ -99,6 +99,11 @@ namespace ft
 
 		// * Allocators
 		allocator_type	get_allocator(void) const;
+	
+	private:
+		// * Private helper methods
+		void	_realloc(size_type new_capacity);
+	
 	};
 	// * Relational operators
 	// template <class T, class Alloc>
@@ -226,9 +231,43 @@ typename ft::vector<T, Alloc>::size_type			ft::vector<T, Alloc>::size(void) cons
  * @return Max number of elements
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::size_type			ft::vector<T, Alloc>::max_size() const
+typename ft::vector<T, Alloc>::size_type			ft::vector<T, Alloc>::max_size(void) const
 {
 	return _alloc.max_size();
+}
+
+
+/**
+ * @brief Resizes the vector so that it fits n elements
+ * Fills in extra elements if n > size
+ * Truncates the vector if n < size
+ * Reallocates if necessaary. n > capacity
+ * 
+ * @param n New size of the array
+ * @param val, optional Value of newly created objects
+ */
+template <class T, class Alloc>
+void												ft::vector<T, Alloc>::resize(size_type n, value_type val)
+{
+	if (n > _capacity)
+	{
+		_realloc(n);
+	}
+	if (n >= _size)
+	{
+		for (size_type i = _size; i < n; i++)
+		{
+			_alloc.construct(&_array[i], val);
+		}
+	}
+	else if (n < _size)
+	{
+		for (size_type i = n; i < _size; i++)
+		{
+			_alloc.destroy(&_array[i]);
+		}
+	}
+	_size = n;
 }
 
 /**
@@ -439,6 +478,29 @@ template <class T, class Alloc>
 typename ft::vector<T, Alloc>::allocator_type		ft::vector<T, Alloc>::get_allocator(void) const
 {
 	return _alloc;
+}
+
+// * Private helper methods
+
+/**
+ * @brief Reallocates the vector's underlying array by allocating a new array,
+ * copying all the values from the old array to the new one, and destroying the old array
+ * Also changes the vector's capacity
+ *
+ * @param new_capacity The vector's new capacity
+ */
+template <class T, class Alloc>
+void												ft::vector<T, Alloc>::_realloc(ft::vector<T, Alloc>::size_type new_capacity)
+{
+	value_type	*new_array = _alloc.allocate(new_capacity);
+	for (size_type i = 0; i < _size; i++)
+	{
+		_alloc.construct(&new_array[i], _array[i]);
+		_alloc.destroy(&_array[i]);
+	}
+	_alloc.deallocate(_array, _capacity);
+	_capacity = new_capacity;
+	_array = new_array;
 }
 
 #endif

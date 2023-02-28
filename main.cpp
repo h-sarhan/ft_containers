@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 08:42:50 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 11:40:47 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -439,18 +439,78 @@ void	clearTests(void)
 	assert(intenseVec.empty() == true);
 }
 
+/**
+ * @brief Tests for vec::resize()
+ * 
+ * @test New size > old && New size < capacity
+ * @test New size < old && New size < capacity
+ * @test New size == old && New size < capacity
+ * @test New size > old && New size > capacity
+ * @test New size == old && New size == capacity
+ * @test Tests with empty vectors
+ * @test Tests with optional arguments
+ * @test Tests with vector of vectors
+ * @test Tests n == 0
+ */
+void	resizeTests(void)
+{
+	std::cout << "Testing vec::resize()" << std::endl;
+	
+	ft::vector<int>	vec1(5, 5); // size = 5 capacity = 5
+	
+	vec1.resize(6); // New size > old && new size > capacity
+	printVec(vec1, "");
+	// size == 6 capacity == 6
+	vec1.resize(3);
+	printVec(vec1, "");
+	// size == 3 capacity == 6
+	vec1.resize(4);
+	printVec(vec1, "");
+	// size == 4 capacity == 6
+	vec1.resize(4);
+	printVec(vec1, "");
+	vec1.resize(6);
+	printVec(vec1, "");
+	vec1.resize(6);
+	printVec(vec1, "");
+	
+	ft::vector<int>	empty;
+	empty.resize(1);
+	empty.resize(1);
+	empty.resize(1);
+	printVec(empty, "");
+	empty.resize(0);
+	printVec(empty, "");
+	empty.resize(6);
+	printVec(empty, "");
+	empty.resize(10, 1);
+	printVec(empty, "");
+	empty.resize(0);
+	printVec(empty, "");
+	
+	ft::vector<int>	filler(909, 100);
+	ft::vector<ft::vector<int> >	no;
+	no.resize(0);
+	no.resize(90);
+	no.resize(100, filler);
+	no.resize(80, filler);
+	no.resize(1000);
+	no.resize(10000, filler);
+}
+
 int	main(void)
 {
-	defaultConstructorTests();
-	fillConstructorTests();
-	copyConstructorTests();
-	vectorInVectorTests();
-	maxSizeTests();
-	emptyTest();
-	atTests();
-	frontBackTests();
-	dataTest();
-	swapTest();
-	clearTests();
+	// defaultConstructorTests();
+	// fillConstructorTests();
+	// copyConstructorTests();
+	// vectorInVectorTests();
+	// maxSizeTests();
+	// emptyTest();
+	// atTests();
+	// frontBackTests();
+	// dataTest();
+	// swapTest();
+	// clearTests();
+	// resizeTests();
 	std::cout << std::endl;
 }

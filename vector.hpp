@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 13:26:09 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 20:32:34 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <memory>
 # include <stdexcept>
 # include <iostream>
+# include "iterator.hpp"
 # include "utils.hpp"
 
 // ! REPLACE ALL INSTANCES OF std::iterator WITH MY OWN ITERATOR CLASS
@@ -39,15 +40,13 @@ namespace ft
 		typedef typename Alloc::const_pointer					const_pointer;
 
 		// ! REPLACE THIS
-		typedef std::iterator<std::random_access_iterator_tag,
-									value_type>					iterator;
-		// ! REPLACE THIS
-		typedef std::iterator<std::random_access_iterator_tag,
-									const value_type>			const_iterator;
-		// ! REPLACE THIS
-		typedef std::reverse_iterator<iterator>					reverse_iterator;
-		// ! REPLACE THIS
-		typedef std::reverse_iterator<const_iterator>			const_reverse_iterator;
+		typedef ft::vector_iterator<T>							iterator;
+		// // ! REPLACE THIS
+		typedef ft::vector_iterator<const T>					const_iterator;
+		// // ! REPLACE THIS
+		// typedef std::reverse_iterator<iterator>					reverse_iterator;
+		// // ! REPLACE THIS
+		// typedef std::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 	private:
 		// * Private attributes
@@ -67,14 +66,14 @@ namespace ft
 		vector				&operator=(const vector &x);
 
 		// * Iterators
-		// iterator			begin();
-		// const_iterator		begin() const;
-		// iterator			end();
-		// const_iterator		end() const;
-		// reverse_iterator				rbegin();
-		// const_reverse_iterator		rbegin() const;
-		// reverse_iterator				rend();
-		// const_reverse_iterator		rend() const;
+		// iterator			begin(void);
+		// const_iterator		begin(void) const;
+		// iterator			end(void);
+		// const_iterator		end(void) const;
+		// reverse_iterator				rbegin(void);
+		// const_reverse_iterator		rbegin(void) const;
+		// reverse_iterator				rend(void);
+		// const_reverse_iterator		rend(void) const;
 		
 		// * Capacity
 		size_type			size(void) const;
@@ -205,7 +204,7 @@ ft::vector<T, Alloc>::~vector(void)
  * @return Reference to itself
  */
 template <class T, class Alloc>
-ft::vector<T, Alloc>&								ft::vector<T, Alloc>::operator=(const vector<T, Alloc>& rhs)
+ft::vector<T, Alloc>&									ft::vector<T, Alloc>::operator=(const vector<T, Alloc>& rhs)
 {
 	if (this == &rhs)
 	{
@@ -225,6 +224,15 @@ ft::vector<T, Alloc>&								ft::vector<T, Alloc>::operator=(const vector<T, All
 	}
 	return (*this);
 }
+
+// ** Iterators
+
+// ! Document
+// template <class T, class Alloc>
+// typename ft::vector<T, Alloc>::iterator					ft::vector<T, Alloc>::begin(void)
+// {
+	
+// }
 
 // ** Capacity
 

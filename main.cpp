@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 12:18:36 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 20:05:30 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <iostream>
 #include "vector.hpp"
 #include <cassert>
+#include "iterator.hpp"
 
 /**
  * @brief Prints the contents of a std::vector or ft::vector
@@ -515,6 +516,16 @@ void	reserveTests(void)
 
 }
 
+
+void	vectorIteratorTests(void)
+{
+	ft::vector<int>::iterator	it;
+	
+	// int a = *it;
+	// (void)a;
+}
+
+
 int	main(void)
 {
 	// defaultConstructorTests();
@@ -529,6 +540,8 @@ int	main(void)
 	// swapTest();
 	// clearTests();
 	// resizeTests();
-	reserveTests();
+	// reserveTests();
+	// beginTests();
+	vectorIteratorTests();
 	std::cout << std::endl;
 }

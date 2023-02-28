@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 07:05:58 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 08:08:45 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	defaultConstructorTests(void)
 
 	// ! int k = ftVec[0]; // a seg fault / invalid read
 	// std::cout << "????? = " << k << std::endl;
+	std::cout << std::endl;
 }
 
 /**
@@ -98,6 +99,7 @@ void	fillConstructorTests(void)
 	std::cout << "FT Vector" << std::endl;
 	std::cout << "Capacity = " << ftVecFill.capacity() << std::endl;
 	std::cout << "Size = " << ftVecFill.size() << std::endl;
+	std::cout << std::endl;
 }
 
 /**
@@ -109,9 +111,11 @@ void	fillConstructorTests(void)
  */
 void	copyConstructorTests(void)
 {
+	std::cout << "Testing copy constructor" << std::endl;
+
 	ft::vector<int>	vec1(10, 34);
 	ft::vector<int>	vec2(vec1);
-	
+
 	std::cout << "Vec2 size and capacity" << std::endl;
 	std::cout << vec2.size() << std::endl;
 	std::cout << vec2.capacity() << std::endl;
@@ -119,15 +123,16 @@ void	copyConstructorTests(void)
 	vec1[0] = 9;
 	printVec(vec1, "Printing vec1");
 	printVec(vec2, "Printing vec2");
-	
+
 	ft::vector<int> vec3;
 	ft::vector<int>	vec4(vec3);
-	
+
 	std::cout << "Vec4 size and capacity" << std::endl;
 	std::cout << vec4.size() << std::endl;
 	std::cout << vec4.capacity() << std::endl;
 
 	printVec(vec4, "Printing vec4 (should be empty)");
+	std::cout << std::endl;
 }
 
 /**
@@ -136,6 +141,8 @@ void	copyConstructorTests(void)
  */
 void	vectorInVectorTests(void)
 {
+	std::cout << "Testing vector of vectors" << std::endl;
+
 	ft::vector<std::vector<int> > a(10);
 	a[0] = std::vector<int>(10, 9);
 	a[1] = std::vector<int>(10, 9);
@@ -151,6 +158,7 @@ void	vectorInVectorTests(void)
 
 	std::vector<ft::vector<int> > e(100);
 	e[10] = ft::vector<int>(8);
+	std::cout << std::endl;
 }
 
 /**
@@ -160,11 +168,14 @@ void	vectorInVectorTests(void)
  */
 void	maxSizeTests(void)
 {
+	std::cout << "Testing vec::max_size()" << std::endl;
+
 	std::vector<int>	stdVec;
 	ft::vector<int>		ftVec;
 
 	std::cout << "std max_size() = " << stdVec.max_size() << std::endl;
 	std::cout << "ft max_size() =  " << ftVec.max_size() << std::endl;
+	std::cout << std::endl;
 }
 
 /**
@@ -174,6 +185,8 @@ void	maxSizeTests(void)
  */
 void	emptyTest(void)
 {
+	std::cout << "Testing vec::empty()" << std::endl;
+
 	ft::vector<int>		ftVec;
 	std::vector<int>	stdVec;
 	if (stdVec.empty() && ftVec.empty())
@@ -187,6 +200,7 @@ void	emptyTest(void)
 	{
 		std::cout << "Both vectors are not empty: √" << std::endl;
 	}
+	std::cout << std::endl;
 }
 
 /**
@@ -196,6 +210,8 @@ void	emptyTest(void)
  */
 void	atTests()
 {
+	std::cout << "Testing vec::at(i)" << std::endl;
+
 	try
 	{
 		std::vector<int> a(10, 3);
@@ -235,6 +251,7 @@ void	atTests()
 	{
 		std::cout << e.what() << std::endl;
 	}
+	std::cout << std::endl;
 }
 
 /**
@@ -248,6 +265,8 @@ void	atTests()
  */
 void	frontBackTests(void)
 {
+	std::cout << "Testing vec::front() and vec::back()" << std::endl;
+
 	ft::vector<int>	ftVec(200, 10);
 	ftVec[0] = 1;
 	ftVec[199] = 2;
@@ -268,6 +287,7 @@ void	frontBackTests(void)
 	// std::vector<int>	stdVecEmpty;
 	// std::cout << "stdVecEmpty.front()" << stdVecEmpty.front() << std::endl;
 	// std::cout << "stdVecEmpty.back()" << stdVecEmpty.back() << std::endl;
+	std::cout << std::endl;
 }
 
 /**
@@ -279,14 +299,88 @@ void	frontBackTests(void)
  */
 void	dataTest(void)
 {
+	std::cout << "Testing vec::data()" << std::endl;
+
 	ft::vector<int>	ftVecFull(10, 10);
 	int	*dataPtr = ftVecFull.data();
-	std::cout << "Full data pointer == " << *dataPtr;
+	std::cout << "Full data pointer == " << *dataPtr << std::endl;
 
 	// ! invalid read
 	// ft::vector<int>	ftVecEmpty;
 	// int	*emptyDataPtr = ftVecEmpty.data();
 	// std::cout << "Empty data pointer == " << *emptyDataPtr;
+	std::cout << std::endl;
+}
+
+
+/**
+ * @brief Tests for vec::swap()
+ * 
+ * @test Check with normal case
+ * @test Check with different sized vectors
+ * @test Check with empty vectors
+ * @test Check size and capacity
+ * @test Check with same vector
+ * @test Check with overloaded swap
+ */
+void	swapTest(void)
+{
+	std::cout << "Testing vec::swap()" << std::endl;
+
+	ft::vector<int>	vec1(10, 1);
+	ft::vector<int>	vec2(10, 2);
+	
+	printVec(vec1, "vec1 before swap");
+	printVec(vec2, "vec2 before swap");
+	vec1.swap(vec2);
+	printVec(vec1, "vec1 after swap 1");
+	printVec(vec2, "vec2 after swap 1");
+	vec1.swap(vec2);
+	printVec(vec1, "vec1 after swap 2");
+	printVec(vec2, "vec2 after swap 2");
+
+	std::cout << "Testing vec::swap() with different sized vectors" << std::endl;
+	ft::vector<ft::vector<int> > vec3(5, vec1);
+	ft::vector<ft::vector<int> > vec4(10, vec2);
+	printVec(vec3[4], "vec3[4] before swap");
+	printVec(vec4[9], "vec3[9] before swap");
+	std::cout << "vec3.capacity() == " << vec3.capacity() << std::endl;
+	std::cout << "vec4.capacity() == " << vec4.capacity() << std::endl;
+	vec3.swap(vec4);
+	printVec(vec3[9], "vec3[9] after swap 1");
+	printVec(vec4[4], "vec3[4] after swap 1");
+	std::cout << "vec3.capacity() == " << vec3.capacity() << std::endl;
+	std::cout << "vec4.capacity() == " << vec4.capacity() << std::endl;
+	vec3.swap(vec4);
+	printVec(vec3[4], "vec3[4] after swap 2");
+	printVec(vec4[9], "vec3[9] after swap 2");
+	std::cout << "vec3.capacity() == " << vec3.capacity() << std::endl;
+	std::cout << "vec4.capacity() == " << vec4.capacity() << std::endl;
+
+	std::cout << "Testing vec::swap() with empty vectors" << std::endl;
+	ft::vector<int> vec5;
+	ft::vector<int> vec6;
+	vec5.swap(vec6);
+	vec2.swap(vec6);
+	vec1.swap(vec5);
+
+	std::cout << "Testing vec::swap() with the same vector" << std::endl;
+	vec1.swap(vec1);
+	vec2.swap(vec2);
+	vec3.swap(vec3);
+	vec4.swap(vec4);
+	vec5.swap(vec5);
+	vec6.swap(vec6);
+
+	std::cout << "Testing overloaded swap() with the different sized vectors" << std::endl;
+	ft::vector<double>	vec7(4, 9.87);
+	ft::vector<double>	vec8(11, 6.7);
+	printVec(vec7, "vec7 before swap");
+	printVec(vec8, "vec8 before swap");
+	swap(vec7, vec8);
+	printVec(vec7, "vec7 after swap");
+	printVec(vec8, "vec8 after swap");
+	std::cout << std::endl;
 }
 
 int	main(void)
@@ -300,4 +394,6 @@ int	main(void)
 	atTests();
 	frontBackTests();
 	dataTest();
+	swapTest();
+	std::cout << std::endl;
 }

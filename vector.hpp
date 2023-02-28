@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 08:06:18 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 08:48:15 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,8 @@ namespace ft
 		// void				insert(iterator position, InputIterator first, InputIterator last);
 		// iterator			erase(iterator position);
 		// iterator			erase(iterator first, iterator last);
-		void				swap(vector& x);
-		// ? void				clear(void);
+		void				swap(vector &x);
+		void				clear(void);
 
 		// * Allocators
 		// ? allocator_type	get_allocator() const;
@@ -115,8 +115,8 @@ namespace ft
 	// ? bool								operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 
 	// * Non-member functions
-	// template <class T, class Alloc>
-	// ? void								swap(vector<T,Alloc>& x, vector<T,Alloc>& y);
+	template <class T, class Alloc>
+	void								swap(ft::vector<T, Alloc> &x, ft::vector<T, Alloc> &y);
 };
 
 // * IMPLEMENTATION (Maybe put this in a .tpp)
@@ -141,7 +141,7 @@ ft::vector<T, Alloc>::vector(const allocator_type& alloc) : _alloc(alloc), _arra
  */
 template <class T, class Alloc >
 ft::vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator_type& alloc)
-	: _alloc(alloc), _array(_alloc.allocate(n * sizeof(val))), _size(n), _capacity(n)
+	: _alloc(alloc), _array(_alloc.allocate(n)), _size(n), _capacity(n)
 {
 	for (size_type i = 0; i < n; i++)
 	{
@@ -199,7 +199,7 @@ ft::vector<T, Alloc>&								ft::vector<T, Alloc>::operator=(const ft::vector<T,
 	_alloc.deallocate(_array, _capacity);
 	_capacity = rhs.capacity();
 	_size = rhs.size();
-	_array = _alloc.allocate(_capacity * sizeof(value_type));
+	_array = _alloc.allocate(_capacity);
 	for (size_type i = 0; i < _size; i++)
 	{
 		_alloc.construct(&_array[i], rhs._array[i]);
@@ -388,7 +388,7 @@ const typename ft::vector<T, Alloc>::value_type*	ft::vector<T, Alloc>::data(void
  * @param x Vector to swap contents with
  */
 template <class T, class Alloc>
-void											ft::vector<T, Alloc>::swap(ft::vector<T, Alloc> &x)
+void												ft::vector<T, Alloc>::swap(ft::vector<T, Alloc> &x)
 {
 	if (this == &x)
 		return ;
@@ -397,6 +397,23 @@ void											ft::vector<T, Alloc>::swap(ft::vector<T, Alloc> &x)
 	*this = temp;
 }
 
+/**
+ * @brief Clears the contents of the vector, deallocates the memory associated
+ * with it and sets size and capacity to zero
+ * 
+ */
+template <class T, class Alloc>
+void												ft::vector<T, Alloc>::clear(void)
+{
+	for (size_type i = 0; i < _size; i++)
+	{
+		_alloc.destroy(&_array[i]);
+	}
+	_alloc.deallocate(_array, _capacity);
+	_array = _alloc.allocate(0);
+	_capacity = 0;
+	_size = 0;
+}
 
 // ** Non-member functions
 /**
@@ -406,7 +423,7 @@ void											ft::vector<T, Alloc>::swap(ft::vector<T, Alloc> &x)
  * @param y Vector 2
  */
 template <class T, class Alloc>
-void											swap(ft::vector<T,Alloc> &x, ft::vector<T,Alloc> &y)
+void												ft::swap(ft::vector<T,Alloc> &x, ft::vector<T,Alloc> &y)
 {
 	x.swap(y);
 }

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 08:08:45 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 08:42:50 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <vector>
 #include <iostream>
 #include "vector.hpp"
+#include <cassert>
 
 /**
  * @brief Prints the contents of a std::vector or ft::vector
@@ -58,6 +59,8 @@ void	defaultConstructorTests(void)
 	// ! int k = ftVec[0]; // a seg fault / invalid read
 	// std::cout << "????? = " << k << std::endl;
 	std::cout << std::endl;
+	assert((ftVec.size() == stdVec.size()));
+	assert((ftVec.capacity() == stdVec.capacity()));
 }
 
 /**
@@ -383,6 +386,59 @@ void	swapTest(void)
 	std::cout << std::endl;
 }
 
+/**
+ * @brief Tests for vec::clear()
+ * 
+ * @test Check with normal vector
+ * @test Check with empty vector
+ * 
+ */
+void	clearTests(void)
+{
+	std::cout << "Testing vec::clear()" << std::endl;
+	ft::vector<int>	normalVec(10, 10);
+
+	normalVec.clear();
+	assert(normalVec.size() == 0);
+	assert(normalVec.capacity() == 0);
+	assert(normalVec.empty() == true);
+	ft::vector<int>	emptyVec;
+
+	emptyVec.clear();
+	assert(emptyVec.size() == 0);
+	assert(emptyVec.capacity() == 0);
+	assert(emptyVec.empty() == true);
+	ft::vector<int>	intenseVec(19832, 198732);
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	intenseVec.clear();
+	assert(intenseVec.size() == 0);
+	assert(intenseVec.capacity() == 0);
+	assert(intenseVec.empty() == true);
+	ft::vector<int>	replaceVec(1902, 198732);
+	intenseVec = replaceVec;
+	assert(intenseVec.size() == 1902);
+	assert(intenseVec.capacity() >= 1902);
+	assert(intenseVec.empty() == false);
+	intenseVec.clear();
+	assert(intenseVec.size() == 0);
+	assert(intenseVec.capacity() == 0);
+	assert(intenseVec.empty() == true);
+}
+
 int	main(void)
 {
 	defaultConstructorTests();
@@ -395,5 +451,6 @@ int	main(void)
 	frontBackTests();
 	dataTest();
 	swapTest();
+	clearTests();
 	std::cout << std::endl;
 }

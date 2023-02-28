@@ -6,34 +6,48 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 12:16:57 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 13:26:09 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 
+# define VECTOR_HPP
+
+# include <iterator>
 # include <memory>
 # include <stdexcept>
 # include <iostream>
-# define VECTOR_HPP
+# include "utils.hpp"
+
+// ! REPLACE ALL INSTANCES OF std::iterator WITH MY OWN ITERATOR CLASS
+
 namespace ft
 {
-	template <class T, class Alloc = std::allocator<T> > class vector
+	template <class T, class Alloc = std::allocator<T> >
+	class vector
 	{
 	public:
 		// * Typedefs
-		typedef T								value_type;
-		typedef Alloc							allocator_type;
-		typedef typename Alloc::size_type		size_type;
-		typedef typename Alloc::difference_type	difference_type;
-		typedef value_type						&reference;
-		typedef const value_type				&const_reference;
-		typedef typename Alloc::pointer			pointer;
-		typedef typename Alloc::const_pointer	const_pointer;
-		// typedef my_iterator_type					iterator;
-		// typedef my_const_iterator_type			const_iterator;
-		// typedef my_reverse_iterator_type			reverse_iterator;
-		// typedef my_const_reverse_iterator_type	const_reverse_iterator;
+		typedef T												value_type;
+		typedef Alloc											allocator_type;
+		typedef typename Alloc::size_type						size_type;
+		typedef typename Alloc::difference_type					difference_type;
+		typedef value_type										&reference;
+		typedef const value_type								&const_reference;
+		typedef typename Alloc::pointer							pointer;
+		typedef typename Alloc::const_pointer					const_pointer;
+
+		// ! REPLACE THIS
+		typedef std::iterator<std::random_access_iterator_tag,
+									value_type>					iterator;
+		// ! REPLACE THIS
+		typedef std::iterator<std::random_access_iterator_tag,
+									const value_type>			const_iterator;
+		// ! REPLACE THIS
+		typedef std::reverse_iterator<iterator>					reverse_iterator;
+		// ! REPLACE THIS
+		typedef std::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 	private:
 		// * Private attributes
@@ -106,10 +120,10 @@ namespace ft
 	
 	};
 	// * Relational operators
+	template <class T, class Alloc>
+	bool								operator==(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs);
 	// template <class T, class Alloc>
-	// ? bool								operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	// template <class T, class Alloc>
-	// ? bool								operator!=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	// ? bool								operator!=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs);
 	// template <class T, class Alloc>
 	// ? bool								operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 	// template <class T, class Alloc>
@@ -121,7 +135,7 @@ namespace ft
 
 	// * Non-member functions
 	template <class T, class Alloc>
-	void								swap(ft::vector<T, Alloc> &x, ft::vector<T, Alloc> &y);
+	void								swap(vector<T, Alloc> &x, vector<T, Alloc> &y);
 };
 
 // * IMPLEMENTATION (Maybe put this in a .tpp)
@@ -191,7 +205,7 @@ ft::vector<T, Alloc>::~vector(void)
  * @return Reference to itself
  */
 template <class T, class Alloc>
-ft::vector<T, Alloc>&								ft::vector<T, Alloc>::operator=(const ft::vector<T, Alloc>& rhs)
+ft::vector<T, Alloc>&								ft::vector<T, Alloc>::operator=(const vector<T, Alloc>& rhs)
 {
 	if (this == &rhs)
 	{
@@ -287,7 +301,7 @@ typename ft::vector<T, Alloc>::size_type			ft::vector<T, Alloc>::capacity(void) 
  * @return true if the vector is empty, false otherwise
  */
 template <class T, class Alloc>
-bool	ft::vector<T, Alloc>::empty() const
+bool	ft::vector<T, Alloc>::empty(void) const
 {
 	return _size == 0;
 }
@@ -442,7 +456,7 @@ const typename ft::vector<T, Alloc>::value_type*	ft::vector<T, Alloc>::data(void
  * @param x Vector to swap contents with
  */
 template <class T, class Alloc>
-void												ft::vector<T, Alloc>::swap(ft::vector<T, Alloc> &x)
+void												ft::vector<T, Alloc>::swap(vector<T, Alloc> &x)
 {
 	if (this == &x)
 		return ;
@@ -469,19 +483,6 @@ void												ft::vector<T, Alloc>::clear(void)
 	_size = 0;
 }
 
-// ** Non-member functions
-/**
- * @brief Swaps the contents of the two vectors provided as arguments
- * 
- * @param x Vector 1
- * @param y Vector 2
- */
-template <class T, class Alloc>
-void												ft::swap(ft::vector<T,Alloc> &x, ft::vector<T,Alloc> &y)
-{
-	x.swap(y);
-}
-
 // ** Allocators
 
 /**
@@ -505,7 +506,7 @@ typename ft::vector<T, Alloc>::allocator_type		ft::vector<T, Alloc>::get_allocat
  * @param new_capacity The vector's new capacity
  */
 template <class T, class Alloc>
-void												ft::vector<T, Alloc>::_realloc(ft::vector<T, Alloc>::size_type new_capacity)
+void												ft::vector<T, Alloc>::_realloc(size_type new_capacity)
 {
 	value_type	*new_array = _alloc.allocate(new_capacity);
 	for (size_type i = 0; i < _size; i++)
@@ -516,6 +517,39 @@ void												ft::vector<T, Alloc>::_realloc(ft::vector<T, Alloc>::size_type n
 	_alloc.deallocate(_array, _capacity);
 	_capacity = new_capacity;
 	_array = new_array;
+}
+
+// ** Relational operators
+
+/**
+ * @brief Equality operator overload method
+ * 
+ * @param lhs Left-handside vector
+ * @param rhs Right-handside vector
+ * @return true if the two vectors are equal, false otherwise
+ */
+template <class T, class Alloc>
+bool								operator==(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+{
+	if (lhs.size() != rhs.size())
+	{
+		return false;
+	}
+	return true;
+	// return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+// ** Non-member functions
+/**
+ * @brief Swaps the contents of the two vectors provided as arguments
+ * 
+ * @param x Vector 1
+ * @param y Vector 2
+ */
+template <class T, class Alloc>
+void												ft::swap(vector<T,Alloc> &x, vector<T,Alloc> &y)
+{
+	x.swap(y);
 }
 
 #endif

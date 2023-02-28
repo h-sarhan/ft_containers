@@ -6,14 +6,14 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/26 15:28:55 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 06:21:18 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdexcept>
 #ifndef VECTOR_HPP
 
 # include <memory>
+# include <stdexcept>
 
 # define VECTOR_HPP
 namespace ft
@@ -41,38 +41,86 @@ namespace ft
 		size_type		_size;
 		size_type		_capacity;
 
-
 	public:
-		// * Constructors
-		explicit		vector(const allocator_type& alloc = allocator_type());
-		explicit 		vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
+		// * Constructors and destructors
+		explicit vector(const allocator_type& alloc = allocator_type());
+		explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type());
+		// template <class InputIterator>
+		// vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
 		vector(const vector& old);
-
-		// * Properties
-		size_type		size(void) const;
-		size_type		capacity(void) const;
-		size_type		max_size(void) const;
-		bool			empty(void) const;
-
-
-		// * Member functions
-		reference		at(size_type n);
-		const_reference	at(size_type n) const;
-		reference		front(void);
-		const_reference	front(void) const;
-
-		// * Operator overloads
-		reference		operator[](size_type i);
-		const_reference	operator[](size_type i) const;
-		vector			&operator=(const vector &x);
-		
-		// * Destructor
 		~vector(void);
+		vector				&operator=(const vector &x);
+
+		// * Iterators
+		// iterator			begin();
+		// const_iterator		begin() const;
+		// iterator			end();
+		// const_iterator		end() const;
+		// reverse_iterator				rbegin();
+		// const_reverse_iterator		rbegin() const;
+		// reverse_iterator				rend();
+		// const_reverse_iterator		rend() const;
+		
+		// * Capacity
+		size_type			size(void) const;
+		size_type			max_size(void) const;
+		// void				resize (size_type n, value_type val = value_type());
+		size_type			capacity(void) const;
+		bool				empty(void) const;
+		// void				reserve (size_type n);
+
+		// * Element access
+		reference			operator[](size_type i);
+		const_reference		operator[](size_type i) const;
+		reference			at(size_type n);
+		const_reference		at(size_type n) const;
+		reference			front(void);
+		const_reference		front(void) const;
+		// reference		back(void);
+		// const_reference	back(void) const;
+		// value_type*			data(void);
+		// const value_type*	data(void) const;
+
+		// * Modifiers
+		// template <class InputIterator>
+		// void				assign(InputIterator first, InputIterator last);
+		// void				assign(size_type n, const value_type& val);
+		// void				push_back(const value_type& val);
+		// void				pop_back(void);
+		// iterator			insert(iterator position, const value_type& val);
+		// void				insert(iterator position, size_type n, const value_type& val);
+		// template <class InputIterator>
+		// void				insert(iterator position, InputIterator first, InputIterator last);
+		// iterator			erase(iterator position);
+		// iterator			erase(iterator first, iterator last);
+		// void				swap(vector& x);
+		// void				clear(void);
+
+		// * Allocators
+		// allocator_type	get_allocator() const;
 	};
+	// * Relational operators
+	// template <class T, class Alloc>
+	// bool								operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	// template <class T, class Alloc>
+	// bool								operator!=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	// template <class T, class Alloc>
+	// bool								operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	// template <class T, class Alloc>
+	// bool								operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	// template <class T, class Alloc>
+	// bool								operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	// template <class T, class Alloc>
+	// bool								operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+
+	// * Non-member functions
+	// template <class T, class Alloc>
+	// void								swap(vector<T,Alloc>& x, vector<T,Alloc>& y);
 };
 
 // * IMPLEMENTATION (Maybe put this in a .tpp)
 
+// ** Constructors and destructors 
 /**
  * @brief Default constructor for ft::vector
  * 
@@ -81,6 +129,23 @@ namespace ft
 template <class T, class Allocator >
 ft::vector<T, Allocator>::vector(const allocator_type& alloc) : _alloc(alloc), _array(_alloc.allocate(0)), _size(0), _capacity(0)
 {
+}
+
+/**
+ * @brief Fill constructor for ft::vector
+ * 
+ * @param n Initial vector size
+ * @param val Default value of vector elements, optional
+ * @param alloc Allocator, optional
+ */
+template <class T, class Allocator >
+ft::vector<T, Allocator>::vector(size_type n, const value_type& val, const allocator_type& alloc)
+	: _alloc(alloc), _array(_alloc.allocate(n * sizeof(val))), _size(n), _capacity(n)
+{
+	for (size_type i = 0; i < n; i++)
+	{
+		_alloc.construct(&_array[i], val);
+	}
 }
 
 /**
@@ -99,20 +164,18 @@ ft::vector<T, Allocator>::vector(const vector& old)
 }
 
 /**
- * @brief Fill constructor for ft::vector
+ * @brief Destructor for ft::vector. Destroys the container elements and frees the memory
+ * allocated for the underlying array
  * 
- * @param n Initial vector size
- * @param val Default value of vector elements, optional
- * @param alloc Allocator, optional
  */
-template <class T, class Allocator >
-ft::vector<T, Allocator>::vector(size_type n, const value_type& val, const allocator_type& alloc)
-	: _alloc(alloc), _array(_alloc.allocate(n * sizeof(val))), _size(n), _capacity(n)
+template <class T, class Allocator>
+ft::vector<T, Allocator>::~vector(void)
 {
-	for (size_type i = 0; i < n; i++)
+	for (size_type i = 0; i < _size; i++)
 	{
-		_alloc.construct(&_array[i], val);
+		_alloc.destroy(&_array[i]);
 	}
+	_alloc.deallocate(_array, _capacity);
 }
 
 /**
@@ -143,21 +206,7 @@ ft::vector<T, Allocator>& ft::vector<T, Allocator>::operator=(const ft::vector<T
 	return (*this);
 }
 
-/**
- * @brief Destructor for ft::vector. Destroys the container elements and frees the memory
- * allocated for the underlying array
- * 
- */
-template <class T, class Allocator>
-ft::vector<T, Allocator>::~vector(void)
-{
-	for (size_type i = 0; i < _size; i++)
-	{
-		_alloc.destroy(&_array[i]);
-	}
-	_alloc.deallocate(_array, _capacity);
-}
-
+// ** Capacity
 
 /**
  * @brief Returns the number of elements in the vector
@@ -171,17 +220,6 @@ typename ft::vector<T, Allocator>::size_type	ft::vector<T, Allocator>::size(void
 }
 
 /**
- * @brief Returns the number of elements vector can hold
- * 
- * @return Number of elements the vector can hold
- */
-template <class T, class Allocator >
-typename ft::vector<T, Allocator>::size_type	ft::vector<T, Allocator>::capacity(void) const
-{
-	return	_capacity;
-}
-
-/**
  * @brief Returns the maximum amount of elements that can be held by this vector
  * 
  * @return Max number of elements
@@ -192,14 +230,28 @@ typename ft::vector<T, Allocator>::size_type	ft::vector<T, Allocator>::max_size(
 	return _alloc.max_size();
 }
 
+
+/**
+ * @brief Returns the number of elements vector can hold
+ * 
+ * @return Number of elements the vector can hold
+ */
+template <class T, class Allocator >
+typename ft::vector<T, Allocator>::size_type	ft::vector<T, Allocator>::capacity(void) const
+{
+	return	_capacity;
+}
+
 template <class T, class Allocator>
 bool	ft::vector<T, Allocator>::empty() const
 {
 	return _size == 0;
 }
 
+// ** Element access
+
 /**
- * @brief The subscript operator overload
+ * @brief Subscript operator overload
  * 
  * @param i Index
  * @return The element at index i in the vector
@@ -211,7 +263,7 @@ typename ft::vector<T, Allocator>::reference	ft::vector<T, Allocator>::operator[
 }
 
 /**
- * @brief The const subscript operator overload
+ * @brief Const subscript operator overload
  * 
  * @param i Index
  * @return The element at index i in the vector
@@ -221,6 +273,7 @@ typename ft::vector<T, Allocator>::const_reference	ft::vector<T, Allocator>::ope
 {
 	return _array[i];
 }
+
 
 /**
  * @brief Returns a reference to the vector element at index n.

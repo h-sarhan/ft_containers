@@ -33,3 +33,6 @@
 
 vector_tests
 .vscode
+
+.cache
+compile_commands.json

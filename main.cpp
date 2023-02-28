@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 11:40:47 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 12:18:36 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -498,6 +498,23 @@ void	resizeTests(void)
 	no.resize(10000, filler);
 }
 
+/**
+ * @brief Tests for vec::reserve()
+ * 
+ */
+void	reserveTests(void)
+{
+	ft::vector<int>	vec;
+
+	vec.reserve(100);
+	vec.reserve(0);
+	vec.reserve(1);
+	assert(vec.capacity() == 100);
+	vec.reserve(2000);
+	assert(vec.capacity() == 2000);
+
+}
+
 int	main(void)
 {
 	// defaultConstructorTests();
@@ -512,5 +529,6 @@ int	main(void)
 	// swapTest();
 	// clearTests();
 	// resizeTests();
+	reserveTests();
 	std::cout << std::endl;
 }

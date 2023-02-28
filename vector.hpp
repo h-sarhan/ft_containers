@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 11:40:03 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/02/28 12:16:57 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ namespace ft
 		void				resize(size_type n, value_type val = value_type());
 		size_type			capacity(void) const;
 		bool				empty(void) const;
-		// void				reserve (size_type n);
+		void				reserve(size_type n);
 
 		// * Element access
 		reference			operator[](size_type i);
@@ -290,6 +290,21 @@ template <class T, class Alloc>
 bool	ft::vector<T, Alloc>::empty() const
 {
 	return _size == 0;
+}
+
+
+/**
+ * @brief Increases vector capacity if it is less than n
+ * 
+ * @param n New vector capacity
+ */
+template <class T, class Alloc>
+void												ft::vector<T, Alloc>::reserve(size_type n)
+{
+	if (n > _capacity)
+	{
+		_realloc(n);
+	}
 }
 
 // ** Element access

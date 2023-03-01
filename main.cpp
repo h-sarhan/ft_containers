@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 13:50:26 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 14:11:25 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -568,6 +568,18 @@ void	vectorRelational(void)
 	std::cout << std::endl;
 }
 
+void	vectorReverseIteratorTests(void)
+{
+	ft::vector<int>	vec(10, 10);
+	
+	
+	for (ft::vector<int>::reverse_iterator it = vec.rbegin(); it != vec.rend(); it++)
+	{
+		std::cout << *it << std::endl;
+	}
+	std::cout << std::endl;
+}
+
 int	main(void)
 {
 	// defaultConstructorTests();
@@ -585,6 +597,7 @@ int	main(void)
 	// reserveTests();
 	// beginTests();
 	// vectorIteratorTests();
+	vectorReverseIteratorTests();
 	vectorRelational();
 	std::cout << std::endl;
 }

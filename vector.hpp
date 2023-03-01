@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 13:53:04 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 14:10:00 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,7 +276,7 @@ typename ft::vector<T, Alloc>::const_iterator					ft::vector<T, Alloc>::end(void
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::reverse_iterator				ft::vector<T, Alloc>::rbegin(void)
 {
-	return reverse_iterator(&_array[0]);
+	return reverse_iterator(&_array[_size - 1]);
 }
 
 /**
@@ -287,7 +287,7 @@ typename ft::vector<T, Alloc>::reverse_iterator				ft::vector<T, Alloc>::rbegin(
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rbegin(void) const
 {
-	return const_reverse_iterator(&_array[0]);
+	return const_reverse_iterator(&_array[_size - 1]);
 }
 
 /**
@@ -298,7 +298,7 @@ typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rb
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::reverse_iterator				ft::vector<T, Alloc>::rend(void)
 {
-	return reverse_iterator(&_array[_size - 1]);
+	return reverse_iterator(&_array[0]);
 }
 
 /**
@@ -309,7 +309,7 @@ typename ft::vector<T, Alloc>::reverse_iterator				ft::vector<T, Alloc>::rend(vo
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rend(void) const
 {
-	return const_reverse_iterator(&_array[_size - 1]);
+	return const_reverse_iterator(&_array[0]);
 }
 
 // ** Capacity

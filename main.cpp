@@ -6,14 +6,16 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 17:15:39 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 17:45:30 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <cstdio>
 #include <ostream>
 #include <stdexcept>
 #include <vector>
 #include <iostream>
+#include "is_integral.hpp"
 #include "vector.hpp"
 #include <cassert>
 
@@ -598,7 +600,12 @@ void	rangeConstructorTests(void)
 	vecOfVecs[0] = v1;
 	vecOfVecs[1] = v2;
 	vecOfVecs[2] = v3;
-	// ft::vector<ft::vector<int> >	vecOfVecs2(vecOfVecs.begin(), vecOfVecs.end());
+	ft::vector<ft::vector<int> >	vecOfVecs2(vecOfVecs.begin(), vecOfVecs.end());
+
+	std::vector<int> o(10, 10);
+	ft::vector<double> k(o.begin(), o.end());
+	printVec(k, "");
+	// std::vector<int>
 }
 
 
@@ -633,7 +640,8 @@ int	main(void)
 	// beginTests();
 	// vectorIteratorTests();
 	// vectorReverseIteratorTests();
-	vectorRelational();
-	assignTests();
+	// vectorRelational();
+	// assignTests();
+	rangeConstructorTests();
 	std::cout << std::endl;
 }

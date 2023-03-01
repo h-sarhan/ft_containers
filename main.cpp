@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 18:50:22 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 19:30:02 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -648,6 +648,18 @@ void	popBackTests(void)
 	printVec(a[98], "");
 }
 
+void	insertTests(void)
+{
+	ft::vector<int>	vec1;
+	vec1.insert(vec1.begin() , 1);
+	vec1.insert(vec1.begin() , 1);
+	vec1.insert(vec1.begin() , 13);
+	vec1.insert(vec1.begin() , 1);
+	vec1.insert(vec1.begin() , 2);
+	vec1.insert(vec1.begin() , 8);
+	printVec(vec1, "");
+}
+
 int	main(void)
 {
 	// defaultConstructorTests();
@@ -670,6 +682,7 @@ int	main(void)
 	// rangeConstructorTests();
 	// assignTests();
 	// pushBackTests();
-	popBackTests();
+	// popBackTests();
+	insertTests();
 	std::cout << std::endl;
 }

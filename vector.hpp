@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 18:48:16 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 19:30:13 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ namespace ft
 		void							assign(size_type n, const value_type& val);
 		void							push_back(const value_type& val);
 		void							pop_back(void);
-		// iterator						insert(iterator position, const value_type& val);
+		iterator						insert(iterator position, const value_type& val);
 		// void							insert(iterator position, size_type n, const value_type& val);
 		// template <class InputIterator>
 		// void							insert(iterator position, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
@@ -226,7 +226,7 @@ ft::vector<T, Alloc>::~vector(void)
  * @return Reference to itself
  */
 template <class T, class Alloc>
-ft::vector<T, Alloc>&									ft::vector<T, Alloc>::operator=(const vector<T, Alloc>& rhs)
+ft::vector<T, Alloc>&											ft::vector<T, Alloc>::operator=(const vector<T, Alloc>& rhs)
 {
 	if (this == &rhs)
 	{
@@ -255,7 +255,7 @@ ft::vector<T, Alloc>&									ft::vector<T, Alloc>::operator=(const vector<T, Al
  * @return Iterator to the first element
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::iterator						ft::vector<T, Alloc>::begin(void)
+typename ft::vector<T, Alloc>::iterator							ft::vector<T, Alloc>::begin(void)
 {
 	return iterator(&_array[0]);
 }
@@ -277,7 +277,7 @@ typename ft::vector<T, Alloc>::const_iterator					ft::vector<T, Alloc>::begin(vo
  * @return Iterator to the last element
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::iterator						ft::vector<T, Alloc>::end(void)
+typename ft::vector<T, Alloc>::iterator							ft::vector<T, Alloc>::end(void)
 {
 	return iterator(&_array[_size]);
 }
@@ -299,7 +299,7 @@ typename ft::vector<T, Alloc>::const_iterator					ft::vector<T, Alloc>::end(void
  * @return Reverse iterator to the first element
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::reverse_iterator				ft::vector<T, Alloc>::rbegin(void)
+typename ft::vector<T, Alloc>::reverse_iterator					ft::vector<T, Alloc>::rbegin(void)
 {
 	return reverse_iterator(&_array[_size - 1]);
 }
@@ -321,7 +321,7 @@ typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rb
  * @return Reverse iterator to the last element
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::reverse_iterator				ft::vector<T, Alloc>::rend(void)
+typename ft::vector<T, Alloc>::reverse_iterator					ft::vector<T, Alloc>::rend(void)
 {
 	return reverse_iterator(&_array[-1]);
 }
@@ -345,7 +345,7 @@ typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::re
  * @return Number of elements in the vector 
  */
 template <class T, class Alloc >
-typename ft::vector<T, Alloc>::size_type			ft::vector<T, Alloc>::size(void) const
+typename ft::vector<T, Alloc>::size_type						ft::vector<T, Alloc>::size(void) const
 {
 	return	_size;
 }
@@ -356,7 +356,7 @@ typename ft::vector<T, Alloc>::size_type			ft::vector<T, Alloc>::size(void) cons
  * @return Max number of elements
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::size_type			ft::vector<T, Alloc>::max_size(void) const
+typename ft::vector<T, Alloc>::size_type						ft::vector<T, Alloc>::max_size(void) const
 {
 	return _alloc.max_size();
 }
@@ -372,7 +372,7 @@ typename ft::vector<T, Alloc>::size_type			ft::vector<T, Alloc>::max_size(void) 
  * @param val, optional Value of newly created objects
  */
 template <class T, class Alloc>
-void												ft::vector<T, Alloc>::resize(size_type n, value_type val)
+void															ft::vector<T, Alloc>::resize(size_type n, value_type val)
 {
 	if (n > _capacity)
 	{
@@ -401,7 +401,7 @@ void												ft::vector<T, Alloc>::resize(size_type n, value_type val)
  * @return Number of elements the vector can hold
  */
 template <class T, class Alloc >
-typename ft::vector<T, Alloc>::size_type			ft::vector<T, Alloc>::capacity(void) const
+typename ft::vector<T, Alloc>::size_type						ft::vector<T, Alloc>::capacity(void) const
 {
 	return	_capacity;
 }
@@ -412,7 +412,7 @@ typename ft::vector<T, Alloc>::size_type			ft::vector<T, Alloc>::capacity(void) 
  * @return true if the vector is empty, false otherwise
  */
 template <class T, class Alloc>
-bool	ft::vector<T, Alloc>::empty(void) const
+bool															ft::vector<T, Alloc>::empty(void) const
 {
 	return _size == 0;
 }
@@ -423,7 +423,7 @@ bool	ft::vector<T, Alloc>::empty(void) const
  * @param n New vector capacity
  */
 template <class T, class Alloc>
-void												ft::vector<T, Alloc>::reserve(size_type n)
+void															ft::vector<T, Alloc>::reserve(size_type n)
 {
 	if (n > _capacity)
 	{
@@ -440,7 +440,7 @@ void												ft::vector<T, Alloc>::reserve(size_type n)
  * @return The element at index i in the vector
  */
 template <class T, class Alloc >
-typename ft::vector<T, Alloc>::reference			ft::vector<T, Alloc>::operator[](size_type i)
+typename ft::vector<T, Alloc>::reference						ft::vector<T, Alloc>::operator[](size_type i)
 {
 	return _array[i];
 }
@@ -452,7 +452,7 @@ typename ft::vector<T, Alloc>::reference			ft::vector<T, Alloc>::operator[](size
  * @return The element at index i in the vector
  */
 template <class T, class Alloc >
-typename ft::vector<T, Alloc>::const_reference		ft::vector<T, Alloc>::operator[](size_type i) const
+typename ft::vector<T, Alloc>::const_reference					ft::vector<T, Alloc>::operator[](size_type i) const
 {
 	return _array[i];
 }
@@ -465,7 +465,7 @@ typename ft::vector<T, Alloc>::const_reference		ft::vector<T, Alloc>::operator[]
  * @return The element at index n in the vector
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::reference			ft::vector<T, Alloc>::at(size_type n)
+typename ft::vector<T, Alloc>::reference						ft::vector<T, Alloc>::at(size_type n)
 {
 	if (n >= _size)
 		throw std::out_of_range("Index is out of range");
@@ -480,7 +480,7 @@ typename ft::vector<T, Alloc>::reference			ft::vector<T, Alloc>::at(size_type n)
  * @return The element at index n in the vector
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::const_reference		ft::vector<T, Alloc>::at(size_type n) const
+typename ft::vector<T, Alloc>::const_reference					ft::vector<T, Alloc>::at(size_type n) const
 {
 	if (n >= _size)
 		throw std::out_of_range("Index is out of range");
@@ -494,7 +494,7 @@ typename ft::vector<T, Alloc>::const_reference		ft::vector<T, Alloc>::at(size_ty
  * @return The first element of the vector
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::reference			ft::vector<T, Alloc>::front(void)
+typename ft::vector<T, Alloc>::reference						ft::vector<T, Alloc>::front(void)
 {
 	return _array[0];
 }
@@ -506,7 +506,7 @@ typename ft::vector<T, Alloc>::reference			ft::vector<T, Alloc>::front(void)
  * @return The first element of the vector
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::const_reference		ft::vector<T, Alloc>::front(void) const
+typename ft::vector<T, Alloc>::const_reference					ft::vector<T, Alloc>::front(void) const
 {
 	return _array[0];
 }
@@ -518,7 +518,7 @@ typename ft::vector<T, Alloc>::const_reference		ft::vector<T, Alloc>::front(void
  * @return The last element of the vector
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::reference			ft::vector<T, Alloc>::back(void)
+typename ft::vector<T, Alloc>::reference						ft::vector<T, Alloc>::back(void)
 {
 	return _array[_size - 1];
 }
@@ -530,7 +530,7 @@ typename ft::vector<T, Alloc>::reference			ft::vector<T, Alloc>::back(void)
  * @return The last element of the vector
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::const_reference		ft::vector<T, Alloc>::back(void) const
+typename ft::vector<T, Alloc>::const_reference					ft::vector<T, Alloc>::back(void) const
 {
 	return _array[_size - 1];
 }
@@ -541,7 +541,7 @@ typename ft::vector<T, Alloc>::const_reference		ft::vector<T, Alloc>::back(void)
  * @return Pointer to the underlying array
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::value_type*			ft::vector<T, Alloc>::data(void)
+typename ft::vector<T, Alloc>::value_type*						ft::vector<T, Alloc>::data(void)
 {
 	return _array;
 }
@@ -552,7 +552,7 @@ typename ft::vector<T, Alloc>::value_type*			ft::vector<T, Alloc>::data(void)
  * @return Const pointer to the underlying array
  */
 template <class T, class Alloc>
-const typename ft::vector<T, Alloc>::value_type*	ft::vector<T, Alloc>::data(void) const
+const typename ft::vector<T, Alloc>::value_type*				ft::vector<T, Alloc>::data(void) const
 {
 	return _array;
 }
@@ -568,7 +568,7 @@ const typename ft::vector<T, Alloc>::value_type*	ft::vector<T, Alloc>::data(void
  */
 template <class T, class Alloc>
 template <class InputIterator>
-void												ft::vector<T, Alloc>::assign(InputIterator first, InputIterator last,
+void															ft::vector<T, Alloc>::assign(InputIterator first, InputIterator last,
 																					typename enable_if<!is_integral<InputIterator>::value >::type*)
 {
 	const size_type	count = last - first;
@@ -596,7 +596,7 @@ void												ft::vector<T, Alloc>::assign(InputIterator first, InputIterator 
  * @param val Default value of elements
  */
 template <class T, class Alloc>
-void												ft::vector<T, Alloc>::assign(size_type n, const value_type& val)
+void															ft::vector<T, Alloc>::assign(size_type n, const value_type& val)
 {
 	if (n > _capacity)
 	{
@@ -619,7 +619,7 @@ void												ft::vector<T, Alloc>::assign(size_type n, const value_type& val)
  * @param val Element to add
  */
 template <class T, class Alloc>
-void												ft::vector<T, Alloc>::push_back(const value_type& val)
+void															ft::vector<T, Alloc>::push_back(const value_type& val)
 {
 	value_type	val_copy = val;
 	if (_size + 1 > _capacity)
@@ -635,12 +635,35 @@ void												ft::vector<T, Alloc>::push_back(const value_type& val)
  * 
  */
 template <class T, class Alloc>
-void												ft::vector<T, Alloc>::pop_back(void)
+void															ft::vector<T, Alloc>::pop_back(void)
 {
 	_alloc.destroy(&_array[_size - 1]);
 	_size -= 1;
 }
 
+/**
+ * @brief Inserts a single element at the position specified.
+ * 
+ * @param position Position to place the new element
+ * @param val The element to place
+ * @return An iterator to the new element
+ */
+template <class T, class Alloc>
+typename ft::vector<T, Alloc>::iterator							ft::vector<T, Alloc>::insert(iterator position, const value_type& val)
+{
+	size_type	insert_idx = position - begin();
+	if (_size + 1 > _capacity)
+	{
+		_realloc((_capacity + 1) * 2);
+	}
+	for (size_type i = _size; i > insert_idx; i--)
+	{
+		_alloc.construct(&_array[i], _array[i - 1]);
+	}
+	_alloc.construct(&_array[insert_idx], val);
+	_size += 1;
+	return iterator(&_array[insert_idx]);
+}
 
 /**
  * @brief Swaps contents of current vector with the one passed as an argument.
@@ -649,7 +672,7 @@ void												ft::vector<T, Alloc>::pop_back(void)
  * @param x Vector to swap contents with
  */
 template <class T, class Alloc>
-void												ft::vector<T, Alloc>::swap(vector<T, Alloc> &x)
+void															ft::vector<T, Alloc>::swap(vector<T, Alloc> &x)
 {
 	if (this == &x)
 		return ;
@@ -664,7 +687,7 @@ void												ft::vector<T, Alloc>::swap(vector<T, Alloc> &x)
  * 
  */
 template <class T, class Alloc>
-void												ft::vector<T, Alloc>::clear(void)
+void															ft::vector<T, Alloc>::clear(void)
 {
 	for (size_type i = 0; i < _size; i++)
 	{
@@ -684,7 +707,7 @@ void												ft::vector<T, Alloc>::clear(void)
  * @return ft::vector<T, Alloc>::allocator_type 
  */
 template <class T, class Alloc>
-typename ft::vector<T, Alloc>::allocator_type		ft::vector<T, Alloc>::get_allocator(void) const
+typename ft::vector<T, Alloc>::allocator_type					ft::vector<T, Alloc>::get_allocator(void) const
 {
 	return _alloc;
 }
@@ -699,7 +722,7 @@ typename ft::vector<T, Alloc>::allocator_type		ft::vector<T, Alloc>::get_allocat
  * @param new_capacity The vector's new capacity
  */
 template <class T, class Alloc>
-void												ft::vector<T, Alloc>::_realloc(size_type new_capacity)
+void															ft::vector<T, Alloc>::_realloc(size_type new_capacity)
 {
 	value_type	*new_array = _alloc.allocate(new_capacity);
 	for (size_type i = 0; i < _size; i++)
@@ -820,7 +843,7 @@ bool								ft::operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rh
  * @param y Vector 2
  */
 template <class T, class Alloc>
-void												ft::swap(vector<T,Alloc> &x, vector<T,Alloc> &y)
+void								ft::swap(vector<T,Alloc> &x, vector<T,Alloc> &y)
 {
 	x.swap(y);
 }

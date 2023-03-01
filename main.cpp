@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 20:58:14 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 21:12:37 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -681,7 +681,11 @@ void	eraseTests(void)
 	a[3] = 4;
 	a[4] = 5;
 	a.erase(a.begin() + 1);
-	printVec(a, "");
+	// printVec(a, "");
+
+	ft::vector<int>	b(1, 5);
+	b.erase(b.begin(), b.begin() + 1);
+	printVec(b, "");
 }
 
 int	main(void)

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 20:57:42 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 21:11:49 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ namespace ft
 		void							insert(iterator position, InputIterator first,
 											InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
 		iterator						erase(iterator position);
-		// iterator						erase(iterator first, iterator last);
+		iterator						erase(iterator first, iterator last);
 		void							swap(vector &x);
 		void							clear(void);
 
@@ -764,6 +764,41 @@ typename ft::vector<T, Alloc>::iterator							ft::vector<T, Alloc>::erase(iterat
 	if (_size > 0)
 	{
 		_size -= 1;
+	}
+	return iterator(&_array[erase_idx]);
+}
+
+/**
+ * @brief Erases the elements pointed to by the iterators
+ * 
+ * @param first An iterator pointing to where to start erasing
+ * @param last An iterator pointing to where to stop erasing
+ * @return Iterator to the element that is now at the erased element's place
+ */
+template <class T, class Alloc>
+typename ft::vector<T, Alloc>::iterator						ft::vector<T, Alloc>::erase(iterator first, iterator last)
+{
+	const size_type	erase_idx = first - begin();
+	const size_type	n = last - first;
+
+	if (n == 0)
+	{
+		return first;
+	}
+	for (size_type i = erase_idx; i < n; i++)
+	{
+		_alloc.destroy(&_array[i]);
+	}
+	if (_size > 1)
+	{
+		for (size_type i = erase_idx; i < _size - 1; i++)
+		{
+			_alloc.construct(&_array[i], _array[i + n - 1]);
+		}
+	}
+	if (_size > 0)
+	{
+		_size -= n;
 	}
 	return iterator(&_array[erase_idx]);
 }

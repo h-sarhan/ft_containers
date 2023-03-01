@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 14:11:25 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 14:24:08 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -559,11 +559,21 @@ void	vectorRelational(void)
 	}
 	if (vec1 < vec2)
 	{
-		std::cout << "equal" << std::endl;
+		std::cout << "less than" << std::endl;
 	}
 	if (vec1 < empty1)
 	{
+		std::cout << "less than" << std::endl;
+	}
+	ft::vector<int>	vec3(10, 9);
+	ft::vector<int>	vec4(10, 10);
+	if (vec3 == vec4)
+	{
 		std::cout << "equal" << std::endl;
+	}
+	if (vec3 < vec4)
+	{
+		std::cout << "less than" << std::endl;
 	}
 	std::cout << std::endl;
 }
@@ -579,6 +589,7 @@ void	vectorReverseIteratorTests(void)
 	}
 	std::cout << std::endl;
 }
+
 
 int	main(void)
 {
@@ -597,7 +608,11 @@ int	main(void)
 	// reserveTests();
 	// beginTests();
 	// vectorIteratorTests();
-	vectorReverseIteratorTests();
+	// vectorReverseIteratorTests();
+	ft::vector<int>	v1(10, 10);
+	ft::vector<int>	v2(100, 10);
+	int a = v2.end() - v2.begin();
+	std::cout << a << std::endl;
 	vectorRelational();
 	std::cout << std::endl;
 }

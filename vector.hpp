@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 14:10:00 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 14:26:34 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,22 @@ ft::vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator
 	}
 }
 
+// template <class T, class Alloc>
+// template <class InputIterator>
+// ft::vector<T, Alloc>::vector(InputIterator first, InputIterator last, const allocator_type& alloc)
+// 	: _alloc(alloc),
+// {
+// 	difference_type	count = 0;
+// 	InputIterator	temp = first;
+// 	while (temp != last)
+// 	{
+// 		count++;
+// 	}
+// 	_size = count;
+// 	_capacity = count;
+// 	_array = _alloc.allocate(_size);
+// }
+
 /**
  * @brief Copy constructor for ft::vector. The copy is a deep copy
  * 
@@ -254,7 +270,7 @@ typename ft::vector<T, Alloc>::const_iterator					ft::vector<T, Alloc>::begin(vo
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::iterator						ft::vector<T, Alloc>::end(void)
 {
-	return iterator(&_array[_size - 1]);
+	return iterator(&_array[_size]);
 }
 
 /**
@@ -265,7 +281,7 @@ typename ft::vector<T, Alloc>::iterator						ft::vector<T, Alloc>::end(void)
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::const_iterator					ft::vector<T, Alloc>::end(void) const
 {
-	return const_iterator(&_array[_size - 1]);
+	return const_iterator(&_array[_size]);
 }
 
 /**
@@ -298,7 +314,7 @@ typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rb
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::reverse_iterator				ft::vector<T, Alloc>::rend(void)
 {
-	return reverse_iterator(&_array[0]);
+	return reverse_iterator(&_array[-1]);
 }
 
 /**
@@ -309,7 +325,7 @@ typename ft::vector<T, Alloc>::reverse_iterator				ft::vector<T, Alloc>::rend(vo
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rend(void) const
 {
-	return const_reverse_iterator(&_array[0]);
+	return const_reverse_iterator(&_array[-1]);
 }
 
 // ** Capacity

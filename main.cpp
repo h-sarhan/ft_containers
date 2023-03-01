@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 14:24:08 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 15:14:27 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <iostream>
 #include "vector.hpp"
 #include <cassert>
-#include "iterator.hpp"
 
 /**
  * @brief Prints the contents of a std::vector or ft::vector
@@ -590,6 +589,17 @@ void	vectorReverseIteratorTests(void)
 	std::cout << std::endl;
 }
 
+void	rangeConstructor(void)
+{
+	ft::vector<int>	v1(10, 100);
+	ft::vector<int>	v2(10, 100);
+	ft::vector<int>	v3(10, 100);
+	ft::vector<ft::vector<int> >	vecOfVecs(3);
+	vecOfVecs[0] = v1;
+	vecOfVecs[1] = v2;
+	vecOfVecs[2] = v3;
+	ft::vector<ft::vector<int> >	vecOfVecs2(vecOfVecs.begin(), vecOfVecs.end());
+}
 
 int	main(void)
 {
@@ -609,10 +619,6 @@ int	main(void)
 	// beginTests();
 	// vectorIteratorTests();
 	// vectorReverseIteratorTests();
-	ft::vector<int>	v1(10, 10);
-	ft::vector<int>	v2(100, 10);
-	int a = v2.end() - v2.begin();
-	std::cout << a << std::endl;
 	vectorRelational();
 	std::cout << std::endl;
 }

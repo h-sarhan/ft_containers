@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 14:26:34 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 16:56:41 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@
 # include <memory>
 # include <stdexcept>
 # include <iostream>
-# include "iterator.hpp"
+# include "enable_if.hpp"
+# include "is_integral.hpp"
+# include "vector_iterator.hpp"
 # include "reverse_iterator.hpp"
 # include "utils.hpp"
-
 
 namespace ft
 {
@@ -55,8 +56,8 @@ namespace ft
 		// * Constructors and destructors
 		explicit vector(const allocator_type &alloc = allocator_type());
 		explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type());
-		// template <class InputIterator>
-		// vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
+		template <class InputIterator>
+		vector(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0, const allocator_type& alloc = allocator_type());
 		vector(const vector &old);
 		~vector(void);
 		vector							&operator=(const vector &x);
@@ -139,7 +140,7 @@ namespace ft
 /**
  * @brief Default constructor for ft::vector
  * 
- * @param alloc Alloc, optional
+ * @param alloc Allocator object, optional
  */
 template <class T, class Alloc >
 ft::vector<T, Alloc>::vector(const allocator_type& alloc) : _alloc(alloc), _array(_alloc.allocate(0)), _size(0), _capacity(0)
@@ -151,7 +152,7 @@ ft::vector<T, Alloc>::vector(const allocator_type& alloc) : _alloc(alloc), _arra
  * 
  * @param n Initial vector size
  * @param val Default value of vector elements, optional
- * @param alloc Alloc, optional
+ * @param alloc Allocator object, optional
  */
 template <class T, class Alloc >
 ft::vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator_type& alloc)
@@ -163,21 +164,26 @@ ft::vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator
 	}
 }
 
-// template <class T, class Alloc>
-// template <class InputIterator>
-// ft::vector<T, Alloc>::vector(InputIterator first, InputIterator last, const allocator_type& alloc)
-// 	: _alloc(alloc),
-// {
-// 	difference_type	count = 0;
-// 	InputIterator	temp = first;
-// 	while (temp != last)
-// 	{
-// 		count++;
-// 	}
-// 	_size = count;
-// 	_capacity = count;
-// 	_array = _alloc.allocate(_size);
-// }
+/**
+ * @brief Range constructor for ft::vector
+ * Generates a new vector with contents from the two iterators
+ * 
+ * @param first Iterator pointing to the beginning of the content
+ * @param last Iterator pointing to the end of the content
+ * @param alloc Allocator object, optional
+ */
+template <class T, class Alloc>
+template <class InputIterator>
+ft::vector<T, Alloc>::vector(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type*, const allocator_type& alloc)
+	: _alloc(alloc), _array(_alloc.allocate(last - first)), _size(last - first), _capacity(_size)
+{
+	difference_type	i = 0;
+	for (InputIterator it = first; it != last; it++)
+	{
+		_alloc.construct(&_array[i], *it);
+		i++;
+	}
+}
 
 /**
  * @brief Copy constructor for ft::vector. The copy is a deep copy

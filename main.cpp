@@ -6,11 +6,12 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 20:39:11 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 20:58:14 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cstdio>
+#include <iterator>
 #include <ostream>
 #include <stdexcept>
 #include <vector>
@@ -671,6 +672,18 @@ void	insertTests(void)
 	printVec(vec3, "");
 }
 
+void	eraseTests(void)
+{
+	ft::vector<int>	a(5);
+	a[0] = 1;
+	a[1] = 2;
+	a[2] = 3;
+	a[3] = 4;
+	a[4] = 5;
+	a.erase(a.begin() + 1);
+	printVec(a, "");
+}
+
 int	main(void)
 {
 	// defaultConstructorTests();
@@ -694,6 +707,7 @@ int	main(void)
 	// assignTests();
 	// pushBackTests();
 	// popBackTests();
-	insertTests();
+	// insertTests();
+	eraseTests();
 	std::cout << std::endl;
 }

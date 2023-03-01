@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 20:39:41 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 20:57:42 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -653,7 +653,7 @@ void															ft::vector<T, Alloc>::pop_back(void)
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::iterator							ft::vector<T, Alloc>::insert(iterator position, const value_type& val)
 {
-	size_type	insert_idx = position - begin();
+	const size_type	insert_idx = position - begin();
 	if (_size + 1 > _capacity)
 	{
 		_realloc((_capacity + 1) * 2);
@@ -681,7 +681,7 @@ void															ft::vector<T, Alloc>::insert(iterator position, size_type n, 
 	{
 		return ;
 	}
-	size_type	insert_idx = position - begin();
+	const size_type	insert_idx = position - begin();
 	if (_size + n > _capacity)
 	{
 		_realloc(_size + n);
@@ -690,7 +690,6 @@ void															ft::vector<T, Alloc>::insert(iterator position, size_type n, 
 	{
 		for (size_type i = _size - 1; i >= insert_idx; i--)
 		{
-			std::cout << i << std::endl;
 			_alloc.construct(&_array[i + n], _array[i]);
 			if (i == 0)
 				break ;
@@ -712,11 +711,12 @@ void															ft::vector<T, Alloc>::insert(iterator position, size_type n, 
  */
 template <class T, class Alloc>
 template <class InputIterator>
-void							ft::vector<T, Alloc>::insert(iterator position, InputIterator first,
-											InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type*)
+void															ft::vector<T, Alloc>::insert(iterator position, InputIterator first,
+																	InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type*)
 {
-	size_type		insert_idx = position - begin();
-	const size_type	n = last - first;
+	const size_type		insert_idx = position - begin();
+	const size_type		n = last - first;
+
 	if (n == 0)
 	{
 		return ;
@@ -725,13 +725,10 @@ void							ft::vector<T, Alloc>::insert(iterator position, InputIterator first,
 	{
 		_realloc(_size + n);
 	}
-	std::cout << insert_idx << std::endl;
-	std::cout << _size << std::endl;
 	if (empty() == false)
 	{
 		for (size_type i = _size - 1; i >= insert_idx; i--)
 		{
-			std::cout << i << std::endl;
 			_alloc.construct(&_array[i + n], _array[i]);
 			if (i == 0)
 				break ;
@@ -743,6 +740,32 @@ void							ft::vector<T, Alloc>::insert(iterator position, InputIterator first,
 		first++;
 	}
 	_size += n;
+}
+
+/**
+ * @brief Erases the element pointed to by the iterator
+ * 
+ * @param position Iterator pointing to the element being erased
+ * @return Iterator to the element that is now at the erased element's place
+ */
+template <class T, class Alloc>
+typename ft::vector<T, Alloc>::iterator							ft::vector<T, Alloc>::erase(iterator position)
+{
+	const size_type	erase_idx = position - begin();
+
+	_alloc.destroy(&_array[erase_idx]);
+	if (_size > 1)
+	{
+		for (size_type i = erase_idx; i < _size - 1; i++)
+		{
+			_alloc.construct(&_array[i], _array[i + 1]);
+		}
+	}
+	if (_size > 0)
+	{
+		_size -= 1;
+	}
+	return iterator(&_array[erase_idx]);
 }
 
 /**

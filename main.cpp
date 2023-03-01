@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 15:14:27 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 17:15:39 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -589,7 +589,7 @@ void	vectorReverseIteratorTests(void)
 	std::cout << std::endl;
 }
 
-void	rangeConstructor(void)
+void	rangeConstructorTests(void)
 {
 	ft::vector<int>	v1(10, 100);
 	ft::vector<int>	v2(10, 100);
@@ -598,7 +598,21 @@ void	rangeConstructor(void)
 	vecOfVecs[0] = v1;
 	vecOfVecs[1] = v2;
 	vecOfVecs[2] = v3;
-	ft::vector<ft::vector<int> >	vecOfVecs2(vecOfVecs.begin(), vecOfVecs.end());
+	// ft::vector<ft::vector<int> >	vecOfVecs2(vecOfVecs.begin(), vecOfVecs.end());
+}
+
+
+void	assignTests(void)
+{
+	ft::vector<int>	a;
+
+	a.assign(1000, 4);
+	a.assign(1000, 4);
+	a.assign(1000, 4);
+	a.assign(1000, 4);
+	a.assign(1000, 4);
+	a.assign(1, 4);
+	printVec(a, "");
 }
 
 int	main(void)
@@ -620,5 +634,6 @@ int	main(void)
 	// vectorIteratorTests();
 	// vectorReverseIteratorTests();
 	vectorRelational();
+	assignTests();
 	std::cout << std::endl;
 }

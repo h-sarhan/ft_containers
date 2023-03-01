@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 16:56:41 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 17:14:17 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 # define VECTOR_HPP
 
+#include <cstddef>
 # include <iterator>
 # include <memory>
 # include <stdexcept>
@@ -56,8 +57,8 @@ namespace ft
 		// * Constructors and destructors
 		explicit vector(const allocator_type &alloc = allocator_type());
 		explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type());
-		template <class InputIterator>
-		vector(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0, const allocator_type& alloc = allocator_type());
+		// template <class InputIterator>
+		// vector(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0, const allocator_type& alloc = allocator_type());
 		vector(const vector &old);
 		~vector(void);
 		vector							&operator=(const vector &x);
@@ -95,7 +96,7 @@ namespace ft
 		// * Modifiers
 		// template <class InputIterator>
 		// void							assign(InputIterator first, InputIterator last);
-		// void							assign(size_type n, const value_type& val);
+		void							assign(size_type n, const value_type& val);
 		// void							push_back(const value_type& val);
 		// void							pop_back(void);
 		// iterator						insert(iterator position, const value_type& val);
@@ -172,18 +173,18 @@ ft::vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator
  * @param last Iterator pointing to the end of the content
  * @param alloc Allocator object, optional
  */
-template <class T, class Alloc>
-template <class InputIterator>
-ft::vector<T, Alloc>::vector(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type*, const allocator_type& alloc)
-	: _alloc(alloc), _array(_alloc.allocate(last - first)), _size(last - first), _capacity(_size)
-{
-	difference_type	i = 0;
-	for (InputIterator it = first; it != last; it++)
-	{
-		_alloc.construct(&_array[i], *it);
-		i++;
-	}
-}
+// template <class T, class Alloc>
+// template <class InputIterator>
+// ft::vector<T, Alloc>::vector(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type*, const allocator_type& alloc)
+// 	: _alloc(alloc), _array(_alloc.allocate(last - first)), _size(last - first), _capacity(_size)
+// {
+// 	size_type	i = 0;
+// 	for (InputIterator it = first; it != last; it++)
+// 	{
+// 		_alloc.construct(&_array[i], *it);
+// 		i++;
+// 	}
+// }
 
 /**
  * @brief Copy constructor for ft::vector. The copy is a deep copy
@@ -552,6 +553,32 @@ template <class T, class Alloc>
 const typename ft::vector<T, Alloc>::value_type*	ft::vector<T, Alloc>::data(void) const
 {
 	return _array;
+}
+
+/**
+ * @brief Replaces the vector's contents with n elements of value val.
+ * If n is greater than the capcity of the vector then a reallocation takes place
+ * 
+ * @param n Number of elements
+ * @param val Default value of elements
+ */
+template <class T, class Alloc>
+void												ft::vector<T, Alloc>::assign(size_type n, const value_type& val)
+{
+	if (n > _capacity)
+	{
+		_realloc(n);
+	}
+	for (size_type i = 0; i < _size; i++)
+	{
+		_alloc.destroy(&_array[i]);
+		_alloc.construct(&_array[i], val);
+	}
+	for (size_type i = _size; i < n; i++)
+	{
+		_alloc.construct(&_array[i], val);
+	}
+	_size = n;
 }
 
 // ** Modifiers

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 20:18:51 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 20:39:41 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ namespace ft
 		template <class InputIterator>
 		void							insert(iterator position, InputIterator first,
 											InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
-		// iterator						erase(iterator position);
+		iterator						erase(iterator position);
 		// iterator						erase(iterator first, iterator last);
 		void							swap(vector &x);
 		void							clear(void);
@@ -667,17 +667,25 @@ typename ft::vector<T, Alloc>::iterator							ft::vector<T, Alloc>::insert(itera
 	return iterator(&_array[insert_idx]);
 }
 
-// ! Document this
+/**
+ * @brief Inserts n elements at the position specified
+ * 
+ * @param position Position to place the new elements
+ * @param n Number of elements to place
+ * @param val The value of the elements
+ */
 template <class T, class Alloc>
 void															ft::vector<T, Alloc>::insert(iterator position, size_type n, const value_type& val)
 {
+	if (n == 0)
+	{
+		return ;
+	}
 	size_type	insert_idx = position - begin();
 	if (_size + n > _capacity)
 	{
 		_realloc(_size + n);
 	}
-	// std::cout << insert_idx << std::endl;
-	// std::cout << _size << std::endl;
 	if (empty() == false)
 	{
 		for (size_type i = _size - 1; i >= insert_idx; i--)
@@ -691,6 +699,48 @@ void															ft::vector<T, Alloc>::insert(iterator position, size_type n, 
 	for (size_type i = 0; i < n; i++)
 	{
 		_alloc.construct(&_array[i + insert_idx], val);
+	}
+	_size += n;
+}
+
+/**
+ * @brief Inserts elements into the vector based from the iterators passed to it.
+ * 
+ * @param position Where to place the elements
+ * @param first Beginning of the iterator
+ * @param last End of the iterator
+ */
+template <class T, class Alloc>
+template <class InputIterator>
+void							ft::vector<T, Alloc>::insert(iterator position, InputIterator first,
+											InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type*)
+{
+	size_type		insert_idx = position - begin();
+	const size_type	n = last - first;
+	if (n == 0)
+	{
+		return ;
+	}
+	if (_size + n > _capacity)
+	{
+		_realloc(_size + n);
+	}
+	std::cout << insert_idx << std::endl;
+	std::cout << _size << std::endl;
+	if (empty() == false)
+	{
+		for (size_type i = _size - 1; i >= insert_idx; i--)
+		{
+			std::cout << i << std::endl;
+			_alloc.construct(&_array[i + n], _array[i]);
+			if (i == 0)
+				break ;
+		}
+	}
+	for (size_type i = 0; i < n; i++)
+	{
+		_alloc.construct(&_array[i + insert_idx], *first);
+		first++;
 	}
 	_size += n;
 }

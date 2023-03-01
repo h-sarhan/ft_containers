@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 20:18:29 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 20:39:11 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -660,7 +660,15 @@ void	insertTests(void)
 
 	ft::vector<int>	vec2;
 	vec2.insert(vec2.end(), 2, 6);
-	printVec(vec2, "");
+	// printVec(vec2, "");
+	ft::vector<int>	vec3(1);
+	ft::vector<int>	vec4(8, 4);
+	vec4[0] = 1;
+	vec4[1] = 2;
+	vec4[2] = 3;
+	vec4[3] = 9;
+	vec3.insert(vec3.begin(), vec4.begin(), vec4.end());
+	printVec(vec3, "");
 }
 
 int	main(void)

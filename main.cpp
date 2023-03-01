@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 20:05:30 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 13:14:28 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -519,10 +519,16 @@ void	reserveTests(void)
 
 void	vectorIteratorTests(void)
 {
-	ft::vector<int>::iterator	it;
+	ft::vector<int>	vec(10, 10);
 	
-	// int a = *it;
-	// (void)a;
+	ft::vector<int>::iterator	beg = vec.begin();
+	
+	vec[5] = 9;
+	for (ft::vector<int>::iterator it = vec.begin(); it != vec.end(); it++)
+	{
+		std::cout << *it << std::endl;
+	}
+	
 }
 
 

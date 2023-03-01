@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/02/28 21:34:17 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 13:14:16 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include "reverse_iterator.hpp"
 # include "utils.hpp"
 
-// ! REPLACE ALL INSTANCES OF std::iterator WITH MY OWN ITERATOR CLASS
 
 namespace ft
 {
@@ -42,8 +41,8 @@ namespace ft
 
 		typedef ft::vector_iterator<T>							iterator;
 		typedef ft::vector_iterator<const T>					const_iterator;
-		// typedef std::reverse_iterator<iterator>					reverse_iterator;
-		// typedef std::reverse_iterator<const_iterator>			const_reverse_iterator;
+		typedef ft::reverse_iterator<iterator>					reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 	private:
 		// * Private attributes
@@ -63,14 +62,14 @@ namespace ft
 		vector							&operator=(const vector &x);
 
 		// * Iterators
-		// iterator						begin(void);
-		// const_iterator				begin(void) const;
-		// iterator						end(void);
-		// const_iterator				end(void) const;
-		// reverse_iterator				rbegin(void);
-		// const_reverse_iterator		rbegin(void) const;
-		// reverse_iterator				rend(void);
-		// const_reverse_iterator		rend(void) const;
+		iterator						begin(void);
+		const_iterator					begin(void) const;
+		iterator						end(void);
+		const_iterator					end(void) const;
+		reverse_iterator				rbegin(void);
+		const_reverse_iterator			rbegin(void) const;
+		reverse_iterator				rend(void);
+		const_reverse_iterator			rend(void) const;
 		
 		// * Capacity
 		size_type						size(void) const;
@@ -224,12 +223,94 @@ ft::vector<T, Alloc>&									ft::vector<T, Alloc>::operator=(const vector<T, Al
 
 // ** Iterators
 
-// ! Document
-// template <class T, class Alloc>
-// typename ft::vector<T, Alloc>::iterator					ft::vector<T, Alloc>::begin(void)
-// {
-	
-// }
+
+/**
+ * @brief Returns an iterator to the first element of the vector
+ * 
+ * @return Iterator to the first element
+ */
+template <class T, class Alloc>
+typename ft::vector<T, Alloc>::iterator						ft::vector<T, Alloc>::begin(void)
+{
+	return iterator(&_array[0]);
+}
+
+/**
+ * @brief Returns a const iterator to the first element of the vector
+ * 
+ * @return Const iterator to the first element
+ */
+template <class T, class Alloc>
+typename ft::vector<T, Alloc>::const_iterator					ft::vector<T, Alloc>::begin(void) const
+{
+	return iterator(&_array[0]);
+}
+
+/**
+ * @brief Returns an iterator to the last element of the vector
+ * 
+ * @return Iterator to the last element
+ */
+template <class T, class Alloc>
+typename ft::vector<T, Alloc>::iterator						ft::vector<T, Alloc>::end(void)
+{
+	return iterator(&_array[_size - 1]);
+}
+
+/**
+ * @brief Returns a const iterator to the last element of the vector
+ * 
+ * @return Const iterator to the last element
+ */
+template <class T, class Alloc>
+typename ft::vector<T, Alloc>::const_iterator					ft::vector<T, Alloc>::end(void) const
+{
+	return iterator(&_array[_size - 1]);
+}
+
+/**
+ * @brief Returns a reverse iterator to the first element of the vector
+ * 
+ * @return Reverse iterator to the first element
+ */
+template <class T, class Alloc>
+typename ft::vector<T, Alloc>::reverse_iterator				ft::vector<T, Alloc>::rbegin(void)
+{
+	return reverse_iterator(&_array[0]);
+}
+
+/**
+ * @brief Returns a const reverse iterator to the first element of the vector
+ * 
+ * @return Const reverse iterator to the first element
+ */
+template <class T, class Alloc>
+typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rbegin(void) const
+{
+	return reverse_iterator(&_array[0]);
+}
+
+/**
+ * @brief Returns a reverse iterator to the last element of the vector
+ * 
+ * @return Reverse iterator to the last element
+ */
+template <class T, class Alloc>
+typename ft::vector<T, Alloc>::reverse_iterator				ft::vector<T, Alloc>::rend(void)
+{
+	return reverse_iterator(&_array[_size - 1]);
+}
+
+/**
+ * @brief Returns a const reverse iterator to the last element of the vector
+ * 
+ * @return Const reverse iterator to the last element
+ */
+template <class T, class Alloc>
+typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rend(void) const
+{
+	return reverse_iterator(&_array[_size - 1]);
+}
 
 // ** Capacity
 
@@ -545,6 +626,11 @@ bool								operator==(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>
 }
 
 // ** Non-member functions
+// template <class T, class Alloc>
+// bool								ft::operator==(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+// {
+	
+// }
 /**
  * @brief Swaps the contents of the two vectors provided as arguments
  * 

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 21:12:37 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 22:00:15 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -688,6 +688,248 @@ void	eraseTests(void)
 	printVec(b, "");
 }
 
+# include <limits.h>
+# include <float.h>
+
+#define NAMESPACE ft
+void copyTests() {
+	size_t size = 30,
+	       value = 42;
+
+	// Copy Constructor
+	NAMESPACE::vector<int> test(size, value);
+	// printByOperator(test);
+	NAMESPACE::vector<int> copy_1(test);
+	// printByOperator(copy_1);
+	NAMESPACE::vector<int> copy_2 = test;
+	// printByOperator(copy_2);
+
+	// Copy Assignment
+	NAMESPACE::vector<int> copy_3;
+	copy_3 = test;
+	// printByOperator(copy_3);
+
+	// Self Assignment
+	size = 10;
+	value = INT_MAX;
+	NAMESPACE::vector<int> self(size, value);
+	NAMESPACE::vector<int> copy(self);
+	// printByOperator(self);
+	// printByOperator(copy);
+	self = copy;
+	// printByOperator(self);
+}
+
+void defaultConstructor() {
+	NAMESPACE::vector<int> test_char;
+	// printByOperator(test_char);
+
+	NAMESPACE::vector<int> test_int;
+	// printByOperator(test_int);
+
+	NAMESPACE::vector<double> test_double;
+	// printByOperator(test_double);
+
+	NAMESPACE::vector<std::string> test_string;
+	// printByOperator(test_string);
+}
+void fillConstructor() {
+	NAMESPACE::vector<char> test_char_1(0, 97);
+	// printByOperator(test_char_1);
+	NAMESPACE::vector<char> test_char_2(10, CHAR_MAX);
+	// printByOperator(test_char_2);
+	NAMESPACE::vector<char> test_char_3(10, 0);
+	// printByOperator(test_char_3);
+	try {
+		NAMESPACE::vector<char> test_char_4(-5, 97);
+		// printByOperator(test_char_4);
+	} catch (std::exception &e) {
+		std::cout << "Exception Caught" << std::endl;
+	}
+
+	NAMESPACE::vector<double> test_double_1(0, 97.9797);
+	// printByOperator(test_double_1);
+	NAMESPACE::vector<double> test_double_2(10, DBL_MIN);
+	// printByOperator(test_double_2);
+	NAMESPACE::vector<double> test_double_3(10, 42424242424242424242.123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123);
+	// printByOperator(test_double_3);
+	try {
+		NAMESPACE::vector<double> test_double_4(-5, DBL_MAX);
+		// printByOperator(test_double_4);
+	} catch (std::exception &e) {
+		std::cout << "Exception Caught" << std::endl;
+	}
+
+	NAMESPACE::vector<std::string> test_string_1(0, "Hello World!");
+	// printByOperator(test_string_1);
+	NAMESPACE::vector<std::string> test_string_2(10, "Hello World!");
+	// printByOperator(test_string_2);
+	try {
+		NAMESPACE::vector<std::string> test_string_3(-42, "Hello World!");
+		// printByOperator(test_string_3);
+	} catch (std::exception &e) {
+		std::cout << "Exception Caught" << std::endl;
+	}
+}
+
+void rangeConstructor() {
+	size_t size = 30,
+	       value = 42;
+	NAMESPACE::vector<int> test(size, value);
+	// printByOperator(test);
+
+	{
+		NAMESPACE::vector<int> range(test.begin(), test.end());
+		// printByOperator(range);
+	}
+	{
+		NAMESPACE::vector<int> range(test.begin() + (test.size() / 4), test.end() - (test.size() / 4));
+		// printByOperator(range);
+	}
+
+	try {
+		NAMESPACE::vector<int> range(test.begin() + (test.size() * 42), test.end() - (test.size() * 42));
+	} catch (std::exception &e) {
+		std::cout << "Exception Caught" << std::endl;
+	}
+	try {
+		NAMESPACE::vector<int> range(test.rend(), test.rbegin());
+	} catch (std::exception &e) {
+		std::cout << "Exception Caught" << std::endl;
+	}
+
+	{
+		char array[] = { 0, 32, 48, 57, 97, 122 };
+		NAMESPACE::vector<char> char_array(array, array + (sizeof(array) / sizeof(char)));
+		// printByOperator(char_array);
+	}
+	{
+		int array[] = { 12, 34, 56, 78, 90, 123, 456, 789, 12345, 67890 };
+		NAMESPACE::vector<int> int_array(array, array + (sizeof(array) / sizeof(int)));
+		// printByOperator(int_array);
+	}
+	{
+		std::string array[] = { "lorem", "ipsum", "dolor", "sit", "amet", ",", "consectetur", "adipiscing" };
+		NAMESPACE::vector<std::string> str_array(array, array + (sizeof(array) / sizeof(std::string)));
+		// printByOperator(str_array);
+	}
+}
+
+template <typename T>
+void capacityExceptionCheck(NAMESPACE::vector<T> &vector, size_t new_size, bool is_resize) {
+	try {
+		is_resize ? vector.resize(new_size) : vector.reserve(new_size);
+	} catch (std::exception &e) {
+		std::cout << "Caught exception" << std::endl;
+	}
+}
+
+
+void basicTests() {
+	{
+		NAMESPACE::vector<long> test;
+		// printByOperator(test);
+
+		test.resize(7, 1234567890);
+		// printByOperator(test);
+		test.resize(12, 42);
+		// printByOperator(test);
+		test.resize(0, INT_MAX);
+		// printByOperator(test);
+		test.resize(25, 'A');
+		// printByOperator(test);
+		test.resize(5, 123);
+		// printByOperator(test);
+		test.resize(8, 'z');
+		// printByOperator(test);
+		test.resize(12, 789789789);
+		// printByOperator(test);
+	}
+	{
+		NAMESPACE::vector<std::string> test;
+		// printByOperator(test);
+
+		test.resize(7, "Lorem ipsum dolor sit amet");
+		// printByOperator(test);
+		test.resize(12, "Proin tellus sem, facilisis vel faucibus nec, convallis in ex");
+		// printByOperator(test);
+		test.resize(0, "Quisque accumsan fringilla eros, faucibus auctor leo gravida a. Maecenas sed mi sed tellus pulvinar mattis. Nulla auctor pretium nunc id auctor. Vivamus tincidunt leo sit amet est posuere tincidunt");
+		// printByOperator(test);
+		test.resize(25, "Sed a rutrum metus, vitae iaculis leo. Donec vulputate lacus nisl, et viverra quam blandit vitae. Mauris tempor mollis gravida. Morbi sed mauris at diam pretium rhoncus sit amet auctor odio. Ut sed nunc id leo ultrices dapibus sed a ligula. Fusce eget quam felis. Fusce dignissim elementum pretium. Quisque consectetur lectus non enim molestie efficitur");
+		// printByOperator(test);
+		test.resize(5, "Mauris in eros pharetra, congue sapien at, varius lorem. Aenean cursus nulla at lectus eleifend suscipit. Aliquam sed lectus sed ante sodales sagittis ut et erat. Aenean eu lacus est. Proin et libero ultrices, lacinia ipsum quis, ultricies lectus. Ut volutpat libero ac lobortis accumsan. Etiam purus quam, convallis non blandit eu, sollicitudin vel sem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vivamus eleifend euismod euismod. Curabitur interdum sollicitudin est ut volutpat. Suspendisse molestie, mauris sit amet ultricies pulvinar, ante nisl posuere lorem, vel aliquet velit eros quis erat. Aliquam vel neque eu massa rhoncus convallis a non augue. Praesent venenatis magna condimentum nibh pulvinar pretium. Etiam maximus malesuada hendrerit. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris mollis erat ut risus mollis, a dictum diam tincidunt");
+		// printByOperator(test);
+		test.resize(8, "Hello World!");
+		// printByOperator(test);
+		test.resize(12, "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
+		// printByOperator(test);
+	}
+}
+
+void exceptionTests() {
+	NAMESPACE::vector<int> test;
+	capacityExceptionCheck(test, test.max_size(), true);
+	capacityExceptionCheck(test, 0, true);
+	capacityExceptionCheck(test, CHAR_BIT, true);
+	capacityExceptionCheck(test, CHAR_MIN, true);
+	capacityExceptionCheck(test, CHAR_MAX, true);
+	capacityExceptionCheck(test, SCHAR_MIN, true);
+	capacityExceptionCheck(test, SCHAR_MAX, true);
+	capacityExceptionCheck(test, INT_MIN, true);
+	// capacityExceptionCheck(test, INT_MAX, true);
+	// capacityExceptionCheck(test, UINT_MAX, true);
+	capacityExceptionCheck(test, SHRT_MIN, true);
+	capacityExceptionCheck(test, SHRT_MAX, true);
+	capacityExceptionCheck(test, USHRT_MAX, true);
+	capacityExceptionCheck(test, LONG_MIN, true);
+	capacityExceptionCheck(test, LONG_MAX, true);
+	capacityExceptionCheck(test, ULONG_MAX, true);
+}
+
+void basicTests2() {
+	size_t size = 10,
+	       value = 12345;
+	NAMESPACE::vector<int> test(size, value);
+	// printByOperator(test);
+
+	test.reserve(42);
+	// printByOperator(test);
+	test.reserve('a');
+	// printByOperator(test);
+	test.reserve(0);
+	// printByOperator(test);
+	test.reserve(999999999);
+	// printByOperator(test);
+	test.reserve(test.capacity());
+	// printByOperator(test);
+	test.reserve(123456789);
+	// printByOperator(test);
+	test.reserve('Z' + 98765 - 12345);
+	// printByOperator(test);
+	test.reserve(*test.begin() + (test.size() / 2));
+	// printByOperator(test);
+}
+
+void exceptionTests2() {
+	NAMESPACE::vector<int> test;
+	capacityExceptionCheck(test, test.max_size(), false);
+	capacityExceptionCheck(test, 0, false);
+	capacityExceptionCheck(test, CHAR_BIT, false);
+	capacityExceptionCheck(test, CHAR_MIN, false);
+	capacityExceptionCheck(test, CHAR_MAX, false);
+	capacityExceptionCheck(test, SCHAR_MIN, false);
+	capacityExceptionCheck(test, SCHAR_MAX, false);
+	capacityExceptionCheck(test, INT_MIN, false);
+	capacityExceptionCheck(test, INT_MAX, false);
+	capacityExceptionCheck(test, UINT_MAX, false);
+	capacityExceptionCheck(test, SHRT_MIN, false);
+	capacityExceptionCheck(test, SHRT_MAX, false);
+	capacityExceptionCheck(test, USHRT_MAX, false);
+	capacityExceptionCheck(test, LONG_MIN, false);
+	capacityExceptionCheck(test, LONG_MAX, false);
+	capacityExceptionCheck(test, ULONG_MAX, false);
+}
+
 int	main(void)
 {
 	// defaultConstructorTests();
@@ -712,6 +954,15 @@ int	main(void)
 	// pushBackTests();
 	// popBackTests();
 	// insertTests();
-	eraseTests();
+	// eraseTests();
+	// copyTests();
+	// fillConstructor();
+	// rangeConstructor();
+	// defaultConstructor();
+	basicTests();
+	exceptionTests();
+	basicTests2();
+	exceptionTests2();
 	std::cout << std::endl;
 }
+

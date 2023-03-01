@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 21:11:49 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 21:50:19 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,8 +162,9 @@ ft::vector<T, Alloc>::vector(const allocator_type& alloc) : _alloc(alloc), _arra
  */
 template <class T, class Alloc >
 ft::vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator_type& alloc)
-	: _alloc(alloc), _array(_alloc.allocate(n)), _size(n), _capacity(n)
+	: _alloc(alloc), _size(n), _capacity(n)
 {
+	_array = _alloc.allocate(n);
 	for (size_type i = 0; i < n; i++)
 	{
 		_alloc.construct(&_array[i], val);

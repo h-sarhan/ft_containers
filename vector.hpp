@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 13:14:16 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 13:53:04 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,16 +117,16 @@ namespace ft
 	// * Relational operators
 	template <class T, class Alloc>
 	bool								operator==(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs);
-	// template <class T, class Alloc>
-	// ? bool							operator!=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs);
-	// template <class T, class Alloc>
-	// ? bool							operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	// template <class T, class Alloc>
-	// ? bool							operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	// template <class T, class Alloc>
-	// ? bool							operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	// template <class T, class Alloc>
-	// ? bool							operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	template <class T, class Alloc>
+	bool								operator!=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs);
+	template <class T, class Alloc>
+	bool								operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	template <class T, class Alloc>
+	bool								operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	template <class T, class Alloc>
+	bool								operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	template <class T, class Alloc>
+	bool								operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 
 	// * Non-member functions
 	template <class T, class Alloc>
@@ -243,7 +243,7 @@ typename ft::vector<T, Alloc>::iterator						ft::vector<T, Alloc>::begin(void)
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::const_iterator					ft::vector<T, Alloc>::begin(void) const
 {
-	return iterator(&_array[0]);
+	return const_iterator(&_array[0]);
 }
 
 /**
@@ -265,7 +265,7 @@ typename ft::vector<T, Alloc>::iterator						ft::vector<T, Alloc>::end(void)
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::const_iterator					ft::vector<T, Alloc>::end(void) const
 {
-	return iterator(&_array[_size - 1]);
+	return const_iterator(&_array[_size - 1]);
 }
 
 /**
@@ -287,7 +287,7 @@ typename ft::vector<T, Alloc>::reverse_iterator				ft::vector<T, Alloc>::rbegin(
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rbegin(void) const
 {
-	return reverse_iterator(&_array[0]);
+	return const_reverse_iterator(&_array[0]);
 }
 
 /**
@@ -309,7 +309,7 @@ typename ft::vector<T, Alloc>::reverse_iterator				ft::vector<T, Alloc>::rend(vo
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rend(void) const
 {
-	return reverse_iterator(&_array[_size - 1]);
+	return const_reverse_iterator(&_array[_size - 1]);
 }
 
 // ** Capacity
@@ -391,7 +391,6 @@ bool	ft::vector<T, Alloc>::empty(void) const
 {
 	return _size == 0;
 }
-
 
 /**
  * @brief Increases vector capacity if it is less than n
@@ -615,22 +614,97 @@ void												ft::vector<T, Alloc>::_realloc(size_type new_capacity)
  * @return true if the two vectors are equal, false otherwise
  */
 template <class T, class Alloc>
-bool								operator==(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
+bool								ft::operator==(const ft::vector<T,Alloc>& lhs, const ft::vector<T,Alloc>& rhs)
 {
+	if (lhs.size() == 0 && rhs.size() == 0)
+	{
+		return true;
+	}
 	if (lhs.size() != rhs.size())
 	{
 		return false;
 	}
-	return true;
-	// return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+	return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+/**
+ * @brief Not equals operator overload method
+ * 
+ * @param lhs Left-handside vector
+ * @param rhs Right-handside vector
+ * @return true if the two vectors are not equal, false otherwise
+ */
+template <class T, class Alloc>
+bool								ft::operator!=(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
+{
+	return !(lhs == rhs);
+}
+
+/**
+ * @brief Less than operator overload method
+ * 
+ * @param lhs Left-handside vector
+ * @param rhs Right-handside vector
+ * @return true if the left vector is less than the right one
+ */
+template <class T, class Alloc>
+bool								ft::operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+{
+	if (lhs.size() == 0 && rhs.size() == 0)
+	{
+		return false;
+	}
+	if (lhs.size() == 0 && rhs.size() != 0)
+	{
+		return true;
+	}
+	if (lhs.size() != 0 && rhs.size() == 0)
+	{
+		return false;
+	}
+	return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+/**
+ * @brief Less than or equal operator overload method
+ * 
+ * @param lhs Left-handside vector
+ * @param rhs Right-handside vector
+ * @return true if the left vector is less than or equal to the right one
+ */
+template <class T, class Alloc>
+bool								ft::operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+{
+	return lhs < rhs || lhs == rhs;
+}
+
+/**
+ * @brief Greater than operator overload method
+ * 
+ * @param lhs Left-handside vector
+ * @param rhs Right-handside vector
+ * @return true if the left vector is greater than  the right one
+ */
+template <class T, class Alloc>
+bool								ft::operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+{
+	return rhs < lhs;
+}
+
+/**
+ * @brief Greater than or equal operator overload method
+ * 
+ * @param lhs Left-handside vector
+ * @param rhs Right-handside vector
+ * @return true if the left vector is greater than or equal to the right one
+ */
+template <class T, class Alloc>
+bool								ft::operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+{
+	return rhs < lhs || rhs == lhs;
 }
 
 // ** Non-member functions
-// template <class T, class Alloc>
-// bool								ft::operator==(const vector<T,Alloc> &lhs, const vector<T,Alloc> &rhs)
-// {
-	
-// }
 /**
  * @brief Swaps the contents of the two vectors provided as arguments
  * 

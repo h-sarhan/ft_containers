@@ -6,10 +6,11 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 13:14:28 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 13:50:26 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <ostream>
 #include <stdexcept>
 #include <vector>
 #include <iostream>
@@ -438,6 +439,7 @@ void	clearTests(void)
 	assert(intenseVec.size() == 0);
 	assert(intenseVec.capacity() == 0);
 	assert(intenseVec.empty() == true);
+	std::cout << std::endl;
 }
 
 /**
@@ -497,6 +499,7 @@ void	resizeTests(void)
 	no.resize(80, filler);
 	no.resize(1000);
 	no.resize(10000, filler);
+	std::cout << std::endl;
 }
 
 /**
@@ -513,7 +516,7 @@ void	reserveTests(void)
 	assert(vec.capacity() == 100);
 	vec.reserve(2000);
 	assert(vec.capacity() == 2000);
-
+	std::cout << std::endl;
 }
 
 
@@ -528,9 +531,42 @@ void	vectorIteratorTests(void)
 	{
 		std::cout << *it << std::endl;
 	}
-	
+	std::cout << std::endl;
 }
 
+void	vectorRelational(void)
+{
+	ft::vector<int>	empty1;
+	ft::vector<int>	empty2;
+	
+	if (empty1 == empty2)
+	{
+		std::cout << "equal" << std::endl;
+	}
+	if (empty1 < empty2)
+	{
+		std::cout << "less than" << std::endl;
+	}
+	ft::vector<int>	vec1(10, 10);
+	ft::vector<int>	vec2(10, 10);
+	if (vec1 == vec2)
+	{
+		std::cout << "equal" << std::endl;
+	}
+	if (vec1 == empty1)
+	{
+		std::cout << "equal" << std::endl;
+	}
+	if (vec1 < vec2)
+	{
+		std::cout << "equal" << std::endl;
+	}
+	if (vec1 < empty1)
+	{
+		std::cout << "equal" << std::endl;
+	}
+	std::cout << std::endl;
+}
 
 int	main(void)
 {
@@ -548,6 +584,7 @@ int	main(void)
 	// resizeTests();
 	// reserveTests();
 	// beginTests();
-	vectorIteratorTests();
+	// vectorIteratorTests();
+	vectorRelational();
 	std::cout << std::endl;
 }

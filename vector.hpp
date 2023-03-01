@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 17:59:20 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 18:43:55 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include "reverse_iterator.hpp"
 # include "utils.hpp"
 
-// ! Check iterator ranges: if last < first
+// ! Check iterator ranges: if first == last || last < first
 
 namespace ft
 {
@@ -100,7 +100,7 @@ namespace ft
 		template <class InputIterator>
 		void							assign(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
 		void							assign(size_type n, const value_type& val);
-		// void							push_back(const value_type& val);
+		void							push_back(const value_type& val);
 		// void							pop_back(void);
 		// iterator						insert(iterator position, const value_type& val);
 		// void							insert(iterator position, size_type n, const value_type& val);
@@ -558,6 +558,8 @@ const typename ft::vector<T, Alloc>::value_type*	ft::vector<T, Alloc>::data(void
 	return _array;
 }
 
+// ** Modifiers
+
 /**
  * @brief Replaces the vector's contents with the elements between the last and first iterators
  *        A reallocation takes place if the number of elements to add is greater than the capacity of the vector
@@ -612,7 +614,23 @@ void												ft::vector<T, Alloc>::assign(size_type n, const value_type& val)
 	_size = n;
 }
 
-// ** Modifiers
+/**
+ * @brief Adds an element at the end of the vector. Reallocates if necessary
+ * 
+ * @param val Element to add
+ */
+template <class T, class Alloc>
+void												ft::vector<T, Alloc>::push_back(const value_type& val)
+{
+	value_type	val_copy = val;
+	if (_size + 1 > _capacity)
+	{
+		reserve((_capacity + 1) * 2);
+	}
+	_alloc.construct(&_array[_size], val_copy);
+	_size += 1;
+}
+
 
 /**
  * @brief Swaps contents of current vector with the one passed as an argument.

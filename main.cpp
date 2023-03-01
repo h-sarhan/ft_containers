@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 18:02:28 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 18:41:40 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -626,6 +626,19 @@ void	assignTests(void)
 	printVec(a, "");
 }
 
+
+void	pushBackTests(void)
+{
+	ft::vector<ft::vector<int> >	a(1);
+	// a.reserve(1);
+	a[0] = ft::vector<int>(908, 10);
+	a.push_back(a[0]);
+	ft::vector<int> q(100, 45);
+	a.push_back(q);
+	// printVec(a[1], "");
+	// std::cout << a[0][0] << std::endl;
+}
+
 int	main(void)
 {
 	// defaultConstructorTests();
@@ -646,6 +659,7 @@ int	main(void)
 	// vectorReverseIteratorTests();
 	// vectorRelational();
 	// rangeConstructorTests();
-	assignTests();
+	// assignTests();
+	pushBackTests();
 	std::cout << std::endl;
 }

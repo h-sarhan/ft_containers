@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 19:30:13 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 20:18:51 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "utils.hpp"
 
 // ! Check iterator ranges: if first == last || last < first
+// ! Check if size == 0
 
 namespace ft
 {
@@ -103,9 +104,10 @@ namespace ft
 		void							push_back(const value_type& val);
 		void							pop_back(void);
 		iterator						insert(iterator position, const value_type& val);
-		// void							insert(iterator position, size_type n, const value_type& val);
-		// template <class InputIterator>
-		// void							insert(iterator position, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
+		void							insert(iterator position, size_type n, const value_type& val);
+		template <class InputIterator>
+		void							insert(iterator position, InputIterator first,
+											InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
 		// iterator						erase(iterator position);
 		// iterator						erase(iterator first, iterator last);
 		void							swap(vector &x);
@@ -663,6 +665,34 @@ typename ft::vector<T, Alloc>::iterator							ft::vector<T, Alloc>::insert(itera
 	_alloc.construct(&_array[insert_idx], val);
 	_size += 1;
 	return iterator(&_array[insert_idx]);
+}
+
+// ! Document this
+template <class T, class Alloc>
+void															ft::vector<T, Alloc>::insert(iterator position, size_type n, const value_type& val)
+{
+	size_type	insert_idx = position - begin();
+	if (_size + n > _capacity)
+	{
+		_realloc(_size + n);
+	}
+	// std::cout << insert_idx << std::endl;
+	// std::cout << _size << std::endl;
+	if (empty() == false)
+	{
+		for (size_type i = _size - 1; i >= insert_idx; i--)
+		{
+			std::cout << i << std::endl;
+			_alloc.construct(&_array[i + n], _array[i]);
+			if (i == 0)
+				break ;
+		}
+	}
+	for (size_type i = 0; i < n; i++)
+	{
+		_alloc.construct(&_array[i + insert_idx], val);
+	}
+	_size += n;
 }
 
 /**

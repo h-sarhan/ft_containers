@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 17:47:11 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 17:59:20 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include "vector_iterator.hpp"
 # include "reverse_iterator.hpp"
 # include "utils.hpp"
+
+// ! Check iterator ranges: if last < first
 
 namespace ft
 {
@@ -58,7 +60,8 @@ namespace ft
 		explicit vector(const allocator_type &alloc = allocator_type());
 		explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type());
 		template <class InputIterator>
-		vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
+		vector(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+				typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
 		vector(const vector &old);
 		~vector(void);
 		vector							&operator=(const vector &x);
@@ -94,15 +97,15 @@ namespace ft
 		const value_type				*data(void) const;
 
 		// * Modifiers
-		// template <class InputIterator>
-		// void							assign(InputIterator first, InputIterator last);
+		template <class InputIterator>
+		void							assign(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
 		void							assign(size_type n, const value_type& val);
 		// void							push_back(const value_type& val);
 		// void							pop_back(void);
 		// iterator						insert(iterator position, const value_type& val);
 		// void							insert(iterator position, size_type n, const value_type& val);
 		// template <class InputIterator>
-		// void							insert(iterator position, InputIterator first, InputIterator last);
+		// void							insert(iterator position, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
 		// iterator						erase(iterator position);
 		// iterator						erase(iterator first, iterator last);
 		void							swap(vector &x);
@@ -556,6 +559,35 @@ const typename ft::vector<T, Alloc>::value_type*	ft::vector<T, Alloc>::data(void
 }
 
 /**
+ * @brief Replaces the vector's contents with the elements between the last and first iterators
+ *        A reallocation takes place if the number of elements to add is greater than the capacity of the vector
+ * 
+ * @param first Beginning iterator
+ * @param last End iterator
+ */
+template <class T, class Alloc>
+template <class InputIterator>
+void												ft::vector<T, Alloc>::assign(InputIterator first, InputIterator last,
+																					typename enable_if<!is_integral<InputIterator>::value >::type*)
+{
+	const size_type	count = last - first;
+	if (count > _capacity)
+	{
+		_realloc(count);
+	}
+	for (size_type i = 0; i < count; i++)
+	{
+		if (i < _size)
+		{
+			_alloc.destroy(&_array[i]);
+		}
+		_alloc.construct(&_array[i], *first);
+		first++;
+	}
+	_size = count;
+}
+
+/**
  * @brief Replaces the vector's contents with n elements of value val.
  * If n is greater than the capcity of the vector then a reallocation takes place
  * 
@@ -569,13 +601,12 @@ void												ft::vector<T, Alloc>::assign(size_type n, const value_type& val)
 	{
 		_realloc(n);
 	}
-	for (size_type i = 0; i < _size; i++)
+	for (size_type i = 0; i < n; i++)
 	{
-		_alloc.destroy(&_array[i]);
-		_alloc.construct(&_array[i], val);
-	}
-	for (size_type i = _size; i < n; i++)
-	{
+		if (i < _size)
+		{
+			_alloc.destroy(&_array[i]);
+		}
 		_alloc.construct(&_array[i], val);
 	}
 	_size = n;

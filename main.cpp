@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 17:45:30 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 18:02:28 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -602,9 +602,9 @@ void	rangeConstructorTests(void)
 	vecOfVecs[2] = v3;
 	ft::vector<ft::vector<int> >	vecOfVecs2(vecOfVecs.begin(), vecOfVecs.end());
 
-	std::vector<int> o(10, 10);
-	ft::vector<double> k(o.begin(), o.end());
-	printVec(k, "");
+	// std::vector<int> o(10, 10);
+	// ft::vector<double> k(o.begin(), o.end());
+	printVec(vecOfVecs2[0], "");
 	// std::vector<int>
 }
 
@@ -619,6 +619,10 @@ void	assignTests(void)
 	a.assign(1000, 4);
 	a.assign(1000, 4);
 	a.assign(1, 4);
+	printVec(a, "");
+
+	ft::vector<int> b(10, 290);
+	a.assign(b.begin(), b.begin());
 	printVec(a, "");
 }
 
@@ -641,7 +645,7 @@ int	main(void)
 	// vectorIteratorTests();
 	// vectorReverseIteratorTests();
 	// vectorRelational();
-	// assignTests();
-	rangeConstructorTests();
+	// rangeConstructorTests();
+	assignTests();
 	std::cout << std::endl;
 }

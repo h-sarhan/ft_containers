@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 18:41:40 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 18:50:22 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -639,6 +639,15 @@ void	pushBackTests(void)
 	// std::cout << a[0][0] << std::endl;
 }
 
+void	popBackTests(void)
+{
+	ft::vector<ft::vector<int> >	a(100);
+	a[98] = ft::vector<int>(2, 3);
+	a[99] = ft::vector<int>(2, 2);
+	a.pop_back();
+	printVec(a[98], "");
+}
+
 int	main(void)
 {
 	// defaultConstructorTests();
@@ -660,6 +669,7 @@ int	main(void)
 	// vectorRelational();
 	// rangeConstructorTests();
 	// assignTests();
-	pushBackTests();
+	// pushBackTests();
+	popBackTests();
 	std::cout << std::endl;
 }

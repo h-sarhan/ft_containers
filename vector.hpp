@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 18:43:55 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/01 18:48:16 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ namespace ft
 		void							assign(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
 		void							assign(size_type n, const value_type& val);
 		void							push_back(const value_type& val);
-		// void							pop_back(void);
+		void							pop_back(void);
 		// iterator						insert(iterator position, const value_type& val);
 		// void							insert(iterator position, size_type n, const value_type& val);
 		// template <class InputIterator>
@@ -248,7 +248,6 @@ ft::vector<T, Alloc>&									ft::vector<T, Alloc>::operator=(const vector<T, Al
 }
 
 // ** Iterators
-
 
 /**
  * @brief Returns an iterator to the first element of the vector
@@ -629,6 +628,17 @@ void												ft::vector<T, Alloc>::push_back(const value_type& val)
 	}
 	_alloc.construct(&_array[_size], val_copy);
 	_size += 1;
+}
+
+/**
+ * @brief Removes an element from the end of the vector.
+ * 
+ */
+template <class T, class Alloc>
+void												ft::vector<T, Alloc>::pop_back(void)
+{
+	_alloc.destroy(&_array[_size - 1]);
+	_size -= 1;
 }
 
 

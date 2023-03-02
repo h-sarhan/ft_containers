@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 00:20:25 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 03:29:52 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <memory>
 # include "pair.hpp"
+# include "bst.hpp"
 # include "reverse_iterator.hpp"
 
 namespace ft
@@ -46,7 +47,7 @@ namespace ft
 		{
 		protected:
 			key_compare								comp;
-			value_compare(key_compare c) : comp(c){}
+			value_compare(key_compare c) : comp(c) {}
 		public:
 			bool operator() (const value_type &x, const value_type &y) const
 			{return comp(x.first, y.first);}
@@ -56,13 +57,15 @@ namespace ft
 	private:
 		key_compare											_comp;
 		allocator_type										_alloc;
+		bst<key_type, mapped_type>							_bst;
+		size_type											_size;
 
 	// ** Constructors and destructors
 	public:
 		explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type());
 		// template <class InputIterator>
 		// map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type());
-		// map(const map &x);
+		map(const map &x);
 		// ~map(void);
 		// map												&operator=(const map &x);
 
@@ -117,11 +120,12 @@ namespace ft
 	};
 };
 
-// template <class Key, class T, class Compare, class Alloc>
-// ft::map<Key, T, Compare, Alloc>::map(const key_compare &comp, const allocator_type &alloc) : _comp(comp), _alloc(alloc)
-// {
-	
-// }
+template <class Key, class T, class Compare, class Alloc>
+ft::map<Key, T, Compare, Alloc>::map(const key_compare &comp, const allocator_type &alloc) : _comp(comp), _alloc(alloc), _bst(), _size(0)
+{}
+
+template <class Key, class T, class Compare, class Alloc>
+ft::map<Key, T, Compare, Alloc>::map(const map &old) : _comp(old._comp), _alloc(old._alloc), _bst(old._bst), _size(old._size){}
 
 
 #endif

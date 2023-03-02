@@ -6,18 +6,16 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 00:06:33 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 03:30:00 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include <iterator>
-// #include <ostream>
-// #include <stdexcept>
-// #include <string_view>
 #include "is_integral.hpp"
 #include "vector.hpp"
 #include <vector>
 #include <cassert>
+#include "map.hpp"
+#include <string>
 
 /**
  * @brief Prints the contents of a std::vector or ft::vector
@@ -712,6 +710,13 @@ void	reverseIteratorTests(void)
 	std::cout << *b.rend() << std::endl;
 }
 
+
+void	mapDefaultConstructor(void)
+{
+	ft::map<std::string, int>	a;
+	ft::map<std::string, int>	b(a);
+}
+
 int	main(void)
 {
 	// defaultConstructorTests();
@@ -741,7 +746,7 @@ int	main(void)
 	// fillConstructor();
 	// rangeConstructor();
 	// defaultConstructor();
-
+	mapDefaultConstructor();
 	// reverseIteratorTests();
 	std::cout << std::endl;
 }

@@ -6,13 +6,14 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 03:29:52 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 03:34:37 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_HPP
 # define MAP_HPP
 
+# include <cstddef>
 # include <memory>
 # include "pair.hpp"
 # include "bst.hpp"
@@ -80,9 +81,9 @@ namespace ft
 		// const_reverse_iterator							rend(void) const;
 
 		// ** Capacity
-		// bool											empty(void) const;
-		// size_type										size(void) const;
-		// size_type										max_size(void) const;
+		bool												empty(void) const;
+		size_type											size(void) const;
+		// size_type											max_size(void) const;
 
 		// ** Element access
 		// mapped_type											&operator[](const key_type &k);
@@ -127,5 +128,21 @@ ft::map<Key, T, Compare, Alloc>::map(const key_compare &comp, const allocator_ty
 template <class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>::map(const map &old) : _comp(old._comp), _alloc(old._alloc), _bst(old._bst), _size(old._size){}
 
+template <class Key, class T, class Compare, class Alloc>
+bool														ft::map<Key, T, Compare, Alloc>::empty() const
+{
+	return _bst.root == NULL;
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::size_type			ft::map<Key, T, Compare, Alloc>::size() const
+{
+	return _size;
+}
+
+// template <class Key, class T, class Compare, class Alloc>
+// typename ft::map<Key, T, Compare, Alloc>::size_type			ft::map<Key, T, Compare, Alloc>::max_size() const
+// {
+// }
 
 #endif

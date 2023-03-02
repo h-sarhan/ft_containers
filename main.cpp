@@ -6,19 +6,17 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/02 04:04:42 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/02 17:16:59 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cstdio>
-#include <iterator>
-#include <ostream>
-#include <stdexcept>
-#include <string_view>
-#include <vector>
-#include <iostream>
+// #include <iterator>
+// #include <ostream>
+// #include <stdexcept>
+// #include <string_view>
 #include "is_integral.hpp"
 #include "vector.hpp"
+#include <vector>
 #include <cassert>
 
 /**
@@ -688,381 +686,242 @@ void	eraseTests(void)
 	b.erase(b.begin(), b.begin() + 1);
 	printVec(b, "");
 }
+#define TESTED_TYPE int
+# include "./containers_test/srcs/base.hpp"
 
-# include <limits.h>
-# include <float.h>
+// #define TESTED_NAMESPACE std
 
-#define NAMESPACE ft
-void copyTests() {
-	size_t size = 30,
-	       value = 42;
-
-	// Copy Constructor
-	NAMESPACE::vector<int> test(size, value);
-	// printByOperator(test);
-	NAMESPACE::vector<int> copy_1(test);
-	// printByOperator(copy_1);
-	NAMESPACE::vector<int> copy_2 = test;
-	// printByOperator(copy_2);
-
-	// Copy Assignment
-	NAMESPACE::vector<int> copy_3;
-	copy_3 = test;
-	// printByOperator(copy_3);
-
-	// Self Assignment
-	size = 10;
-	value = INT_MAX;
-	NAMESPACE::vector<int> self(size, value);
-	NAMESPACE::vector<int> copy(self);
-	// printByOperator(self);
-	// printByOperator(copy);
-	self = copy;
-	// printByOperator(self);
-}
-
-void defaultConstructor() {
-	NAMESPACE::vector<int> test_char;
-	// printByOperator(test_char);
-
-	NAMESPACE::vector<int> test_int;
-	// printByOperator(test_int);
-
-	NAMESPACE::vector<double> test_double;
-	// printByOperator(test_double);
-
-	NAMESPACE::vector<std::string> test_string;
-	// printByOperator(test_string);
-}
-void fillConstructor() {
-	NAMESPACE::vector<char> test_char_1(0, 97);
-	// printByOperator(test_char_1);
-	NAMESPACE::vector<char> test_char_2(10, CHAR_MAX);
-	// printByOperator(test_char_2);
-	NAMESPACE::vector<char> test_char_3(10, 0);
-	// printByOperator(test_char_3);
-	try {
-		NAMESPACE::vector<char> test_char_4(-5, 97);
-		// printByOperator(test_char_4);
-	} catch (std::exception &e) {
-		std::cout << "Exception Caught" << std::endl;
-	}
-
-	NAMESPACE::vector<double> test_double_1(0, 97.9797);
-	// printByOperator(test_double_1);
-	NAMESPACE::vector<double> test_double_2(10, DBL_MIN);
-	// printByOperator(test_double_2);
-	NAMESPACE::vector<double> test_double_3(10, 42424242424242424242.123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123);
-	// printByOperator(test_double_3);
-	try {
-		NAMESPACE::vector<double> test_double_4(-5, DBL_MAX);
-		// printByOperator(test_double_4);
-	} catch (std::exception &e) {
-		std::cout << "Exception Caught" << std::endl;
-	}
-
-	NAMESPACE::vector<std::string> test_string_1(0, "Hello World!");
-	// printByOperator(test_string_1);
-	NAMESPACE::vector<std::string> test_string_2(10, "Hello World!");
-	// printByOperator(test_string_2);
-	try {
-		NAMESPACE::vector<std::string> test_string_3(-42, "Hello World!");
-		// printByOperator(test_string_3);
-	} catch (std::exception &e) {
-		std::cout << "Exception Caught" << std::endl;
-	}
-}
-
-void rangeConstructor() {
-	size_t size = 30,
-	       value = 42;
-	NAMESPACE::vector<int> test(size, value);
-	// printByOperator(test);
-
-	{
-		NAMESPACE::vector<int> range(test.begin(), test.end());
-		// printByOperator(range);
-	}
-	{
-		NAMESPACE::vector<int> range(test.begin() + (test.size() / 4), test.end() - (test.size() / 4));
-		// printByOperator(range);
-	}
-
-	try {
-		NAMESPACE::vector<int> range(test.begin() + (test.size() * 42), test.end() - (test.size() * 42));
-	} catch (std::exception &e) {
-		std::cout << "Exception Caught" << std::endl;
-	}
-	try {
-		NAMESPACE::vector<int> range(test.rend(), test.rbegin());
-	} catch (std::exception &e) {
-		std::cout << "Exception Caught" << std::endl;
-	}
-
-	{
-		char array[] = { 0, 32, 48, 57, 97, 122 };
-		NAMESPACE::vector<char> char_array(array, array + (sizeof(array) / sizeof(char)));
-		// printByOperator(char_array);
-	}
-	{
-		int array[] = { 12, 34, 56, 78, 90, 123, 456, 789, 12345, 67890 };
-		NAMESPACE::vector<int> int_array(array, array + (sizeof(array) / sizeof(int)));
-		// printByOperator(int_array);
-	}
-	{
-		std::string array[] = { "lorem", "ipsum", "dolor", "sit", "amet", ",", "consectetur", "adipiscing" };
-		NAMESPACE::vector<std::string> str_array(array, array + (sizeof(array) / sizeof(std::string)));
-		// printByOperator(str_array);
-	}
-}
+#define T_SIZE_TYPE typename TESTED_NAMESPACE::vector<T>::size_type
 
 template <typename T>
-void capacityExceptionCheck(NAMESPACE::vector<T> &vector, size_t new_size, bool is_resize) {
-	try {
-		is_resize ? vector.resize(new_size) : vector.reserve(new_size);
-	} catch (std::exception &e) {
-		std::cout << "Caught exception" << std::endl;
-	}
-}
-
-
-void basicTests() {
-	{
-		NAMESPACE::vector<long> test;
-		// printByOperator(test);
-
-		test.resize(7, 1234567890);
-		// printByOperator(test);
-		test.resize(12, 42);
-		// printByOperator(test);
-		test.resize(0, INT_MAX);
-		// printByOperator(test);
-		test.resize(25, 'A');
-		// printByOperator(test);
-		test.resize(5, 123);
-		// printByOperator(test);
-		test.resize(8, 'z');
-		// printByOperator(test);
-		test.resize(12, 789789789);
-		// printByOperator(test);
-	}
-	{
-		NAMESPACE::vector<std::string> test;
-		// printByOperator(test);
-
-		test.resize(7, "Lorem ipsum dolor sit amet");
-		// printByOperator(test);
-		test.resize(12, "Proin tellus sem, facilisis vel faucibus nec, convallis in ex");
-		// printByOperator(test);
-		test.resize(0, "Quisque accumsan fringilla eros, faucibus auctor leo gravida a. Maecenas sed mi sed tellus pulvinar mattis. Nulla auctor pretium nunc id auctor. Vivamus tincidunt leo sit amet est posuere tincidunt");
-		// printByOperator(test);
-		test.resize(25, "Sed a rutrum metus, vitae iaculis leo. Donec vulputate lacus nisl, et viverra quam blandit vitae. Mauris tempor mollis gravida. Morbi sed mauris at diam pretium rhoncus sit amet auctor odio. Ut sed nunc id leo ultrices dapibus sed a ligula. Fusce eget quam felis. Fusce dignissim elementum pretium. Quisque consectetur lectus non enim molestie efficitur");
-		// printByOperator(test);
-		test.resize(5, "Mauris in eros pharetra, congue sapien at, varius lorem. Aenean cursus nulla at lectus eleifend suscipit. Aliquam sed lectus sed ante sodales sagittis ut et erat. Aenean eu lacus est. Proin et libero ultrices, lacinia ipsum quis, ultricies lectus. Ut volutpat libero ac lobortis accumsan. Etiam purus quam, convallis non blandit eu, sollicitudin vel sem. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vivamus eleifend euismod euismod. Curabitur interdum sollicitudin est ut volutpat. Suspendisse molestie, mauris sit amet ultricies pulvinar, ante nisl posuere lorem, vel aliquet velit eros quis erat. Aliquam vel neque eu massa rhoncus convallis a non augue. Praesent venenatis magna condimentum nibh pulvinar pretium. Etiam maximus malesuada hendrerit. Interdum et malesuada fames ac ante ipsum primis in faucibus. Mauris mollis erat ut risus mollis, a dictum diam tincidunt");
-		// printByOperator(test);
-		test.resize(8, "Hello World!");
-		// printByOperator(test);
-		test.resize(12, "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
-		// printByOperator(test);
-	}
-}
-
-void exceptionTests() {
-	NAMESPACE::vector<int> test;
-	capacityExceptionCheck(test, test.max_size(), true);
-	capacityExceptionCheck(test, 0, true);
-	capacityExceptionCheck(test, CHAR_BIT, true);
-	capacityExceptionCheck(test, CHAR_MIN, true);
-	capacityExceptionCheck(test, CHAR_MAX, true);
-	capacityExceptionCheck(test, SCHAR_MIN, true);
-	capacityExceptionCheck(test, SCHAR_MAX, true);
-	capacityExceptionCheck(test, INT_MIN, true);
-	// capacityExceptionCheck(test, INT_MAX, true);
-	// capacityExceptionCheck(test, UINT_MAX, true);
-	capacityExceptionCheck(test, SHRT_MIN, true);
-	capacityExceptionCheck(test, SHRT_MAX, true);
-	capacityExceptionCheck(test, USHRT_MAX, true);
-	capacityExceptionCheck(test, LONG_MIN, true);
-	capacityExceptionCheck(test, LONG_MAX, true);
-	capacityExceptionCheck(test, ULONG_MAX, true);
-}
-
-void basicTests2() {
-	size_t size = 10,
-	       value = 12345;
-	NAMESPACE::vector<int> test(size, value);
-	// printByOperator(test);
-
-	test.reserve(42);
-	// printByOperator(test);
-	test.reserve('a');
-	// printByOperator(test);
-	test.reserve(0);
-	// printByOperator(test);
-	test.reserve(999999999);
-	// printByOperator(test);
-	test.reserve(test.capacity());
-	// printByOperator(test);
-	test.reserve(123456789);
-	// printByOperator(test);
-	test.reserve('Z' + 98765 - 12345);
-	// printByOperator(test);
-	test.reserve(*test.begin() + (test.size() / 2));
-	// printByOperator(test);
-}
-
-void exceptionTests2() {
-	NAMESPACE::vector<int> test;
-	capacityExceptionCheck(test, test.max_size(), false);
-	capacityExceptionCheck(test, 0, false);
-	capacityExceptionCheck(test, CHAR_BIT, false);
-	capacityExceptionCheck(test, CHAR_MIN, false);
-	capacityExceptionCheck(test, CHAR_MAX, false);
-	capacityExceptionCheck(test, SCHAR_MIN, false);
-	capacityExceptionCheck(test, SCHAR_MAX, false);
-	capacityExceptionCheck(test, INT_MIN, false);
-	capacityExceptionCheck(test, INT_MAX, false);
-	capacityExceptionCheck(test, UINT_MAX, false);
-	capacityExceptionCheck(test, SHRT_MIN, false);
-	capacityExceptionCheck(test, SHRT_MAX, false);
-	capacityExceptionCheck(test, USHRT_MAX, false);
-	capacityExceptionCheck(test, LONG_MIN, false);
-	capacityExceptionCheck(test, LONG_MAX, false);
-	capacityExceptionCheck(test, ULONG_MAX, false);
-}
-
-#include <cstdlib>
-template <typename T>
-void pushRandomValues(NAMESPACE::vector<T> &vector, size_t size) {
-	for (size_t i = 0; i < size; i++) {
-		vector.push_back(10000 + (std::rand() % 50000));
-	}
-}
-
-
-int gerardSwap()
+void	printSize(TESTED_NAMESPACE::vector<T> const &vct, bool print_content = true)
 {
-	// timeval exec_time;
-	// gettimeofday(&exec_time, NULL);
-	// double start = 1.0e6 * exec_time.tv_sec + exec_time.tv_usec;
+	const T_SIZE_TYPE size = vct.size();
+	const T_SIZE_TYPE capacity = vct.capacity();
+	const std::string isCapacityOk = (capacity >= size) ? "OK" : "KO";
+	// Cannot limit capacity's max value because it's implementation dependent
 
-	// member function swap
+	std::cout << "size: " << size << std::endl;
+	std::cout << "capacity: " << isCapacityOk << std::endl;
+	std::cout << "max_size: " << vct.max_size() << std::endl;
+	if (print_content)
 	{
-		NAMESPACE::vector<int> vector_1;
-		NAMESPACE::vector<int>::iterator it_begin_1 = vector_1.begin();
-		NAMESPACE::vector<int>::iterator it_end_1 = vector_1.end();
-		pushRandomValues(vector_1, 10);
-		// printByOperator(vector_1);
-
-		NAMESPACE::vector<int> vector_2;
-		NAMESPACE::vector<int>::iterator it_begin_2 = vector_2.begin();
-		NAMESPACE::vector<int>::iterator it_end_2 = vector_2.end();
-		pushRandomValues(vector_2, 7);
-		// printByOperator(vector_2);
-
-		std::cout << std::boolalpha
-		          << "Is vector_1.begin() == it_begin_1? " << (vector_1.begin() == it_begin_1) << std::endl
-		          << "Is vector_1.end() == it_end_1? " << (vector_1.end() == it_end_1) << std::endl
-		          << "Is vector_2.begin() == it_begin_2? " << (vector_2.begin() == it_begin_2) << std::endl
-		          << "Is vector_2.end() == it_end_2? " << (vector_2.end() == it_end_2) << std::endl;
-
-		it_begin_1 = vector_1.begin();
-		it_end_1 = vector_1.end();
-		it_begin_2 = vector_2.begin();
-		it_end_2 = vector_2.end();
-
-		vector_1.swap(vector_2);
-		// printByIterator(vector_1, it_begin_2, vector_1.end());
-		// printByIterator(vector_2, it_begin_1, vector_2.end());
-
-		std::cout << "Is vector_1.begin() == it_begin_1? " << (vector_1.begin() == it_begin_1) << std::endl
-		          << "Is vector_1.begin() == it_begin_2? " << (vector_1.begin() == it_begin_2) << std::endl
-		          << "Is vector_2.begin() == it_begin_1? " << (vector_2.begin() == it_begin_1) << std::endl
-		          << "Is vector_2.begin() == it_begin_2? " << (vector_2.begin() == it_begin_2) << std::endl;
-
-		NAMESPACE::vector<int> vector_3(vector_2);
-		NAMESPACE::vector<int>::iterator it_begin_3 = vector_3.begin();
-
-		std::cout << "Is vector_3.begin() == it_begin_1? " << (vector_3.begin() == it_begin_1) << std::endl
-		          << "Is vector_3.begin() == it_begin_2? " << (vector_3.begin() == it_begin_2) << std::endl;
-
-		vector_3.swap(vector_1);
-		// printByIterator(vector_1, it_begin_3, vector_1.end());
-		// printByIterator(vector_3, it_begin_2, vector_3.end());
-
-		vector_3.swap(vector_2);
-		// printByIterator(vector_2, it_begin_2, vector_2.end());
-		// printByIterator(vector_3, it_begin_1, vector_3.end());
-
-		vector_3.clear();
-		// printByIterator(vector_1, vector_1.begin(), vector_1.end());
-		// printByIterator(vector_2, vector_2.begin(), vector_2.end());
-		// printByIterator(vector_3, vector_3.begin(), vector_3.end());
+		typename TESTED_NAMESPACE::vector<T>::const_iterator it = vct.begin();
+		typename TESTED_NAMESPACE::vector<T>::const_iterator ite = vct.end();
+		std::cout << std::endl << "Content is:" << std::endl;
+		for (; it != ite; ++it)
+			std::cout << "- " << *it << std::endl;
 	}
-
-	// non-member function swap
-	{
-		NAMESPACE::vector<std::string> vector_1;
-		NAMESPACE::vector<std::string>::iterator it_begin_1 = vector_1.begin();
-		NAMESPACE::vector<std::string>::iterator it_end_1 = vector_1.end();
-		vector_1.push_back("I admire your courage but I don't admire your singing ability.");
-		vector_1.push_back("There was a big earthquake last night.");
-		vector_1.push_back("Tom can't remember all his passwords, so he keeps them in a list disguised as phone numbers.");
-		vector_1.push_back("Let's all just take a moment to breathe, please!");
-		vector_1.push_back("Let's all just take a moment to breathe, please!");
-		vector_1.push_back("It's fascinating that you know all the planets.");
-		vector_1.push_back(" Your reputation as an eccentric will rapidly grow in the neighborhood if you're seen walking a pet ostrich on a leash every morning.");
-		vector_1.push_back("Have you heard the news?");
-		// printByOperator(vector_1);
-
-		NAMESPACE::vector<std::string> vector_2;
-		NAMESPACE::vector<std::string>::iterator it_begin_2 = vector_2.begin();
-		NAMESPACE::vector<std::string>::iterator it_end_2 = vector_2.end();
-		vector_2.push_back("Lorem ipsum dolor sit amet");
-		vector_2.push_back("");
-		vector_2.push_back("The quick brown fox jumps over the lazy dog");
-		// printByOperator(vector_2);
-
-		std::cout << "Is vector_1.begin() == it_begin_1? " << (vector_1.begin() == it_begin_1) << std::endl
-		          << "Is vector_1.end() == it_end_1? " << (vector_1.end() == it_end_1) << std::endl
-		          << "Is vector_2.begin() == it_begin_2? " << (vector_2.begin() == it_begin_2) << std::endl
-		          << "Is vector_2.end() == it_end_2? " << (vector_2.end() == it_end_2) << std::endl;
-
-		it_begin_1 = vector_1.begin();
-		it_end_1 = vector_1.end();
-		it_begin_2 = vector_2.begin();
-		it_end_2 = vector_2.end();
-
-		NAMESPACE::swap(vector_1, vector_2);
-		// printByIterator(vector_1, it_begin_2, vector_1.end());
-		// printByIterator(vector_2, it_begin_1, vector_2.end());
-
-		std::cout << "Is vector_1.begin() == it_begin_1? " << (vector_1.begin() == it_begin_1) << std::endl
-		          << "Is vector_1.begin() == it_begin_2? " << (vector_1.begin() == it_begin_2) << std::endl
-		          << "Is vector_2.begin() == it_begin_1? " << (vector_2.begin() == it_begin_1) << std::endl
-		          << "Is vector_2.begin() == it_begin_2? " << (vector_2.begin() == it_begin_2) << std::endl;
-
-		NAMESPACE::vector<std::string> vector_3(vector_1);
-		NAMESPACE::vector<std::string>::iterator it_begin_3 = vector_3.begin();
-
-		std::cout << "Is vector_3.begin() == it_begin_1? " << (vector_3.begin() == it_begin_1) << std::endl
-		          << "Is vector_3.begin() == it_begin_2? " << (vector_3.begin() == it_begin_2) << std::endl;
-
-		NAMESPACE::swap(vector_3, vector_2);
-		// printByIterator(vector_2, it_begin_3, vector_2.end());
-		// printByIterator(vector_3, it_begin_1, vector_3.end());
-
-		vector_3.clear();
-		// printByIterator(vector_1, vector_1.begin(), vector_1.end());
-		// printByIterator(vector_2, vector_2.begin(), vector_2.end());
-		// printByIterator(vector_3, vector_3.begin(), vector_3.end());
-	}
-
-	// gettimeofday(&exec_time, NULL);
-	// double end = 1.0e6 * exec_time.tv_sec + exec_time.tv_usec;
-	// std::cout << std::fixed << std::setprecision(3) << (end - start) / 1000 << " ms" << std::endl;
-	return 0;
+	std::cout << "###############################################" << std::endl;
 }
+
+int		riteMli(void)
+{
+	const int size = 5;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::iterator it_ = vct.begin();
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it(it_);
+
+	std::cout << "dad  " << *(it_) << std::endl;
+	std::cout << "mom  " << *(it) << std::endl;
+	for (int i = 0; i < size; ++i)
+		vct[i] = (i + 1) * 5;
+
+	printSize(vct);
+
+	std::cout << (it_ == it.base()) << std::endl;
+	std::cout << (it_ == (it + 3).base()) << std::endl;
+
+	std::cout << *(it.base() + 1) << std::endl;
+	std::cout << *(it - 3) << std::endl;
+	std::cout << *(it - 3).base() << std::endl;
+	it -= 3;
+	std::cout << *it.base() << std::endl;
+
+	std::cout << "TEST OFFSET" << std::endl;
+	std::cout << *(it) << std::endl;
+	std::cout << *(it).base() << std::endl;
+	std::cout << *(it - 0) << std::endl;
+	std::cout << *(it - 0).base() << std::endl;
+	std::cout << *(it - 1).base() << std::endl;
+
+	return (0);
+}
+
+int		rite2Mli(void)
+{
+	const int size = 5;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it = vct.rbegin();
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite = vct.rbegin();
+	vct[0] = 1;
+	vct[1] = 2;
+	vct[2] = 3;
+	vct[3] = 4;
+	vct[4] = 5;
+	std::cout << *it << std::endl;
+	for (int i = 0; i < size; ++i)
+		it[i] = (size - i) * 5;
+
+	it = it + 5;
+	it = 1 + it;
+	it = it - 4;
+	std::cout << *(it += 2) << std::endl;
+	std::cout << *(it -= 1) << std::endl;
+
+	*(it -= 2) = 42;
+	*(it += 2) = 21;
+
+	std::cout << "const_ite +=/-=: " << *(ite += 2) << " | " << *(ite -= 2) << std::endl;
+
+	std::cout << "(it == const_it): " << (ite == it) << std::endl;
+	std::cout << "(const_ite - it): " << (ite - it) << std::endl;
+	std::cout << "(ite + 3 == it): " << (ite + 3 == it) << std::endl;
+
+	printSize(vct, true);
+	return (0);
+}
+
+#undef TESTED_TYPE
+#define TESTED_TYPE foo<int>
+#undef TESTED_NAMESPACE
+#define TESTED_NAMESPACE ft
+
+int		riteArrow(void)
+{
+	const int size = 5;
+	TESTED_NAMESPACE::vector<TESTED_TYPE> vct(size);
+	vct[0] = 1;
+	vct[1] = 2;
+	vct[2] = 3;
+	vct[3] = 4;
+	vct[4] = 5;
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::reverse_iterator it(vct.rbegin());
+	TESTED_NAMESPACE::vector<TESTED_TYPE>::const_reverse_iterator ite(vct.rend());
+	
+	// std::cout << *it << "   " << *ite << std::endl;
+
+	for (int i = 1; it != ite; ++i)
+		*it++ = (i * 7);
+	printSize(vct, 1);
+
+	it = vct.rbegin();
+	ite = vct.rbegin();
+
+	std::cout << *(++ite) << std::endl;
+	std::cout << *(ite++) << std::endl;
+	std::cout << *ite++ << std::endl;
+	std::cout << *++ite << std::endl;
+
+	it->m();
+	ite->m();
+
+	std::cout << *(++it) << std::endl;
+	std::cout << *(it++) << std::endl;
+	std::cout << *it++ << std::endl;
+	std::cout << *++it << std::endl;
+
+	std::cout << *(--ite) << std::endl;
+	std::cout << *(ite--) << std::endl;
+	std::cout << *--ite << std::endl;
+	std::cout << *ite-- << std::endl;
+
+	(*it).m();
+	(*ite).m();
+
+	std::cout << *(--it) << std::endl;
+	std::cout << *(it--) << std::endl;
+	std::cout << *it-- << std::endl;
+	std::cout << *--it << std::endl;
+
+	return (0);
+}
+
+void	reverseIteratorTests(void)
+{
+	ft::vector<int>	a(5);
+	
+	a[0] = 0;
+	a[1] = 1;
+	a[2] = 2;
+	a[3] = 3;
+	a[4] = 4;
+	
+	// std::cout << *a.rbegin() << std::endl;
+	std::cout << *a.rend() << std::endl;
+
+	std::vector<int>	b(5);
+	
+	// b[0] = 0;
+	// b[1] = 1;
+	// b[2] = 2;
+	// b[3] = 3;
+	// b[4] = 4;
+	
+	// std::cout << *b.rbegin() << std::endl;
+	std::cout << *b.rend() << std::endl;
+}
+
+template <typename Ite_1, typename Ite_2>
+void ft_eq_ope(const Ite_1 &first, const Ite_2 &second, const bool redo = 1)
+{
+	std::cout << (first < second) << std::endl;
+	std::cout << (first <= second) << std::endl;
+	std::cout << (first > second) << std::endl;
+	std::cout << (first >= second) << std::endl;
+	if (redo)
+		ft_eq_ope(second, first, 0);
+}
+
+#undef TESTED_NAMESPACE
+#define TESTED_NAMESPACE ft
+
+int		riteEqOp(void)
+{
+	const int size = 5;
+	TESTED_NAMESPACE::vector<int> vct(size);
+	TESTED_NAMESPACE::vector<int>::reverse_iterator it_0(vct.rbegin());
+	TESTED_NAMESPACE::vector<int>::reverse_iterator it_1(vct.rend());
+	TESTED_NAMESPACE::vector<int>::reverse_iterator it_mid;
+
+	TESTED_NAMESPACE::vector<int>::const_reverse_iterator cit_0 = vct.rbegin();
+	TESTED_NAMESPACE::vector<int>::const_reverse_iterator cit_1;
+	TESTED_NAMESPACE::vector<int>::const_reverse_iterator cit_mid;
+
+	for (int i = size; it_0 != it_1; --i)
+		*it_0++ = i;
+	// printSize(vct, 1);
+	it_0 = vct.rbegin();
+	cit_1 = vct.rend();
+	it_mid = it_0 + 3;
+	cit_mid = it_0 + 3; cit_mid = cit_0 + 3; cit_mid = it_mid;
+
+	std::cout << std::boolalpha;
+	std::cout << ((it_0 + 3 == cit_0 + 3) && (cit_0 + 3 == it_mid)) << std::endl;
+
+	std::cout << "\t\tft_eq_ope:" << std::endl;
+	// regular it
+	ft_eq_ope(it_0 + 3, it_mid);
+	ft_eq_ope(it_0, it_1);
+	
+	std::cout << "it_1 - 3 == " <<  *(it_1 - 3) << std::endl;
+	ft_eq_ope(it_1 - 3, it_mid);
+	// const it
+	ft_eq_ope(cit_0 + 3, cit_mid);
+	ft_eq_ope(cit_0, cit_1);
+	ft_eq_ope(cit_1 - 3, cit_mid);
+	// both it
+	ft_eq_ope(it_0 + 3, cit_mid);
+	ft_eq_ope(it_mid, cit_0 + 3);
+	ft_eq_ope(it_0, cit_1);
+	ft_eq_ope(it_1, cit_0);
+	ft_eq_ope(it_1 - 3, cit_mid);
+	ft_eq_ope(it_mid, cit_1 - 3);
+
+	return (0);
+}
+
+
 
 int	main(void)
 {
@@ -1099,19 +958,11 @@ int	main(void)
 	// exceptionTests2();
 	// gerardSwap();
 
-
-	ft::vector<int>	a(10, 10);
-	// ft::vector<int>::const_iterator cit = a.begin();
-	// ft::vector<int>::iterator it = a.end();
-	// if (it != cit)
-	// {
-	// 	std::cout << "a" << std::endl;
-	// }
-	
-	ft::vector<int>::iterator		it = a.begin();
-	ft::vector<int>::iterator		it2 = a.end();
-	it - it2;
-	
+	// riteMli();
+	// rite2Mli();
+	// riteArrow();
+	// reverseIteratorTests();
+	riteEqOp();
 	std::cout << std::endl;
 }
 

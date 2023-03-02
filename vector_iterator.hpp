@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:44:24 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/02 04:06:59 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/02 19:00:24 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ namespace ft
 		vector_iterator		&operator-=(const difference_type b);
 	};
 
-};
 	// * Non-member Iterator comparison
 	template <class T1, class T2>
 	bool													operator==(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2);
@@ -117,6 +116,7 @@ namespace ft
 	
 	template <class T>
 	typename ft::vector_iterator<T>::difference_type		operator-(const ft::vector_iterator<T>& lhs, const ft::vector_iterator<T>& rhs);
+};
 
 template <class T>
 ft::vector_iterator<T>::vector_iterator(void): _ptr(0)
@@ -128,9 +128,8 @@ ft::vector_iterator<T>::vector_iterator(pointer ptr): _ptr(ptr)
 
 template <class T>
 template <class U>
-ft::vector_iterator<T>::vector_iterator(const vector_iterator<U> &old)
+ft::vector_iterator<T>::vector_iterator(const vector_iterator<U> &old) : _ptr(old.base())
 {
-	_ptr = old.base();
 }
 
 template <class T>
@@ -176,7 +175,7 @@ template <class T>
 ft::vector_iterator<T>	ft::vector_iterator<T>::operator++(int)
 {
 	vector_iterator<T> temp = *this;
-	++*this;
+	++(*this);
 	return temp;
 }
 
@@ -184,7 +183,7 @@ template <class T>
 ft::vector_iterator<T>	ft::vector_iterator<T>::operator--(int)
 {
 	vector_iterator<T> temp = *this;
-	--*this;
+	--(*this);
 	return temp;
 }
 
@@ -275,85 +274,85 @@ ft::vector_iterator<T>		&ft::vector_iterator<T>::operator-=(const difference_typ
 }
 
 template <class T1, class T2>
-bool													operator==(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
+bool													ft::operator==(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
 {
 	return it1.base() == it2.base();
 }
 
 template <class T>
-bool													operator==(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
+bool													ft::operator==(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
 {
 	return it1.base() == it2.base();
 }
 
 template <class T1, class T2>
-bool													operator!=(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
+bool													ft::operator!=(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
 {
 	return !(it1 == it2);
 }
 
 template <class T>
-bool													operator!=(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
+bool													ft::operator!=(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
 {
 	return !(it1 == it2);
 }
 
 template <class T1, class T2>
-bool													operator<(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
+bool													ft::operator<(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
 {
 	return it1.base() < it2.base();
 }
 
 template <class T>
-bool													operator<(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
+bool													ft::operator<(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
 {
 	return it1.base() < it2.base();
 }
 
 template <class T1, class T2>
-bool													operator>(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
+bool													ft::operator>(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
 {
 	return it2 < it1;
 }
 
 template <class T>
-bool													operator>(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
+bool													ft::operator>(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
 {
 	return it2 < it1;
 }
 
 template <class T1, class T2>
-bool													operator<=(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
+bool													ft::operator<=(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
 {
 	return it1 < it2 || it1 == it2;
 }
 
 template <class T>
-bool													operator<=(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
+bool													ft::operator<=(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
 {
 	return it1 < it2 || it1 == it2;
 }
 
 template <class T1, class T2>
-bool													operator>=(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
+bool													ft::operator>=(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
 {
 	return it1 > it2 || it1 == it2;
 }
 
 template <class T>
-bool													operator>=(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
+bool													ft::operator>=(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
 {
 	return it1 > it2 || it1 == it2;
 }
 
 template <class T>
-ft::vector_iterator<T>								operator+(typename ft::vector_iterator<T>::difference_type n, const ft::vector_iterator<T>& it)
+ft::vector_iterator<T>								ft::operator+(typename ft::vector_iterator<T>::difference_type n, const ft::vector_iterator<T>& it)
 {
 	return ft::vector_iterator<T>(it.base() + n);
 }
 
 template <class T>
-typename ft::vector_iterator<T>::difference_type		operator-(const ft::vector_iterator<T>& lhs, const ft::vector_iterator<T>& rhs)
+typename ft::vector_iterator<T>::difference_type		ft::operator-(const ft::vector_iterator<T>& lhs, const ft::vector_iterator<T>& rhs)
 {
 	return lhs.base() - rhs.base();
 }

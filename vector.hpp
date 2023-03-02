@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/02 02:53:33 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/02 16:51:09 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,7 +305,7 @@ typename ft::vector<T, Alloc>::const_iterator					ft::vector<T, Alloc>::end(void
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::reverse_iterator					ft::vector<T, Alloc>::rbegin(void)
 {
-	return reverse_iterator(&_array[_size - 1]);
+	return reverse_iterator(end());
 }
 
 /**
@@ -316,7 +316,7 @@ typename ft::vector<T, Alloc>::reverse_iterator					ft::vector<T, Alloc>::rbegin
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rbegin(void) const
 {
-	return const_reverse_iterator(&_array[_size - 1]);
+	return const_reverse_iterator(end());
 }
 
 /**
@@ -327,7 +327,7 @@ typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rb
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::reverse_iterator					ft::vector<T, Alloc>::rend(void)
 {
-	return reverse_iterator(&_array[-1]);
+	return reverse_iterator(begin());
 }
 
 /**
@@ -338,7 +338,7 @@ typename ft::vector<T, Alloc>::reverse_iterator					ft::vector<T, Alloc>::rend(v
 template <class T, class Alloc>
 typename ft::vector<T, Alloc>::const_reverse_iterator			ft::vector<T, Alloc>::rend(void) const
 {
-	return const_reverse_iterator(&_array[-1]);
+	return const_reverse_iterator(begin());
 }
 
 // ** Capacity
@@ -795,7 +795,7 @@ typename ft::vector<T, Alloc>::iterator						ft::vector<T, Alloc>::erase(iterato
 	{
 		for (size_type i = erase_idx; i < _size - 1; i++)
 		{
-			_alloc.construct(&_array[i], _array[i + n - 1]);
+			_alloc.construct(&_array[i], _array[i + n]);
 		}
 	}
 	if (_size > 0)

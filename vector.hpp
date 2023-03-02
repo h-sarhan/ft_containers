@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 21:50:19 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/02 02:53:33 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 # include "is_integral.hpp"
 # include "vector_iterator.hpp"
 # include "reverse_iterator.hpp"
-# include "utils.hpp"
+# include "iterator_comparison.hpp"
+# include "iterator_distance.hpp"
 
 // ! Check iterator ranges: if first == last || last < first
 // ! Check if size == 0
@@ -107,7 +108,7 @@ namespace ft
 		void							insert(iterator position, size_type n, const value_type& val);
 		template <class InputIterator>
 		void							insert(iterator position, InputIterator first,
-											InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
+												InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type* = 0);
 		iterator						erase(iterator position);
 		iterator						erase(iterator first, iterator last);
 		void							swap(vector &x);
@@ -182,7 +183,7 @@ ft::vector<T, Alloc>::vector(size_type n, const value_type& val, const allocator
 template <class T, class Alloc>
 template <class InputIterator>
 ft::vector<T, Alloc>::vector(InputIterator first, InputIterator last, const allocator_type& alloc, typename enable_if<!is_integral<InputIterator>::value >::type*)
-	: _alloc(alloc), _array(_alloc.allocate(last - first)), _size(last - first), _capacity(_size)
+	: _alloc(alloc), _array(_alloc.allocate(iterator_distance(first, last))), _size(iterator_distance(first, last)), _capacity(_size)
 {
 	size_type	i = 0;
 	for (InputIterator it = first; it != last; it++)
@@ -574,7 +575,7 @@ template <class InputIterator>
 void															ft::vector<T, Alloc>::assign(InputIterator first, InputIterator last,
 																					typename enable_if<!is_integral<InputIterator>::value >::type*)
 {
-	const size_type	count = last - first;
+	const size_type	count = iterator_distance(first, last);
 	if (count > _capacity)
 	{
 		_realloc(count);
@@ -716,7 +717,7 @@ void															ft::vector<T, Alloc>::insert(iterator position, InputIterator
 																	InputIterator last, typename enable_if<!is_integral<InputIterator>::value >::type*)
 {
 	const size_type		insert_idx = position - begin();
-	const size_type		n = last - first;
+	const size_type		n = iterator_distance(first, last);
 
 	if (n == 0)
 	{
@@ -780,7 +781,7 @@ template <class T, class Alloc>
 typename ft::vector<T, Alloc>::iterator						ft::vector<T, Alloc>::erase(iterator first, iterator last)
 {
 	const size_type	erase_idx = first - begin();
-	const size_type	n = last - first;
+	const size_type	n = iterator_distance(first, last);
 
 	if (n == 0)
 	{

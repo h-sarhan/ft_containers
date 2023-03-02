@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   iterator.hpp                                       :+:      :+:    :+:   */
+/*   vector_iterator.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:44:24 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 14:20:27 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/02 04:06:59 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,25 @@ namespace ft
 
 	private:
 		// * Private attributes
-		iterator_traits<vector_iterator<T> >	_traits;
 		pointer									_ptr;
 
 	public:
 		// * Constructors and destructors
 		vector_iterator(void);
 		vector_iterator(pointer ptr);
-		vector_iterator(const vector_iterator &old);
 		vector_iterator	&operator=(const vector_iterator &rhs);
 		~vector_iterator(void);
 
+		template <class U>
+		vector_iterator(const vector_iterator<U> &old);
+
+		pointer				base(void) const;
+
 		// * Iterator traversal
-		vector_iterator	&operator++(void); // pre-increment
-		vector_iterator	&operator--(void); // pre-decrement
-		vector_iterator	operator++(int); // post-increment
-		vector_iterator	operator--(int); // post-decrement
+		vector_iterator		&operator++(void); // pre-increment
+		vector_iterator		&operator--(void); // pre-decrement
+		vector_iterator		operator++(int); // post-increment
+		vector_iterator		operator--(int); // post-decrement
 
 		// * Iterator comparison
 		bool				operator==(const vector_iterator &rhs) const;
@@ -56,9 +59,11 @@ namespace ft
 		bool				operator<=(const vector_iterator &rhs) const;
 		bool				operator>=(const vector_iterator &rhs) const;
 
+
+
 		// * Iterator access
-		value_type			&operator*(void);
-		value_type			*operator->(void);
+		reference			operator*(void);
+		pointer				operator->(void);
 		value_type			&operator[](const difference_type b);
 		
 		// * Iterator arithmetic
@@ -67,21 +72,73 @@ namespace ft
 		vector_iterator		operator-(const difference_type rhs) const;
 		vector_iterator		&operator+=(const difference_type b);
 		vector_iterator		&operator-=(const difference_type b);
-
 	};
+
 };
+	// * Non-member Iterator comparison
+	template <class T1, class T2>
+	bool													operator==(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2);
+
+	template <class T>
+	bool													operator==(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2);
+
+	template <class T1, class T2>
+	bool													operator!=(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2);
+
+	template <class T>
+	bool													operator!=(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2);
+
+	template <class T1, class T2>
+	bool													operator<(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2);
+
+	template <class T>
+	bool													operator<(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2);
+
+	template <class T1, class T2>
+	bool													operator>(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2);
+
+	template <class T>
+	bool													operator>(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2);
+
+	template <class T1, class T2>
+	bool													operator<=(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2);
+
+	template <class T>
+	bool													operator<=(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2);
+
+	template <class T1, class T2>
+	bool													operator>=(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2);
+
+	template <class T>
+	bool													operator>=(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2);
+
+	template <class T>
+	ft::vector_iterator<T>								operator+(typename ft::vector_iterator<T>::difference_type n, const ft::vector_iterator<T>& it);
+	
+	template <class T>
+	typename ft::vector_iterator<T>::difference_type		operator-(const ft::vector_iterator<T>& lhs, const ft::vector_iterator<T>& rhs);
 
 template <class T>
-ft::vector_iterator<T>::vector_iterator(void): _traits(), _ptr(0)
+ft::vector_iterator<T>::vector_iterator(void): _ptr(0)
 {}
 
 template <class T>
-ft::vector_iterator<T>::vector_iterator(pointer ptr): _traits(), _ptr(ptr)
+ft::vector_iterator<T>::vector_iterator(pointer ptr): _ptr(ptr)
 {}
 
 template <class T>
-ft::vector_iterator<T>::vector_iterator(const vector_iterator &old): _traits(old._traits), _ptr(old._ptr)
-{}
+template <class U>
+ft::vector_iterator<T>::vector_iterator(const vector_iterator<U> &old)
+{
+	_ptr = old.base();
+}
+
+template <class T>
+typename ft::vector_iterator<T>::pointer				ft::vector_iterator<T>::base(void) const
+{
+	return _ptr;
+}
+
 
 template <class T>
 ft::vector_iterator<T> &ft::vector_iterator<T>::operator=(const vector_iterator &rhs)
@@ -90,7 +147,7 @@ ft::vector_iterator<T> &ft::vector_iterator<T>::operator=(const vector_iterator 
 	{
 		return *this;
 	}
-	_traits = rhs._traits;
+	// _traits = rhs._traits;
 	_ptr = rhs._ptr;
 	return *this;
 }
@@ -216,5 +273,90 @@ ft::vector_iterator<T>		&ft::vector_iterator<T>::operator-=(const difference_typ
 	_ptr -= rhs;
 	return *this;
 }
+
+template <class T1, class T2>
+bool													operator==(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
+{
+	return it1.base() == it2.base();
+}
+
+template <class T>
+bool													operator==(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
+{
+	return it1.base() == it2.base();
+}
+
+template <class T1, class T2>
+bool													operator!=(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
+{
+	return !(it1 == it2);
+}
+
+template <class T>
+bool													operator!=(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
+{
+	return !(it1 == it2);
+}
+
+template <class T1, class T2>
+bool													operator<(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
+{
+	return it1.base() < it2.base();
+}
+
+template <class T>
+bool													operator<(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
+{
+	return it1.base() < it2.base();
+}
+
+template <class T1, class T2>
+bool													operator>(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
+{
+	return it2 < it1;
+}
+
+template <class T>
+bool													operator>(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
+{
+	return it2 < it1;
+}
+
+template <class T1, class T2>
+bool													operator<=(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
+{
+	return it1 < it2 || it1 == it2;
+}
+
+template <class T>
+bool													operator<=(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
+{
+	return it1 < it2 || it1 == it2;
+}
+
+template <class T1, class T2>
+bool													operator>=(const ft::vector_iterator<T1> &it1, const ft::vector_iterator<T2> &it2)
+{
+	return it1 > it2 || it1 == it2;
+}
+
+template <class T>
+bool													operator>=(const ft::vector_iterator<T> &it1, const ft::vector_iterator<T> &it2)
+{
+	return it1 > it2 || it1 == it2;
+}
+
+template <class T>
+ft::vector_iterator<T>								operator+(typename ft::vector_iterator<T>::difference_type n, const ft::vector_iterator<T>& it)
+{
+	return ft::vector_iterator<T>(it.base() + n);
+}
+
+template <class T>
+typename ft::vector_iterator<T>::difference_type		operator-(const ft::vector_iterator<T>& lhs, const ft::vector_iterator<T>& rhs)
+{
+	return lhs.base() - rhs.base();
+}
+
 
 #endif

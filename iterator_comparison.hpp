@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.hpp                                          :+:      :+:    :+:   */
+/*   iterator_comparison.hpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/28 12:46:06 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/01 13:47:18 by hsarhan          ###   ########.fr       */
+/*   Created: 2023/03/01 22:36:47 by hsarhan           #+#    #+#             */
+/*   Updated: 2023/03/02 02:32:17 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILS_HPP
-
-# define UTILS_HPP
+#ifndef ITERATOR_COMPARISION_HPP
+# define ITERATOR_COMPARISION_HPP
 
 namespace ft
 {

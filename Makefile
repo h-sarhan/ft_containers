@@ -6,13 +6,13 @@
 #    By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/04 00:48:08 by hsarhan           #+#    #+#              #
-#    Updated: 2023/02/28 10:53:07 by hsarhan          ###   ########.fr        #
+#    Updated: 2023/03/01 22:49:29 by hsarhan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX = g++
 
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g3
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g3 -Iutils
 
 NAME = vector_tests
 

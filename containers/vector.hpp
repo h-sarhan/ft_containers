@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/02 16:51:09 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 03:03:30 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -816,9 +816,19 @@ void															ft::vector<T, Alloc>::swap(vector<T, Alloc> &x)
 {
 	if (this == &x)
 		return ;
-	ft::vector<T>	temp(x);
-	x = *this;
-	*this = temp;
+	pointer			temp_arr = x.data();
+	allocator_type	temp_alloc = x.get_allocator();
+	size_type		temp_size = x.size();
+	size_type		temp_capacity = x.capacity();
+
+	x._array = data();
+	x._alloc = get_allocator();
+	x._size = size();
+	x._capacity = capacity();
+	_array = temp_arr;
+	_alloc = temp_alloc;
+	_size = temp_size;
+	_capacity = temp_capacity;
 }
 
 /**

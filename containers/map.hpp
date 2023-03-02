@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 00:05:23 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 00:20:25 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ namespace ft
 	template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<pair<const Key, T> > >
 	class map
 	{
+	// ** Member types
 	public:
-		// ** Member types
 		typedef Key											key_type;
 		typedef T											mapped_type;
 		typedef pair<key_type, mapped_type>					value_type;
@@ -40,7 +40,7 @@ namespace ft
 		// typedef iterator_traits<iterator>::difference_type	difference_type;
 		typedef size_t										size_type;
 
-		// ** Nested value_compare class
+	// ** Nested value_compare class
 	public:
 		class value_compare : public std::binary_function<value_type, value_type, bool>
 		{
@@ -52,9 +52,14 @@ namespace ft
 			{return comp(x.first, y.first);}
 		};
 
+	// ** Private member attributes
+	private:
+		key_compare											_comp;
+		allocator_type										_alloc;
+
+	// ** Constructors and destructors
 	public:
-		// ** Constructors and destructors
-		// explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type());
+		explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type());
 		// template <class InputIterator>
 		// map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type());
 		// map(const map &x);
@@ -111,5 +116,12 @@ namespace ft
 		// allocator_type get_allocator() const;
 	};
 };
+
+// template <class Key, class T, class Compare, class Alloc>
+// ft::map<Key, T, Compare, Alloc>::map(const key_compare &comp, const allocator_type &alloc) : _comp(comp), _alloc(alloc)
+// {
+	
+// }
+
 
 #endif

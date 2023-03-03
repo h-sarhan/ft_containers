@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 03:30:00 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 05:53:11 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <cassert>
 #include "map.hpp"
 #include <string>
+#include "make_pair.hpp"
 
 /**
  * @brief Prints the contents of a std::vector or ft::vector
@@ -717,6 +718,17 @@ void	mapDefaultConstructor(void)
 	ft::map<std::string, int>	b(a);
 }
 
+
+void	mapSingleInsert()
+{
+	ft::map<std::string, int>	a;
+	a.insert(ft::make_pair("a", 1));
+	a.insert(ft::make_pair("b", 1));
+	a.insert(ft::make_pair("c", 1));
+	a.insert(ft::make_pair("d", 1));
+	a.insert(ft::make_pair("e", 1));
+}
+
 int	main(void)
 {
 	// defaultConstructorTests();
@@ -747,6 +759,7 @@ int	main(void)
 	// rangeConstructor();
 	// defaultConstructor();
 	mapDefaultConstructor();
+	mapSingleInsert();
 	// reverseIteratorTests();
 	std::cout << std::endl;
 }

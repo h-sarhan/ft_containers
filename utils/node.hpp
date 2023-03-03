@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:07:03 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 03:19:45 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 06:01:12 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,25 @@
 
 namespace ft
 {
-	template <class KeyType, class ValType>
+	template <class T>
 	class node
 	{
 	public:
-		KeyType					key;
-		ValType					val;
-		node<KeyType, ValType>	*parent;
-		node<KeyType, ValType>	*left;
-		node<KeyType, ValType>	*right;
+		const T		*data;
+		node<T>	*parent;
+		node<T>	*left;
+		node<T>	*right;
 
 		node(void)
-			: key(KeyType()), val(ValType()), parent(0), left(0), right(0){}
-		node(const pair<KeyType, ValType> &pair)
-			: key(pair.first), val(pair.second), parent(0), left(0), right(0){}
-		node(const node &old) : key(old.key), val(old.val), parent(old.parent), left(old.left), right(old.right){}
+			: data(), parent(0), left(0), right(0){}
+		node(const T *data)
+			: data(data), parent(0), left(0), right(0){}
+		node(const node &old) : data(old.data), parent(old.parent), left(old.left), right(old.right){}
 		node		&operator=(const node &rhs)
 		{
 			if (this == &rhs)
 				return *this;
-			key = rhs.key;
-			val = rhs.val;
+			data = rhs.data;
 			parent = rhs.parent;
 			left = rhs.left;
 			right = rhs.right;

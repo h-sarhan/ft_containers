@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 03:34:37 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 05:53:39 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ namespace ft
 	public:
 		typedef Key											key_type;
 		typedef T											mapped_type;
-		typedef pair<key_type, mapped_type>					value_type;
+		typedef pair<const key_type, mapped_type>			value_type;
 		typedef Compare										key_compare;
 		typedef Alloc										allocator_type;
 		typedef typename allocator_type::reference			reference;
@@ -56,10 +56,10 @@ namespace ft
 
 	// ** Private member attributes
 	private:
-		key_compare											_comp;
-		allocator_type										_alloc;
-		bst<key_type, mapped_type>							_bst;
-		size_type											_size;
+		key_compare													_comp;
+		allocator_type												_alloc;
+		bst<key_type, mapped_type, key_compare, allocator_type>		_bst;
+		size_type													_size;
 
 	// ** Constructors and destructors
 	public:
@@ -91,6 +91,8 @@ namespace ft
 		// const mapped_type									&at(const key_type &k) const;
 
 		// ** Modifiers
+		// ! THIS ONE IS FOR TESTING PLEASE REMOVE
+		void													insert(const value_type& val);
 		// pair<iterator, bool>									insert(const value_type& val);
 		// iterator												insert(iterator position, const value_type &val);
 		// template <class InputIterator>
@@ -122,7 +124,7 @@ namespace ft
 };
 
 template <class Key, class T, class Compare, class Alloc>
-ft::map<Key, T, Compare, Alloc>::map(const key_compare &comp, const allocator_type &alloc) : _comp(comp), _alloc(alloc), _bst(), _size(0)
+ft::map<Key, T, Compare, Alloc>::map(const key_compare &comp, const allocator_type &alloc) : _comp(comp), _alloc(alloc), _bst(0, comp, alloc), _size(0)
 {}
 
 template <class Key, class T, class Compare, class Alloc>
@@ -144,5 +146,12 @@ typename ft::map<Key, T, Compare, Alloc>::size_type			ft::map<Key, T, Compare, A
 // typename ft::map<Key, T, Compare, Alloc>::size_type			ft::map<Key, T, Compare, Alloc>::max_size() const
 // {
 // }
+
+template <class Key, class T, class Compare, class Alloc>
+void														ft::map<Key, T, Compare, Alloc>::insert(const value_type& val)
+{
+	_bst.insert(val);
+}
+
 
 #endif

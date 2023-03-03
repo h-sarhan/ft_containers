@@ -6,13 +6,14 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 05:53:11 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 14:13:33 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <vector>
 #include <cassert>
 #include <string>
+#include <map>
 #include "is_integral.hpp"
 #include "vector.hpp"
 #include "map.hpp"
@@ -763,6 +764,10 @@ int	main(void)
 	// defaultConstructor();
 	mapDefaultConstructor();
 	mapSingleInsert();
+	ft::map<std::string, int> a;
+	std::cout << a.max_size() << std::endl;
+	std::map<std::string, int> b;
+	std::cout << b.max_size() << std::endl;
 	// reverseIteratorTests();
 	std::cout << std::endl;
 }

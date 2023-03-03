@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 05:53:39 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 14:12:21 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,21 @@ namespace ft
 	{
 	// ** Member types
 	public:
-		typedef Key														key_type;
-		typedef T														mapped_type;
-		typedef pair<const key_type, mapped_type>						value_type;
-		typedef Compare													key_compare;
-		typedef typename Alloc::rebind<node<value_type> >::other		allocator_type;
-		typedef typename allocator_type::reference						reference;
-		typedef typename allocator_type::const_reference				const_reference;
-		typedef typename allocator_type::pointer						pointer;
-		typedef typename allocator_type::const_pointer					const_pointer;
+		typedef Key															key_type;
+		typedef T															mapped_type;
+		typedef pair<const key_type, mapped_type>							value_type;
+		typedef Compare														key_compare;
+		typedef typename Alloc::template rebind<node<value_type> >::other	allocator_type;
+		typedef typename allocator_type::reference							reference;
+		typedef typename allocator_type::const_reference					const_reference;
+		typedef typename allocator_type::pointer							pointer;
+		typedef typename allocator_type::const_pointer						const_pointer;
 		// typedef map_iterator<value_type>					iterator;
 		// typedef map_iterator<const value_type>				const_iterator;
 		// typedef ft::reverse_iterator<iterator>				reverse_iterator;
 		// typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 		// typedef iterator_traits<iterator>::difference_type	difference_type;
-		typedef size_t													size_type;
+		typedef size_t														size_type;
 
 	// ** Nested value_compare class
 	public:
@@ -83,7 +83,7 @@ namespace ft
 		// ** Capacity
 		bool												empty(void) const;
 		size_type											size(void) const;
-		// size_type											max_size(void) const;
+		size_type											max_size(void) const;
 
 		// ** Element access
 		// mapped_type											&operator[](const key_type &k);
@@ -143,10 +143,11 @@ typename ft::map<Key, T, Compare, Alloc>::size_type			ft::map<Key, T, Compare, A
 	return _size;
 }
 
-// template <class Key, class T, class Compare, class Alloc>
-// typename ft::map<Key, T, Compare, Alloc>::size_type			ft::map<Key, T, Compare, Alloc>::max_size() const
-// {
-// }
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::size_type			ft::map<Key, T, Compare, Alloc>::max_size() const
+{
+	return _alloc.max_size();
+}
 
 template <class Key, class T, class Compare, class Alloc>
 void														ft::map<Key, T, Compare, Alloc>::insert(const value_type& val)

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 06:02:32 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 14:08:35 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define BST_HPP
 
 # include <cstddef>
-#include <memory>
+# include <memory>
+# include <iostream>
 # include "node.hpp"
 
 namespace ft
@@ -45,6 +46,7 @@ namespace ft
 			return *this;
 		}
 		void								insert(const value_type &val);
+		void								traverse(void) const;
 		void								traverse(node<value_type> *node) const;
 	};
 };
@@ -55,32 +57,33 @@ void							ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &v
 	node<value_type>	*new_node = _alloc.allocate(1);
 	_alloc.construct(new_node, node<value_type>(val));
 
-	node<value_type>	*x = root;
-	node<value_type>	*y = NULL;
-	while (x != NULL)
+
+	node<value_type>	*end = root;
+	node<value_type>	*end_parent = NULL;
+	while (end != NULL)
 	{
-		y = x;
-		if (_comp(new_node->data.first, x->data.first))
+		end_parent = end;
+		if (_comp(new_node->data.first, end->data.first))
 		{
-			x = x->left;
+			end = end->left;
 		}
 		else
 		{
-			x = x->right;
+			end = end->right;
 		}
 	}
-	new_node->parent = y;
-	if (y == NULL)
+	new_node->parent = end_parent;
+	if (end_parent == NULL)
 	{
 		root = new_node;
 	}
-	else if (_comp(new_node->data.first, y->data.first))
+	else if (_comp(new_node->data.first, end_parent->data.first))
 	{
-		y->left = new_node;
+		end_parent->left = new_node;
 	}
 	else
 	{
-		y->right = new_node;
+		end_parent->right = new_node;
 	}
 }
 
@@ -94,5 +97,7 @@ void						ft::bst<KeyType, ValType, Compare, Alloc>::traverse(node<value_type> *
 		traverse(node->right);
 	}
 }
+
+
 
 #endif

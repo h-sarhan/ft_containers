@@ -45,13 +45,13 @@ namespace ft
 			return *this;
 		}
 		void								insert(const value_type &val);
+		void								traverse(node<value_type> *node) const;
 	};
 };
 
 template <class KeyType, class ValType, class Compare, class Alloc >
 void							ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &val)
 {
-
 	node<value_type>	*new_node = _alloc.allocate(1);
 	_alloc.construct(new_node, node<value_type>(val));
 
@@ -81,6 +81,17 @@ void							ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &v
 	else
 	{
 		y->right = new_node;
+	}
+}
+
+template <class KeyType, class ValType, class Compare, class Alloc>
+void						ft::bst<KeyType, ValType, Compare, Alloc>::traverse(node<value_type> *node) const
+{
+	if (node != NULL)
+	{
+		traverse(node->left);
+		std::cout << node->data.second << std::endl;
+		traverse(node->right);
 	}
 }
 

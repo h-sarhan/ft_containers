@@ -93,6 +93,7 @@ namespace ft
 		// ** Modifiers
 		// ! THIS ONE IS FOR TESTING PLEASE REMOVE
 		void													insert(const value_type& val);
+		void													printTree(void) const;
 		// pair<iterator, bool>									insert(const value_type& val);
 		// iterator												insert(iterator position, const value_type &val);
 		// template <class InputIterator>
@@ -153,5 +154,10 @@ void														ft::map<Key, T, Compare, Alloc>::insert(const value_type& val)
 	_bst.insert(val);
 }
 
+template <class Key, class T, class Compare, class Alloc>
+void ft::map<Key, T, Compare, Alloc>::printTree(void) const
+{
+	_bst.traverse(_bst.root);
+}
 
 #endif

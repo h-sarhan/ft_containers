@@ -722,11 +722,14 @@ void	mapDefaultConstructor(void)
 void	mapSingleInsert()
 {
 	ft::map<std::string, int>	a;
+	a.insert(ft::make_pair("d", 4));
+	a.insert(ft::make_pair("b", 2));
+	a.insert(ft::make_pair("e", 5));
+	a.insert(ft::make_pair("c", 3));
 	a.insert(ft::make_pair("a", 1));
-	a.insert(ft::make_pair("b", 1));
-	a.insert(ft::make_pair("c", 1));
-	a.insert(ft::make_pair("d", 1));
-	a.insert(ft::make_pair("e", 1));
+
+	// a._bst.traverse();
+	a.printTree();
 }
 
 int	main(void)

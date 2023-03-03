@@ -12,7 +12,7 @@
 
 CXX = g++
 
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g3 -Iutils -Icontainers
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g3 -Iutils -Icontainers -I/usr/include/ -I/usr/include/ 
 
 NAME = tests
 

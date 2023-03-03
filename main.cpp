@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "is_integral.hpp"
-#include "vector.hpp"
 #include <vector>
 #include <cassert>
-#include "map.hpp"
 #include <string>
+#include "is_integral.hpp"
+#include "vector.hpp"
+#include "map.hpp"
 #include "make_pair.hpp"
 
 /**

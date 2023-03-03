@@ -27,23 +27,21 @@ namespace ft
 
 		node<value_type>				*root;
 	private:
-		Compare								_comp;
-		Alloc								_val_alloc;
-		std::allocator<node<value_type> >	_node_alloc;
+		Compare							_comp;
+		Alloc							_alloc;
 
 	public:
 		bst(node<value_type> *root, Compare comp, Alloc allocator)
-			: root(root), _comp(comp), _val_alloc(allocator), _node_alloc() {}
+			: root(root), _comp(comp), _alloc(allocator) {}
 		bst(const bst &old)
-			: root(old.root), _comp(old._comp), _val_alloc(old._val_alloc), _node_alloc(old._node_alloc) {}
+			: root(old.root), _comp(old._comp), _alloc(old._alloc) {}
 		bst		&operator=(const bst &rhs)
 		{
 			if (this == &rhs)
 				return *this;
 			root = rhs.root;
 			_comp = rhs._comp;
-			_val_alloc = rhs._alloc;
-			_node_alloc = rhs._node_alloc;
+			_alloc = rhs._alloc;
 			return *this;
 		}
 		void								insert(const value_type &val);
@@ -53,18 +51,16 @@ namespace ft
 template <class KeyType, class ValType, class Compare, class Alloc >
 void							ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &val)
 {
-	value_type *data = _val_alloc.allocate(1);
-	_val_alloc.construct(data, val);
 
-	node<value_type>	*new_node = _node_alloc.allocate(1);
-	_node_alloc.construct(new_node, node<value_type>(data));
+	node<value_type>	*new_node = _alloc.allocate(1);
+	_alloc.construct(new_node, node<value_type>(val));
 
 	node<value_type>	*x = root;
 	node<value_type>	*y = NULL;
 	while (x != NULL)
 	{
 		y = x;
-		if (_comp(new_node->data->first, x->data->first))
+		if (_comp(new_node->data.first, x->data.first))
 		{
 			x = x->left;
 		}
@@ -78,7 +74,7 @@ void							ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &v
 	{
 		root = new_node;
 	}
-	else if (_comp(new_node->data->first, y->data->first))
+	else if (_comp(new_node->data.first, y->data.first))
 	{
 		y->left = new_node;
 	}

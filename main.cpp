@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 14:13:33 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 16:35:01 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -729,8 +729,8 @@ void	mapSingleInsert()
 	a.insert(ft::make_pair("c", 3));
 	a.insert(ft::make_pair("a", 1));
 
-	// a._bst.traverse();
-	a.printTree();
+	// a.printTree();
+	std::cout << a["b"] << std::endl;
 }
 
 int	main(void)
@@ -762,12 +762,12 @@ int	main(void)
 	// fillConstructor();
 	// rangeConstructor();
 	// defaultConstructor();
-	mapDefaultConstructor();
+	// mapDefaultConstructor();
 	mapSingleInsert();
-	ft::map<std::string, int> a;
-	std::cout << a.max_size() << std::endl;
-	std::map<std::string, int> b;
-	std::cout << b.max_size() << std::endl;
+	// ft::map<std::string, int> a;
+	// std::cout << a.max_size() << std::endl;
+	// std::map<std::string, int> b;
+	// std::cout << b.max_size() << std::endl;
 	// reverseIteratorTests();
 	std::cout << std::endl;
 }

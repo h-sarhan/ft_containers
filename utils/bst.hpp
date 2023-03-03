@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 14:08:35 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 14:45:33 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,15 @@ namespace ft
 	{
 	public:
 		typedef pair<const KeyType, ValType>		value_type;
+		typedef node<value_type>					node_type;
 
-		node<value_type>				*root;
+		node_type				*root;
 	private:
 		Compare							_comp;
 		Alloc							_alloc;
 
 	public:
-		bst(node<value_type> *root, Compare comp, Alloc allocator)
+		bst(node_type *root, Compare comp, Alloc allocator)
 			: root(root), _comp(comp), _alloc(allocator) {}
 		bst(const bst &old)
 			: root(old.root), _comp(old._comp), _alloc(old._alloc) {}
@@ -46,20 +47,20 @@ namespace ft
 			return *this;
 		}
 		void								insert(const value_type &val);
-		void								traverse(void) const;
-		void								traverse(node<value_type> *node) const;
+		void								traverse(node_type *node) const;
+		node_type							*get(const KeyType &key);
 	};
 };
 
 template <class KeyType, class ValType, class Compare, class Alloc >
 void							ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &val)
 {
-	node<value_type>	*new_node = _alloc.allocate(1);
-	_alloc.construct(new_node, node<value_type>(val));
+	node_type	*new_node = _alloc.allocate(1);
+	_alloc.construct(new_node, node_type(val));
 
 
-	node<value_type>	*end = root;
-	node<value_type>	*end_parent = NULL;
+	node_type	*end = root;
+	node_type	*end_parent = NULL;
 	while (end != NULL)
 	{
 		end_parent = end;
@@ -88,7 +89,25 @@ void							ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &v
 }
 
 template <class KeyType, class ValType, class Compare, class Alloc>
-void						ft::bst<KeyType, ValType, Compare, Alloc>::traverse(node<value_type> *node) const
+typename ft::bst<KeyType, ValType, Compare, Alloc>::node_type			*ft::bst<KeyType, ValType, Compare, Alloc>::get(const KeyType &key)
+{
+	node_type	*search = root;
+	while (search != NULL && search->data.first != key)
+	{
+		if (_comp(key, search->data.first))
+		{
+			search = search->left;
+		}
+		else
+		{
+			search = search->right;
+		}
+	}
+	return search;
+}
+
+template <class KeyType, class ValType, class Compare, class Alloc>
+void									ft::bst<KeyType, ValType, Compare, Alloc>::traverse(node_type *node) const
 {
 	if (node != NULL)
 	{
@@ -97,7 +116,5 @@ void						ft::bst<KeyType, ValType, Compare, Alloc>::traverse(node<value_type> *
 		traverse(node->right);
 	}
 }
-
-
 
 #endif

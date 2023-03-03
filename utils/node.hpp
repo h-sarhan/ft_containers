@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:07:03 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/03 06:01:12 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/03 15:48:46 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ namespace ft
 	class node
 	{
 	public:
-		const T		data;
+		T			data;
 		node<T>		*parent;
 		node<T>		*left;
 		node<T>		*right;

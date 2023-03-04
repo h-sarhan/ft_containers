@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 06:29:31 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/04 12:39:40 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void ft::bst<KeyType, ValType, Compare, Alloc>::traverse(node_type *node) const
     if (node != NULL)
     {
         traverse(node->left);
-        std::cout << node->data.second << std::endl;
+        std::cout << "key == " << node->data.first << " value == " << node->data.second << std::endl;
         traverse(node->right);
     }
 }
@@ -159,16 +159,63 @@ void ft::bst<KeyType, ValType, Compare, Alloc>::delete_node(node_type *node)
 {
     if (node->left == NULL)
     {
+        // if node only has a right child replace it by its right child
         _move_subtree(node, node->right);
     }
     else if (node->right == NULL)
     {
+        // if node only has a left child replace it by its left child
         _move_subtree(node, node->left);
     }
     else
     {
+        // find node's successor and replace node by it
+        node_type *successor = _bst_min(node->right);
+        if (successor != node->right)
+        {
+            // node's successor is not its right child
+            //                                               node
+            //                                           l1         r
+            //                                                  suc
+            //                                                      x
 
-        // more cases
+            // 1. Replace node's successor by its right child (repalace suc with x)
+            //                                                node
+            //                                           l1                                  r
+            //                                                                           x
+            //                                                                               suc
+            _move_subtree(successor, successor->right);
+
+            // 2. Set suc to be r's parent
+            //                                                node
+            //                                           l1                              suc
+            //                                                                               r
+            //                                                                           x
+            successor->right = node->right;
+            successor->right->parent = successor;
+
+            // 3. Replace suc with node
+            //                                                suc
+            //                                            l1       r
+            //                                                  x
+            _move_subtree(node, successor);
+            successor->left = node->left;
+            successor->left->parent = successor;
+        }
+        else
+        {
+            // node's successor is its right child
+            //                                               node
+            //                                           l1        suc
+            //                                                          x
+
+            // 1. Replace suc with node
+            //                                                suc
+            //                                            l1       x
+            _move_subtree(node, successor);
+            successor->left = node->left;
+            successor->left->parent = successor;
+        }
     }
 }
 

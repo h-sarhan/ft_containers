@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 06:31:23 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/04 12:23:49 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -726,6 +726,22 @@ void mapSingleInsert()
     std::cout << a["b"] << std::endl;
 }
 
+void mapSingleErase()
+{
+    ft::map<std::string, int> a;
+    a.insert(ft::make_pair("d", 4));
+    a.insert(ft::make_pair("b", 2));
+    a.insert(ft::make_pair("e", 5));
+    a.insert(ft::make_pair("c", 3));
+    a.insert(ft::make_pair("a", 1));
+
+    a.erase("d");
+
+    // a.printTree();
+    // std::cout << a["d"] << std::endl;
+    a.printTree();
+}
+
 int main(void)
 {
     // defaultConstructorTests();
@@ -756,7 +772,8 @@ int main(void)
     // rangeConstructor();
     // defaultConstructor();
     // mapDefaultConstructor();
-    mapSingleInsert();
+    // mapSingleInsert();
+    mapSingleErase();
     // ft::map<std::string, int> a;
     // std::cout << a.max_size() << std::endl;
     // std::map<std::string, int> b;

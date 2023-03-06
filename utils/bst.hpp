@@ -34,10 +34,6 @@ template <class KeyType, class ValType, class Compare, class Alloc> class bst
 
   private:
     void _move_subtree(node_type *node_1, node_type *node_2);
-    static node_type *_bst_min(node_type *node);
-    static node_type *_bst_max(node_type *node);
-    static node_type *_bst_successor(node_type *node);
-    static node_type *_bst_predecessor(node_type *node);
 
   public:
     bst(node_type *root, Compare comp, Alloc allocator) : root(root), _comp(comp), _alloc(allocator)
@@ -60,6 +56,15 @@ template <class KeyType, class ValType, class Compare, class Alloc> class bst
     node_type *get(const KeyType &key);
     void delete_node(node_type *key);
 };
+
+// * Public helper functions
+template <class NodeType> NodeType *successor_node(NodeType *node);
+
+template <class NodeType> NodeType *predecessor_node(NodeType *node);
+
+template <class NodeType> NodeType *min_node(NodeType *node);
+
+template <class NodeType> NodeType *max_node(NodeType *node);
 };   // namespace ft
 
 template <class KeyType, class ValType, class Compare, class Alloc>
@@ -122,7 +127,8 @@ void ft::bst<KeyType, ValType, Compare, Alloc>::traverse(node_type *node) const
     if (node != NULL)
     {
         traverse(node->left);
-        std::cout << "key == " << node->data.first << " value == " << node->data.second << std::endl;
+        std::cout << "key == " << node->data.first << " value == " << node->data.second
+                  << std::endl;
         traverse(node->right);
     }
 }
@@ -130,7 +136,7 @@ void ft::bst<KeyType, ValType, Compare, Alloc>::traverse(node_type *node) const
 template <class KeyType, class ValType, class Compare, class Alloc>
 void ft::bst<KeyType, ValType, Compare, Alloc>::_move_subtree(node_type *tree1, node_type *tree2)
 {
-    // ! This should destroy and tree1
+    // ! This should destroy and fee
 
     if (tree1->parent == NULL)
     {
@@ -170,7 +176,7 @@ void ft::bst<KeyType, ValType, Compare, Alloc>::delete_node(node_type *node)
     else
     {
         // find node's successor and replace node by it
-        node_type *successor = _bst_min(node->right);
+        node_type *successor = min_node(node->right);
         if (successor != node->right)
         {
             // node's successor is not its right child
@@ -219,9 +225,7 @@ void ft::bst<KeyType, ValType, Compare, Alloc>::delete_node(node_type *node)
     }
 }
 
-template <class KeyType, class ValType, class Compare, class Alloc>
-typename ft::bst<KeyType, ValType, Compare, Alloc>::node_type *ft::bst<
-    KeyType, ValType, Compare, Alloc>::_bst_min(node_type *node)
+template <class NodeType> NodeType *ft::min_node(NodeType *node)
 {
     while (node->left != NULL)
     {
@@ -230,9 +234,7 @@ typename ft::bst<KeyType, ValType, Compare, Alloc>::node_type *ft::bst<
     return node;
 }
 
-template <class KeyType, class ValType, class Compare, class Alloc>
-typename ft::bst<KeyType, ValType, Compare, Alloc>::node_type *ft::bst<
-    KeyType, ValType, Compare, Alloc>::_bst_max(node_type *node)
+template <class NodeType> NodeType *ft::max_node(NodeType *node)
 {
     while (node->right != NULL)
     {
@@ -241,18 +243,16 @@ typename ft::bst<KeyType, ValType, Compare, Alloc>::node_type *ft::bst<
     return node;
 }
 
-template <class KeyType, class ValType, class Compare, class Alloc>
-typename ft::bst<KeyType, ValType, Compare, Alloc>::node_type *ft::bst<
-    KeyType, ValType, Compare, Alloc>::_bst_successor(node_type *node)
+template <class NodeType> NodeType *ft::successor_node(NodeType *node)
 {
     if (node->right != NULL)
     {
-        // return left-most node in right subtree
-        return _bst_min(node->right);
+        // return smallest (left-most) node in right subtree
+        return min_node(node->right);
     }
     // traverse upwards through the tree till you find an ancestor of node
     // whose left child is also an ancestor of node
-    node_type *up = node->parent;
+    NodeType *up = node->parent;
     while (up != NULL && node != up->left)
     {
         node = up;
@@ -261,18 +261,16 @@ typename ft::bst<KeyType, ValType, Compare, Alloc>::node_type *ft::bst<
     return up;
 }
 
-template <class KeyType, class ValType, class Compare, class Alloc>
-typename ft::bst<KeyType, ValType, Compare, Alloc>::node_type *ft::bst<
-    KeyType, ValType, Compare, Alloc>::_bst_predecessor(node_type *node)
+template <class NodeType> NodeType *ft::predecessor_node(NodeType *node)
 {
     if (node->left != NULL)
     {
-        // return right-most node in left subtree
-        return _bst_max(node->left);
+        // return largest (right-most) node in left subtree
+        return max_node(node->left);
     }
     // traverse upwards through the tree till you find an ancestor of node
     // whose right child is also an ancestor of node
-    node_type *up = node->parent;
+    NodeType *up = node->parent;
     while (up != NULL && node != up->right)
     {
         node = up;

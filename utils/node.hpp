@@ -20,6 +20,8 @@ namespace ft
 template <class DataType> class node
 {
   public:
+    typedef DataType pair_type;
+
     DataType data;
     node<DataType> *parent;
     node<DataType> *left;

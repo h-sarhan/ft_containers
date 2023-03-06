@@ -737,6 +737,8 @@ void mapSingleErase()
 
     a.erase("d");
 
+    // ft::map<std::string, int> b;
+    // ft::map<std::string, int>::iterator c = b.begin();
     // a.printTree();
     // std::cout << a["d"] << std::endl;
     a.printTree();

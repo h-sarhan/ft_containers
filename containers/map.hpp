@@ -14,6 +14,7 @@
 #define MAP_HPP
 
 #include "bst.hpp"
+#include "map_iterator.hpp"
 #include "pair.hpp"
 #include "reverse_iterator.hpp"
 #include <cstddef>
@@ -43,11 +44,11 @@ class map
     typedef typename allocator_type::pointer pointer;
     typedef typename allocator_type::const_pointer const_pointer;
 
-    // typedef map_iterator<value_type>					iterator;
-    // typedef map_iterator<const value_type>				const_iterator;
-    // typedef ft::reverse_iterator<iterator>				reverse_iterator;
-    // typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
-    // typedef iterator_traits<iterator>::difference_type	difference_type;
+    typedef map_iterator<value_type> iterator;
+    typedef map_iterator<const value_type> const_iterator;
+    typedef ft::reverse_iterator<iterator> reverse_iterator;
+    typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+    typedef typename iterator_traits<iterator>::difference_type difference_type;
 
     // ** Nested value_compare class
   public:

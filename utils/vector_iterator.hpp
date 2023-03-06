@@ -37,10 +37,9 @@ template <class T> class vector_iterator
     vector_iterator(void);
     vector_iterator(pointer ptr);
 
+    template <class U> vector_iterator(const vector_iterator<U> &old);
     template <class U> vector_iterator &operator=(const vector_iterator<U> &rhs);
     ~vector_iterator(void);
-
-    template <class U> vector_iterator(const vector_iterator<U> &old);
 
     pointer base(void) const;
 

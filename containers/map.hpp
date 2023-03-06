@@ -69,7 +69,8 @@ class map
 
     // ** Private member attributes
   private:
-    key_compare _comp;
+    key_compare _key_comp;
+    value_compare _val_comp;
     allocator_type _alloc;
     bst<key_type, mapped_type, key_compare, allocator_type> _bst;
     size_type _size;
@@ -120,8 +121,8 @@ class map
     // void													clear(void);
 
     // ** Observers
-    // key_compare												key_comp(void) const;
-    // value_compare											value_comp(void) const;
+    key_compare key_comp(void) const;
+    value_compare value_comp(void) const;
 
     // ** Operations
     // iterator													find(const key_type &k);
@@ -142,13 +143,14 @@ class map
 
 template <class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>::map(const key_compare &comp, const allocator_type &alloc)
-    : _comp(comp), _alloc(alloc), _bst(0, comp, alloc), _size(0)
+    : _key_comp(comp), _val_comp(comp), _alloc(alloc), _bst(0, comp, alloc), _size(0)
 {
 }
 
 template <class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>::map(const map &old)
-    : _comp(old._comp), _alloc(old._alloc), _bst(old._bst), _size(old._size)
+    : _key_comp(old._key_comp), _val_comp(old._val_comp), _alloc(old._alloc), _bst(old._bst),
+      _size(old._size)
 {
 }
 
@@ -219,4 +221,17 @@ typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, All
     return 1;
 }
 
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::key_compare ft::map<Key, T, Compare, Alloc>::key_comp(
+    void) const
+{
+    return _key_comp;
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::value_compare ft::map<Key, T, Compare, Alloc>::value_comp(
+    void) const
+{
+    return _val_comp;
+}
 #endif

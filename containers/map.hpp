@@ -96,9 +96,9 @@ class map
 
     // ** Capacity
     bool empty(void) const;
-	
+
     size_type size(void) const;
-	
+
     size_type max_size(void) const;
 
     // ** Element access
@@ -108,12 +108,10 @@ class map
     void insert(const value_type &val);
     void printTree(void) const;
 
-
     // ** Modifiers
     // pair<iterator, bool>									insert(const value_type& val);
-    // iterator												insert(iterator position, const value_type
-    // &val); template <class InputIterator> void
-    // insert(InputIterator first, InputIterator last);
+    // iterator							insert(iterator position, const value_type &val);
+    // template <class InputIterator> void insert(InputIterator first, InputIterator last);
     size_type erase(const key_type &k);
     // void													erase(iterator position);
     // void													erase(iterator first, iterator last);

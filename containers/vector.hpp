@@ -30,7 +30,7 @@
 
 // ! Check iterator ranges: if first == last || last < first
 // ! Check if size == 0
-// ! Check reverse iterators
+// ! Check range insert 
 namespace ft
 {
 template <class T, class Alloc = std::allocator<T> > class vector

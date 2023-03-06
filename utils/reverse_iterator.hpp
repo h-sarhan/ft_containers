@@ -102,25 +102,25 @@ bool ft::operator!=(const ft::reverse_iterator<It1> &it1, const ft::reverse_iter
 template <class It1, class It2>
 bool ft::operator<(const ft::reverse_iterator<It1> &it1, const ft::reverse_iterator<It2> &it2)
 {
-    return it1.base() < it2.base();
+    return it1.base() > it2.base();
 }
 
 template <class It1, class It2>
 bool ft::operator>(const ft::reverse_iterator<It1> &it1, const ft::reverse_iterator<It2> &it2)
 {
-    return it1.base() > it2.base();
+    return it1.base() < it2.base();
 }
 
 template <class It1, class It2>
 bool ft::operator<=(const ft::reverse_iterator<It1> &it1, const ft::reverse_iterator<It2> &it2)
 {
-    return it1.base() <= it2.base();
+    return it1.base() >= it2.base();
 }
 
 template <class It1, class It2>
 bool ft::operator>=(const ft::reverse_iterator<It1> &it1, const ft::reverse_iterator<It2> &it2)
 {
-    return it1.base() >= it2.base();
+    return it1.base() <= it2.base();
 }
 
 template <class Iterator>

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 12:39:24 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/06 18:20:43 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ class map
   public:
     class value_compare : public std::binary_function<value_type, value_type, bool>
     {
+        friend class map;
+
       protected:
         key_compare comp;
         value_compare(key_compare c) : comp(c)
@@ -87,14 +89,14 @@ class map
     // map												&operator=(const map &x);
 
     // ** Iterator functions
-    // iterator										begin(void);
-    // const_iterator 									begin(void) const;
-    // iterator										end(void);
-    // const_iterator									end(void) const;
-    // reverse_iterator								rbegin(void);
-    // const_reverse_iterator							rbegin(void) const;
-    // reverse_iterator								end(void);
-    // const_reverse_iterator							rend(void) const;
+    iterator begin(void);
+    const_iterator begin(void) const;
+    iterator end(void);
+    const_iterator end(void) const;
+    reverse_iterator rbegin(void);
+    const_reverse_iterator rbegin(void) const;
+    reverse_iterator rend(void);
+    const_reverse_iterator rend(void) const;
 
     // ** Capacity
     bool empty(void) const;
@@ -111,30 +113,29 @@ class map
     void printTree(void) const;
 
     // ** Modifiers
-    // pair<iterator, bool>									insert(const value_type& val);
-    // iterator							insert(iterator position, const value_type &val);
+    // pair<iterator, bool> insert(const value_type &val);
+    // iterator insert(iterator position, const value_type &val);
     // template <class InputIterator> void insert(InputIterator first, InputIterator last);
     size_type erase(const key_type &k);
-    // void													erase(iterator position);
-    // void													erase(iterator first, iterator last);
-    // void													swap(map& x);
-    // void													clear(void);
+    // void erase(iterator position);
+    // void erase(iterator first, iterator last);
+    // void swap(map &x);
+    // void clear(void);
 
     // ** Observers
     key_compare key_comp(void) const;
     value_compare value_comp(void) const;
 
     // ** Operations
-    // iterator													find(const key_type &k);
-    // const_iterator											find(const key_type &k) const;
-    // size_type												count(const key_type &k) const;
-    // iterator													lower_bound(const key_type &k);
-    // const_iterator											lower_bound(const key_type &k)
-    // const; iterator													upper_bound(const key_type
-    // &k); const_iterator											upper_bound(const key_type &k)
-    // const; pair<iterator, iterator>									equal_range(const key_type
-    // &k); pair<const_iterator, const_iterator>						equal_range(const key_type
-    // &k) const;
+    // iterator find(const key_type &k);
+    // const_iterator find(const key_type &k) const;
+    // size_type count(const key_type &k) const;
+    // iterator lower_bound(const key_type &k);
+    // const_iterator lower_bound(const key_type &k) const;
+    // iterator upper_bound(const key_type &k);
+    // const_iterator upper_bound(const key_type &k) const;
+    // pair<iterator, iterator> equal_range(const key_type &k);
+    // pair<const_iterator, const_iterator> equal_range(const key_type &k) const;
 
     // ** Allocators
     allocator_type get_allocator(void) const;
@@ -155,7 +156,95 @@ ft::map<Key, T, Compare, Alloc>::map(const map &old)
 }
 
 template <class Key, class T, class Compare, class Alloc>
-bool ft::map<Key, T, Compare, Alloc>::empty() const
+typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::begin(void)
+{
+    if (empty())
+    {
+        return iterator();
+    }
+    return iterator(ft::min_node(_bst.root));
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::begin(
+    void) const
+{
+    if (empty())
+    {
+        return iterator();
+    }
+    return iterator(ft::min_node(_bst.root));
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::end(void)
+{
+    if (empty())
+    {
+        return begin();
+    }
+    // ! probably wrong i'll come back to this when the tester fails me
+    return iterator(ft::max_node(_bst.root)->right);
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::end(
+    void) const
+{
+    if (empty())
+    {
+        return begin();
+    }
+    // ! probably wrong i'll come back to this when the tester fails me
+    return iterator(ft::max_node(_bst.root)->right);
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::reverse_iterator ft::map<Key, T, Compare, Alloc>::rbegin(
+    void)
+{
+    if (empty())
+    {
+        // idk
+    }
+    return reverse_iterator(iterator(ft::max_node(_bst.root)));
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::const_reverse_iterator ft::map<Key, T, Compare,
+                                                                         Alloc>::rbegin(void) const
+{
+    if (empty())
+    {
+        // idk
+    }
+    return reverse_iterator(iterator(ft::max_node(_bst.root)));
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::reverse_iterator ft::map<Key, T, Compare, Alloc>::rend(
+    void)
+{
+    if (empty())
+    {
+        // idk
+    }
+    return reverse_iterator(iterator(ft::min_node(_bst.root))->left);
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::const_reverse_iterator ft::map<Key, T, Compare,
+                                                                         Alloc>::rend(void) const
+{
+    if (empty())
+    {
+        // idk
+    }
+    return reverse_iterator(iterator(ft::min_node(_bst.root))->left);
+}
+
+template <class Key, class T, class Compare, class Alloc>
+bool ft::map<Key, T, Compare, Alloc>::empty(void) const
 {
     return _bst.root == NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/06 22:14:51 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 11:45:26 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ class map
     // ** Allocators
     allocator_type get_allocator(void) const;
 };
-};   // namespace ft
+}   // namespace ft
 
 template <class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>::map(const key_compare &comp, const allocator_type &alloc)

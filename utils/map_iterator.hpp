@@ -60,7 +60,7 @@ template <class T, class NodeType> class map_iterator
     reference operator*(void);
     pointer operator->(void);
 };
-};   // namespace ft
+}   // namespace ft
 
 template <class T, class NodeType> ft::map_iterator<T, NodeType>::map_iterator(void) : _node_ptr(0)
 {

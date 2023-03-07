@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 22:36:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 06:29:46 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 09:05:42 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ bool equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2);
 template <class InputIterator1, class InputIterator2>
 bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2,
                              InputIterator2 last2);
-};   // namespace ft
+}   // namespace ft
 
 /**
  * @brief Checks if the elements in both iterators are equal

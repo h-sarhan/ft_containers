@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:54:39 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 06:30:57 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 09:04:03 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ reverse_iterator<Iterator> operator+(typename reverse_iterator<Iterator>::differ
 template <class It1, class It2>
 typename reverse_iterator<It1>::difference_type operator-(const reverse_iterator<It1> &lhs,
                                                           const reverse_iterator<It2> &rhs);
-};   // namespace ft
+}   // namespace ft
 
 template <class It1, class It2>
 bool ft::operator==(const ft::reverse_iterator<It1> &it1, const ft::reverse_iterator<It2> &it2)

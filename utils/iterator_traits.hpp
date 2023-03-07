@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:48:10 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 06:29:59 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 09:03:52 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,6 @@ template <class Iterator> class iterator_traits
     typedef typename Iterator::reference reference;
     typedef typename Iterator::iterator_category iterator_category;
 };
-};   // namespace ft
+}   // namespace ft
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:16:13 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 06:30:49 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 09:03:32 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ template <class T1, class T2> bool operator<(const pair<T1, T2> &lhs, const pair
 template <class T1, class T2> bool operator<=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs);
 template <class T1, class T2> bool operator>(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs);
 template <class T1, class T2> bool operator>=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs);
-};   // namespace ft
+}   // namespace ft
 
 template <class T1, class T2> ft::pair<T1, T2>::pair(void) : first(T1()), second(T2())
 {

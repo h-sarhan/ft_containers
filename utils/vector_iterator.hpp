@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:44:24 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 06:31:00 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 09:05:49 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ template <class T>
 vector_iterator<T> operator+(typename vector_iterator<T>::difference_type n,
                              const vector_iterator<T> &it);
 
-};   // namespace ft
+}   // namespace ft
 
 template <class T> ft::vector_iterator<T>::vector_iterator(void) : _ptr(0)
 {

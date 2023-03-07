@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/07 11:45:14 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 12:58:03 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,12 @@ template <class NodeType> NodeType *max_node(NodeType *node);
 template <class KeyType, class ValType, class Compare, class Alloc>
 void ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &val)
 {
+    // Is the key already in the tree?
+    const node_type *res = get(val.first);
+    if (res != NULL)
+    {
+        return ;
+    }
     node_type *new_node = _alloc.allocate(1);
     _alloc.construct(new_node, node_type(val));
 

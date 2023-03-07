@@ -6,13 +6,17 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/07 10:51:00 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 13:02:53 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "map.hpp"
+#include <cstdio>
 #include <iostream>
 #include "make_pair.hpp"
+#include <map>
+#include <ostream>
+#include <string>
 
 void mapDefaultConstructor(void)
 {
@@ -59,9 +63,15 @@ void    mapIterators(void)
 void    mapSingleInsertReplace(void)
 {
     ft::map<std::string, int> a; 
-    a.insert(ft::make_pair("aabb", 4));
-    ft::map<std::string, int>::iterator mapIt = a.begin();
-    std::cout << "Should be `aa` " << mapIt->first << std::cout; 
+    a.insert(ft::make_pair("a", 4));
+    // ft::map<int, int>::iterator mapIt = a.begin();
+    a.insert(ft::make_pair("a", 0));
+    a.insert(ft::make_pair("a", 0));
+    a.insert(ft::make_pair("a", 0));
+    a.insert(ft::make_pair("a", 0));
+    a.insert(ft::make_pair("a", 0));
+    a.insert(ft::make_pair("a", 0));
+    a.printTree();
 }
 
 void mapTests(void)

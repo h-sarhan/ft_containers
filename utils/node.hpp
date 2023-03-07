@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:07:03 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 06:30:38 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 09:03:41 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ template <class DataType> class node
         return *this;
     }
 };
-};   // namespace ft
+}   // namespace ft
 
 #endif

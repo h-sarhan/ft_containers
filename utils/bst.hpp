@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 12:39:40 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 09:03:44 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ template <class NodeType> NodeType *predecessor_node(NodeType *node);
 template <class NodeType> NodeType *min_node(NodeType *node);
 
 template <class NodeType> NodeType *max_node(NodeType *node);
-};   // namespace ft
+}   // namespace ft
 
 template <class KeyType, class ValType, class Compare, class Alloc>
 void ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &val)

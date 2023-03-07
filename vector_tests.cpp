@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   vector_tests.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 12:23:49 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 09:00:22 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,7 +214,7 @@ void emptyTest(void)
  *
  * @test Check vec.at() when n is in or out of range
  */
-void atTests()
+void atTests(void)
 {
     std::cout << "Testing vec::at(i)" << std::endl;
 
@@ -705,81 +705,4 @@ void reverseIteratorTests(void)
 
     // std::cout << *b.rbegin() << std::endl;
     std::cout << *b.rend() << std::endl;
-}
-
-void mapDefaultConstructor(void)
-{
-    ft::map<std::string, int> a;
-    ft::map<std::string, int> b(a);
-}
-
-void mapSingleInsert()
-{
-    ft::map<std::string, int> a;
-    a.insert(ft::make_pair("d", 4));
-    a.insert(ft::make_pair("b", 2));
-    a.insert(ft::make_pair("e", 5));
-    a.insert(ft::make_pair("c", 3));
-    a.insert(ft::make_pair("a", 1));
-
-    // a.printTree();
-    std::cout << a["b"] << std::endl;
-}
-
-void mapSingleErase()
-{
-    ft::map<std::string, int> a;
-    a.insert(ft::make_pair("d", 4));
-    a.insert(ft::make_pair("b", 2));
-    a.insert(ft::make_pair("e", 5));
-    a.insert(ft::make_pair("c", 3));
-    a.insert(ft::make_pair("a", 1));
-
-    a.erase("d");
-
-    // ft::map<std::string, int> b;
-    // ft::map<std::string, int>::iterator c = b.begin();
-    // a.printTree();
-    // std::cout << a["d"] << std::endl;
-    a.printTree();
-}
-
-int main(void)
-{
-    // defaultConstructorTests();
-    // fillConstructorTests();
-    // copyConstructorTests();
-    // vectorInVectorTests();
-    // maxSizeTests();
-    // emptyTest();
-    // atTests();
-    // frontBackTests();
-    // dataTest();
-    // swapTest();
-    // clearTests();
-    // resizeTests();
-    // reserveTests();
-    // beginTests();
-    // vectorIteratorTests();
-    // vectorReverseIteratorTests();
-    // vectorRelational();
-    // rangeConstructorTests();
-    // assignTests();
-    // pushBackTests();
-    // popBackTests();
-    // insertTests();
-    // eraseTests();
-    // copyTests();
-    // fillConstructor();
-    // rangeConstructor();
-    // defaultConstructor();
-    // mapDefaultConstructor();
-    // mapSingleInsert();
-    mapSingleErase();
-    // ft::map<std::string, int> a;
-    // std::cout << a.max_size() << std::endl;
-    // std::map<std::string, int> b;
-    // std::cout << b.max_size() << std::endl;
-    // reverseIteratorTests();
-    std::cout << std::endl;
 }

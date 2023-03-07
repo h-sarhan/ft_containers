@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 16:34:36 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 06:29:43 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 09:05:32 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,6 @@ template <> struct is_integral<short int> : public true_type
 {
 };
 
-template <> struct is_integral<long int> : public true_type
-{
-};
-
-template <> struct is_integral<long long int> : public true_type
-{
-};
-
 template <> struct is_integral<unsigned char> : public true_type
 {
 };
@@ -65,9 +57,5 @@ template <> struct is_integral<unsigned long int> : public true_type
 {
 };
 
-template <> struct is_integral<unsigned long long int> : public true_type
-{
-};
-
-};   // namespace ft
+}   // namespace ft
 #endif

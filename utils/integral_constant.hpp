@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 16:48:38 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 06:29:41 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 09:04:35 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@ template <class T, T v> struct integral_constant
 };
 typedef integral_constant<bool, false> false_type;
 typedef integral_constant<bool, true> true_type;
-};   // namespace ft
+}   // namespace ft
 
 #endif

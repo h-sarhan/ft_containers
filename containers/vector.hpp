@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 06:27:36 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 09:07:27 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,7 @@ bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs);
 
 // * Non-member functions
 template <class T, class Alloc> void swap(vector<T, Alloc> &x, vector<T, Alloc> &y);
-};   // namespace ft
+}   // namespace ft
 
 // * IMPLEMENTATION (Maybe put this in a .tpp)
 
@@ -251,7 +251,7 @@ ft::vector<T, Alloc>::vector(const vector &old)
  * allocated for the underlying array
  *
  */
-template <class T, class Alloc> ft::vector<T, Alloc>::~vector(void)
+template <class T, class Alloc> ft::vector<T, Alloc>::~vector<T, Alloc>(void)
 {
     for (size_type i = 0; i < _size; i++)
     {

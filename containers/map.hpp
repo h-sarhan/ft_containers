@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/06 18:20:43 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/06 22:14:51 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ class map
     typedef typename allocator_type::pointer pointer;
     typedef typename allocator_type::const_pointer const_pointer;
 
-    typedef map_iterator<value_type> iterator;
-    typedef map_iterator<const value_type> const_iterator;
+    typedef map_iterator<value_type, node_type> iterator;
+    typedef map_iterator<const value_type, node_type> const_iterator;
     typedef ft::reverse_iterator<iterator> reverse_iterator;
     typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
     typedef typename iterator_traits<iterator>::difference_type difference_type;
@@ -109,11 +109,11 @@ class map
     mapped_type &operator[](const key_type &k);
 
     // ! THESE ONES ARE FOR TESTING PLEASE REMOVE
-    void insert(const value_type &val);
+    // void insert(const value_type &val);
     void printTree(void) const;
 
     // ** Modifiers
-    // pair<iterator, bool> insert(const value_type &val);
+    void insert(const value_type &val);
     // iterator insert(iterator position, const value_type &val);
     // template <class InputIterator> void insert(InputIterator first, InputIterator last);
     size_type erase(const key_type &k);
@@ -265,6 +265,9 @@ typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, All
 template <class Key, class T, class Compare, class Alloc>
 void ft::map<Key, T, Compare, Alloc>::insert(const value_type &val)
 {
+    // ft::pair<iterator, bool> res;
+
+    
     _bst.insert(val);
     _size += 1;
 }

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/04 12:39:40 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/06 22:40:01 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <iostream>
 #include <memory>
 
+// ! Implement sentinel nodes, because you are segfaulting whenever you increment or decrement end()
 namespace ft
 {
 template <class KeyType, class ValType, class Compare, class Alloc> class bst
@@ -80,10 +81,12 @@ void ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &val)
         end_parent = end;
         if (_comp(new_node->data.first, end->data.first))
         {
+            // less than
             end = end->left;
         }
         else
         {
+            // greater tahn
             end = end->right;
         }
     }

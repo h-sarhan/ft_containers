@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/07 08:59:43 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 10:51:00 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void mapDefaultConstructor(void)
     ft::map<std::string, int> b(a);
 }
 
-void mapSingleInsert(void)
+void mapSingleInsertNew(void)
 {
     ft::map<std::string, int> a;
     a.insert(ft::make_pair("d", 4));
@@ -51,42 +51,21 @@ void mapSingleErase(void)
     a.printTree();
 }
 
-int main(void)
+void    mapIterators(void)
 {
-    // defaultConstructorTests();
-    // fillConstructorTests();
-    // copyConstructorTests();
-    // vectorInVectorTests();
-    // maxSizeTests();
-    // emptyTest();
-    // atTests();
-    // frontBackTests();
-    // dataTest();
-    // swapTest();
-    // clearTests();
-    // resizeTests();
-    // reserveTests();
-    // beginTests();
-    // vectorIteratorTests();
-    // vectorReverseIteratorTests();
-    // vectorRelational();
-    // rangeConstructorTests();
-    // assignTests();
-    // pushBackTests();
-    // popBackTests();
-    // insertTests();
-    // eraseTests();
-    // copyTests();
-    // fillConstructor();
-    // rangeConstructor();
-    // defaultConstructor();
-    // mapDefaultConstructor();
-    // mapSingleInsert();
-    // mapSingleErase();
-    // ft::map<std::string, int> a;
-    // std::cout << a.max_size() << std::endl;
-    // std::map<std::string, int> b;
-    // std::cout << b.max_size() << std::endl;
-    // reverseIteratorTests();
+    
+}
+
+void    mapSingleInsertReplace(void)
+{
+    ft::map<std::string, int> a; 
+    a.insert(ft::make_pair("aabb", 4));
+    ft::map<std::string, int>::iterator mapIt = a.begin();
+    std::cout << "Should be `aa` " << mapIt->first << std::cout; 
+}
+
+void mapTests(void)
+{
+    mapSingleInsertReplace();
     std::cout << std::endl;
 }

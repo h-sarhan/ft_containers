@@ -6,17 +6,17 @@
 #    By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/04 00:48:08 by hsarhan           #+#    #+#              #
-#    Updated: 2023/03/07 09:03:05 by hsarhan          ###   ########.fr        #
+#    Updated: 2023/03/07 10:50:31 by hsarhan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CXX = clang++
+CXX = g++
 
-CXXFLAGS = -Wpedantic -Wall -Wextra -Werror -std=c++98 -g3 -Iutils -Icontainers -I/usr/include/ -I/usr/include/ 
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g3 -Iutils -Icontainers -I/usr/include/ -I/usr/include/ 
 
 NAME = tests
 
-SRC = map_tests.cpp vector_tests.cpp
+SRC = map_tests.cpp vector_tests.cpp main.cpp
 
 OBJ := $(SRC:%.cpp=%.o)
 

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/07 09:00:22 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/07 10:25:24 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -705,4 +705,30 @@ void reverseIteratorTests(void)
 
     // std::cout << *b.rbegin() << std::endl;
     std::cout << *b.rend() << std::endl;
+}
+
+void vectorTests(void)
+{
+    defaultConstructorTests();
+    fillConstructorTests();
+    copyConstructorTests();
+    vectorInVectorTests();
+    maxSizeTests();
+    emptyTest();
+    atTests();
+    frontBackTests();
+    dataTest();
+    swapTest();
+    clearTests();
+    resizeTests();
+    reserveTests();
+    vectorIteratorTests();
+    vectorReverseIteratorTests();
+    vectorRelational();
+    rangeConstructorTests();
+    assignTests();
+    pushBackTests();
+    popBackTests();
+    insertTests();
+    eraseTests();
 }

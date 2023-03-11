@@ -1,3 +1,6 @@
+#include <string>
+#include <map>
+#include <iostream>
 void vectorTests(void);
 void mapTests(void);
 

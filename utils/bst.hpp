@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/07 12:58:03 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/08 12:31:03 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <iostream>
 #include <memory>
 
-// ! Implement sentinel nodes, because you are segfaulting whenever you increment or decrement end()
+// ! Implement sentinel nodes, because you are segfaulting whenever you increment end()
 namespace ft
 {
 template <class KeyType, class ValType, class Compare, class Alloc> class bst
@@ -26,7 +26,6 @@ template <class KeyType, class ValType, class Compare, class Alloc> class bst
   public:
     typedef pair<const KeyType, ValType> value_type;
     typedef node<value_type> node_type;
-
     node_type *root;
 
   private:
@@ -37,10 +36,12 @@ template <class KeyType, class ValType, class Compare, class Alloc> class bst
     void _move_subtree(node_type *node_1, node_type *node_2);
 
   public:
-    bst(node_type *root, Compare comp, Alloc allocator) : root(root), _comp(comp), _alloc(allocator)
+    bst(node_type *root, Compare comp, Alloc allocator)
+        : root(root), _comp(comp), _alloc(allocator)
     {
     }
-    bst(const bst &old) : root(old.root), _comp(old._comp), _alloc(old._alloc)
+    bst(const bst &old)
+        : root(old.root), _comp(old._comp), _alloc(old._alloc)
     {
     }
     bst &operator=(const bst &rhs)
@@ -52,7 +53,7 @@ template <class KeyType, class ValType, class Compare, class Alloc> class bst
         _alloc = rhs._alloc;
         return *this;
     }
-    void insert(const value_type &val);
+    bool insert(const value_type &val);
     void traverse(node_type *node) const;
     node_type *get(const KeyType &key);
     void delete_node(node_type *key);
@@ -69,17 +70,17 @@ template <class NodeType> NodeType *max_node(NodeType *node);
 }   // namespace ft
 
 template <class KeyType, class ValType, class Compare, class Alloc>
-void ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &val)
+bool ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &val)
 {
     // Is the key already in the tree?
     const node_type *res = get(val.first);
     if (res != NULL)
     {
-        return ;
+        return false;
     }
     node_type *new_node = _alloc.allocate(1);
     _alloc.construct(new_node, node_type(val));
-
+    
     node_type *end = root;
     node_type *end_parent = NULL;
     while (end != NULL)
@@ -99,6 +100,7 @@ void ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &val)
     new_node->parent = end_parent;
     if (end_parent == NULL)
     {
+        std::cout << "updating root " << std::endl;
         root = new_node;
     }
     else if (_comp(new_node->data.first, end_parent->data.first))
@@ -109,13 +111,19 @@ void ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &val)
     {
         end_parent->right = new_node;
     }
+    return true;
 }
 
 template <class KeyType, class ValType, class Compare, class Alloc>
 typename ft::bst<KeyType, ValType, Compare, Alloc>::node_type *ft::bst<
     KeyType, ValType, Compare, Alloc>::get(const KeyType &key)
 {
+    if (root == NULL)
+    {
+        return NULL;
+    }
     node_type *search = root;
+    // std::cout << "in bst::get() root"
     while (search != NULL && search->data.first != key)
     {
         if (_comp(key, search->data.first))

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/07 12:02:34 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/11 20:49:00 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ class map
     typedef size_t size_type;
 
     typedef Compare key_compare;
-    typedef typename Alloc::template rebind<node<value_type> >::other allocator_type;
+    typedef typename Alloc::template rebind<node_type>::other allocator_type;
 
     typedef typename allocator_type::reference reference;
     typedef typename allocator_type::const_reference const_reference;
@@ -76,6 +76,7 @@ class map
     allocator_type _alloc;
     bst<key_type, mapped_type, key_compare, allocator_type> _bst;
     size_type _size;
+    node_type *_sentinel;
 
     // ** Constructors and destructors
   public:
@@ -109,11 +110,11 @@ class map
     mapped_type &operator[](const key_type &k);
 
     // ! THESE ONES ARE FOR TESTING PLEASE REMOVE
-    // void insert(const value_type &val);
+    void insert(const value_type &val);
     void printTree(void) const;
 
     // ** Modifiers
-    void insert(const value_type &val);
+    // pair<iterator,bool> insert(const value_type &val);
     // iterator insert(iterator position, const value_type &val);
     // template <class InputIterator> void insert(InputIterator first, InputIterator last);
     size_type erase(const key_type &k);
@@ -144,47 +145,55 @@ class map
 
 template <class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>::map(const key_compare &comp, const allocator_type &alloc)
-    : _key_comp(comp), _val_comp(comp), _alloc(alloc), _bst(0, comp, alloc), _size(0)
+    : _key_comp(comp), _val_comp(comp), _alloc(alloc), _bst(NULL, comp, alloc), _size(0),
+      _sentinel(_alloc.allocate(1))
 {
+    _alloc.construct(_sentinel, node_type());
 }
 
 template <class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>::map(const map &old)
     : _key_comp(old._key_comp), _val_comp(old._val_comp), _alloc(old._alloc), _bst(old._bst),
-      _size(old._size)
+      _size(old._size), _sentinel(old._sentinel)
 {
 }
 
 template <class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::begin(void)
 {
+    // ! Check if this is correct behaviour with std::map on linux and mac. Maybe return sentinel
+    // node instead??
     if (empty())
     {
         return iterator();
     }
-    return iterator(ft::min_node(_bst.root));
+    return iterator(ft::min_node(_bst.root), _bst.root, _sentinel);
 }
 
 template <class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::begin(
     void) const
 {
+    // ! Check if this is correct behaviour with std::map on linux and mac. Maybe return sentinel
+    // node instead??
     if (empty())
     {
         return iterator();
     }
-    return iterator(ft::min_node(_bst.root));
+    return iterator(ft::min_node(_bst.root), _bst.root, _sentinel);
 }
 
 template <class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::end(void)
 {
+    // ! Check if this is correct behaviour with std::map on linux and mac. Maybe return sentinel
+    // node instead??
     if (empty())
     {
         return begin();
     }
     // ! probably wrong i'll come back to this when the tester fails me
-    return iterator(ft::max_node(_bst.root)->right);
+    return iterator(_sentinel, _bst.root, _sentinel);
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -195,8 +204,7 @@ typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare
     {
         return begin();
     }
-    // ! probably wrong i'll come back to this when the tester fails me
-    return iterator(ft::max_node(_bst.root)->right);
+    return iterator(_sentinel, _bst.root, _sentinel);
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -207,7 +215,16 @@ typename ft::map<Key, T, Compare, Alloc>::reverse_iterator ft::map<Key, T, Compa
     {
         // idk
     }
-    return reverse_iterator(iterator(ft::max_node(_bst.root)));
+    // std::cout << "last node IS " << ft::max_node(_bst.root)->data.first << std::endl;
+
+    // reverse_iterator rit = reverse_iterator(iterator(ft::max_node(_bst.root), _bst.root, _sentinel));
+    // std::cout << "rit == " << rit->first << std::endl;
+    // iterator it = iterator(ft::max_node(_bst.root), _bst.root, _sentinel);
+    // std::cout << "it == " << it->first << std::endl;
+    // std::cout << "max node == " << ft::max_node(_bst.root)->data.first << std::endl;
+    // reverse_iterator rit = reverse_iterator(iterator(ft::max_node(_bst.root), _bst.root, _sentinel));
+    // std::cout << "rit == " << (*rit).first << std::endl;
+    return reverse_iterator(iterator(_sentinel, _bst.root, _sentinel));
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -218,7 +235,7 @@ typename ft::map<Key, T, Compare, Alloc>::const_reverse_iterator ft::map<Key, T,
     {
         // idk
     }
-    return reverse_iterator(iterator(ft::max_node(_bst.root)));
+    return reverse_iterator(iterator(_sentinel, _bst.root, _sentinel));
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -229,7 +246,7 @@ typename ft::map<Key, T, Compare, Alloc>::reverse_iterator ft::map<Key, T, Compa
     {
         // idk
     }
-    return reverse_iterator(iterator(ft::min_node(_bst.root))->left);
+    return reverse_iterator(iterator(ft::min_node(_bst.root), _bst.root, _sentinel));
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -240,7 +257,7 @@ typename ft::map<Key, T, Compare, Alloc>::const_reverse_iterator ft::map<Key, T,
     {
         // idk
     }
-    return reverse_iterator(iterator(ft::min_node(_bst.root))->left);
+    return reverse_iterator(iterator(ft::min_node(_bst.root), _bst.root, _sentinel));
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -267,9 +284,10 @@ void ft::map<Key, T, Compare, Alloc>::insert(const value_type &val)
 {
     // ft::pair<iterator, bool> res;
 
-    
-    _bst.insert(val);
-    _size += 1;
+    if (_bst.insert(val) == true)
+    {
+        _size += 1;
+    }
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -326,4 +344,5 @@ typename ft::map<Key, T, Compare, Alloc>::value_compare ft::map<Key, T, Compare,
 {
     return _val_comp;
 }
+
 #endif

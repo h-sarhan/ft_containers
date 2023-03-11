@@ -33,11 +33,13 @@ template <class T, class NodeType> class map_iterator
   private:
     // * Private attributes
     node_pointer _node_ptr;
+    node_pointer _bst_root;
+    node_pointer _sentinel;
 
   public:
     // * Constructors and destructors
     map_iterator(void);
-    map_iterator(node_pointer ptr);
+    map_iterator(node_pointer ptr, node_pointer bst_root, node_pointer sentinel);
 
     template <class T2> map_iterator &operator=(const map_iterator<T2, NodeType> &rhs);
     ~map_iterator(void);
@@ -45,6 +47,8 @@ template <class T, class NodeType> class map_iterator
     template <class T2> map_iterator(const map_iterator<T2, NodeType> &old);
 
     node_pointer base(void) const;
+    node_pointer bst_root(void) const;
+    node_pointer sentinel(void) const;
 
     // * Iterator traversal
     map_iterator &operator++(void);   // pre-increment
@@ -62,19 +66,23 @@ template <class T, class NodeType> class map_iterator
 };
 }   // namespace ft
 
-template <class T, class NodeType> ft::map_iterator<T, NodeType>::map_iterator(void) : _node_ptr(0)
+template <class T, class NodeType>
+ft::map_iterator<T, NodeType>::map_iterator(void)
+    : _node_ptr(NULL), _bst_root(NULL), _sentinel(NULL)
 {
 }
 
 template <class T, class NodeType>
-ft::map_iterator<T, NodeType>::map_iterator(node_pointer ptr) : _node_ptr(ptr)
+ft::map_iterator<T, NodeType>::map_iterator(node_pointer ptr, node_pointer bst_root,
+                                            node_pointer sentinel)
+    : _node_ptr(ptr), _bst_root(bst_root), _sentinel(sentinel)
 {
 }
 
 template <class T, class NodeType>
 template <class T2>
 ft::map_iterator<T, NodeType>::map_iterator(const map_iterator<T2, NodeType> &old)
-    : _node_ptr(old.base())
+    : _node_ptr(old._node_ptr), _bst_root(old._bst_root), _sentinel(old._sentinel)
 {
 }
 
@@ -85,11 +93,27 @@ typename ft::map_iterator<T, NodeType>::node_pointer ft::map_iterator<T, NodeTyp
 }
 
 template <class T, class NodeType>
+typename ft::map_iterator<T, NodeType>::node_pointer ft::map_iterator<T, NodeType>::bst_root(
+    void) const
+{
+    return _bst_root;
+}
+
+template <class T, class NodeType>
+typename ft::map_iterator<T, NodeType>::node_pointer ft::map_iterator<T, NodeType>::sentinel(
+    void) const
+{
+    return _sentinel;
+}
+
+template <class T, class NodeType>
 template <class T2>
 ft::map_iterator<T, NodeType> &ft::map_iterator<T, NodeType>::operator=(
     const map_iterator<T2, NodeType> &rhs)
 {
     _node_ptr = rhs.base();
+    _bst_root = rhs.bst_root();
+    _sentinel = rhs.sentinel();
     return *this;
 }
 
@@ -101,15 +125,38 @@ template <class T, class NodeType> ft::map_iterator<T, NodeType>::~map_iterator<
 template <class T, class NodeType>
 ft::map_iterator<T, NodeType> &ft::map_iterator<T, NodeType>::operator++(void)
 {
-    // * This will find the successor of the tree
+    // ? If the passed node was one behind the first element then incrementing it should give you
+    // ? the first element.
+    if (_node_ptr == _sentinel)
+    {
+        // ? Get the first element of the map
+        _node_ptr = ft::min_node(_bst_root);
+        return *this;
+    }
     _node_ptr = ft::successor_node(_node_ptr);
+    if (_node_ptr == NULL)
+    {
+        _node_ptr = _sentinel;
+    }
     return *this;
 }
 
 template <class T, class NodeType>
 ft::map_iterator<T, NodeType> &ft::map_iterator<T, NodeType>::operator--(void)
 {
+    // ? If the passed node was one in front of the first element then decrementing it should give
+    // ? you the last element.
+    if (_node_ptr == _sentinel)
+    {
+        // ? Get the last element of the map
+        _node_ptr = ft::max_node(_bst_root);
+        return *this;
+    }
     _node_ptr = ft::predecessor_node(_node_ptr);
+    if (_node_ptr == NULL)
+    {
+        _node_ptr = _sentinel;
+    }
     return *this;
 }
 
@@ -146,7 +193,7 @@ bool ft::map_iterator<T, NodeType>::operator!=(const map_iterator<T2, NodeType> 
 template <class T, class NodeType>
 typename ft::map_iterator<T, NodeType>::value_type &ft::map_iterator<T, NodeType>::operator*(void)
 {
-    return (*_node_ptr).data;
+    return _node_ptr->data;
 }
 
 template <class T, class NodeType>

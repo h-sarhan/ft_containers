@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/12 23:50:22 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 00:00:41 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,27 @@ void mapRangeErase(void)
     strToInt.printTree();
 }
 
+void mapClear(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    strToInt.insert(ft::make_pair(5, "four"));
+    strToInt.clear();
+    assert(strToInt.empty() == true);
+    assert(strToInt.size() == 0);
+    strToInt.printTree();
+}
+
 void mapTests(void)
 {
     // mapSingleInsertReplace();
     // mapIterators();
     // mapCount();
     // mapSingleErase();
-    mapRangeErase();
+    // mapRangeErase();
+    mapClear();
     std::cout << std::endl;
 }

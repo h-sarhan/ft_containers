@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/12 23:47:42 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/12 23:59:07 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ class map
     explicit map(const key_compare &comp = key_compare(),
                  const allocator_type &alloc = allocator_type());
     // template <class InputIterator>
-    // map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(), const
-    // allocator_type &alloc = allocator_type());
+    // map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(),
+    //     const allocator_type &alloc = allocator_type());
     map(const map &x);
     // ~map(void);
     // map												&operator=(const map &x);
@@ -121,7 +121,7 @@ class map
     void erase(iterator position);
     void erase(iterator first, iterator last);
     // void swap(map &x);
-    // void clear(void);
+    void clear(void);
 
     // ** Observers
     key_compare key_comp(void) const;
@@ -353,6 +353,12 @@ void ft::map<Key, T, Compare, Alloc>::erase(iterator first, iterator last)
     {
         erase(it);
     }
+}
+
+template <class Key, class T, class Compare, class Alloc>
+void ft::map<Key, T, Compare, Alloc>::clear(void)
+{
+    erase(begin(), end());
 }
 
 template <class Key, class T, class Compare, class Alloc>

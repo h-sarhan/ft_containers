@@ -6,19 +6,19 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/12 23:24:41 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/12 23:50:22 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "make_pair.hpp"
 #include "map.hpp"
 #include "vector.hpp"
+#include <cassert>
 #include <cstdio>
 #include <iostream>
 #include <map>
 #include <ostream>
 #include <string>
-#include <cassert>
 
 void mapDefaultConstructor(void)
 {
@@ -62,7 +62,8 @@ void mapIterators(void)
     strToInt.insert(ft::make_pair(2, "two"));
     strToInt.insert(ft::make_pair(3, "three"));
     strToInt.insert(ft::make_pair(4, "four"));
-    for (ft::map<int, std::string>::reverse_iterator it = strToInt.rbegin(); it != strToInt.rend(); it++)
+    for (ft::map<int, std::string>::reverse_iterator it = strToInt.rbegin(); it != strToInt.rend();
+         it++)
     {
         std::cout << "Key " << it->first << std::endl;
         std::cout << "Value " << it->second << std::endl;
@@ -80,11 +81,31 @@ void mapCount(void)
     assert(strToInt.count(5) == 0);
 }
 
+void mapRangeErase(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    ft::map<int, std::string>::iterator first = strToInt.begin();
+    ft::map<int, std::string>::iterator last = first;
+    last++;
+    last++;
+    strToInt.erase(first, last);
+    assert(strToInt.count(1) == 0);
+    assert(strToInt.count(2) == 0);
+    assert(strToInt.count(3) == 1);
+    assert(strToInt.count(4) == 1);
+    strToInt.printTree();
+}
+
 void mapTests(void)
 {
     // mapSingleInsertReplace();
     // mapIterators();
     // mapCount();
-    mapSingleErase();
+    // mapSingleErase();
+    mapRangeErase();
     std::cout << std::endl;
 }

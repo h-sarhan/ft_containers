@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/12 23:39:15 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/12 23:47:42 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ class map
     // template <class InputIterator> void insert(InputIterator first, InputIterator last);
     size_type erase(const key_type &k);
     void erase(iterator position);
-    // void erase(iterator first, iterator last);
+    void erase(iterator first, iterator last);
     // void swap(map &x);
     // void clear(void);
 
@@ -344,6 +344,15 @@ void ft::map<Key, T, Compare, Alloc>::erase(iterator position)
     }
     _bst.delete_node(to_delete);
     _size -= 1;
+}
+
+template <class Key, class T, class Compare, class Alloc>
+void ft::map<Key, T, Compare, Alloc>::erase(iterator first, iterator last)
+{
+    for (iterator it = first; it != last; it++)
+    {
+        erase(it);
+    }
 }
 
 template <class Key, class T, class Compare, class Alloc>

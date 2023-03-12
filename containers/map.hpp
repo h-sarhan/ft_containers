@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/11 20:49:00 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/12 23:03:42 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ class map
     // ** Operations
     // iterator find(const key_type &k);
     // const_iterator find(const key_type &k) const;
-    // size_type count(const key_type &k) const;
+    size_type count(const key_type &k) const;
     // iterator lower_bound(const key_type &k);
     // const_iterator lower_bound(const key_type &k) const;
     // iterator upper_bound(const key_type &k);
@@ -215,15 +215,7 @@ typename ft::map<Key, T, Compare, Alloc>::reverse_iterator ft::map<Key, T, Compa
     {
         // idk
     }
-    // std::cout << "last node IS " << ft::max_node(_bst.root)->data.first << std::endl;
 
-    // reverse_iterator rit = reverse_iterator(iterator(ft::max_node(_bst.root), _bst.root, _sentinel));
-    // std::cout << "rit == " << rit->first << std::endl;
-    // iterator it = iterator(ft::max_node(_bst.root), _bst.root, _sentinel);
-    // std::cout << "it == " << it->first << std::endl;
-    // std::cout << "max node == " << ft::max_node(_bst.root)->data.first << std::endl;
-    // reverse_iterator rit = reverse_iterator(iterator(ft::max_node(_bst.root), _bst.root, _sentinel));
-    // std::cout << "rit == " << (*rit).first << std::endl;
     return reverse_iterator(iterator(_sentinel, _bst.root, _sentinel));
 }
 
@@ -265,6 +257,17 @@ bool ft::map<Key, T, Compare, Alloc>::empty(void) const
 {
     return _bst.root == NULL;
 }
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, Alloc>::count(const key_type &k) const
+{
+    if (_bst.get(k) == NULL)
+    {
+        return 0;
+    }
+    return 1;
+}
+
 
 template <class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, Alloc>::size() const

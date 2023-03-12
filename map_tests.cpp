@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/11 20:33:44 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/12 23:03:27 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <map>
 #include <ostream>
 #include <string>
+#include <cassert>
 
 void mapDefaultConstructor(void)
 {
@@ -58,17 +59,6 @@ void mapSingleErase(void)
 
 void mapIterators(void)
 {
-    // ft::vector<int> intVec;
-    // intVec.reserve(5);
-    // intVec.push_back(0);
-    // intVec.push_back(1);
-    // intVec.push_back(2);
-    // intVec.push_back(3);
-    // intVec.push_back(4);
-    // for (ft::vector<int>::reverse_iterator it = intVec.rbegin(); it != intVec.rend(); it++)
-    // {
-    //     std::cout << *it << std::endl;
-    // }
     ft::map<int, std::string> strToInt;
     strToInt.insert(ft::make_pair(1, "one"));
     strToInt.insert(ft::make_pair(2, "two"));
@@ -81,9 +71,21 @@ void mapIterators(void)
     }
 }
 
+void mapCount(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    assert(strToInt.count(1) == 1);
+    assert(strToInt.count(5) == 0);
+}
+
 void mapTests(void)
 {
     // mapSingleInsertReplace();
     mapIterators();
+    mapCount();
     std::cout << std::endl;
 }

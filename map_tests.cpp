@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/12 23:03:27 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/12 23:24:41 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,10 @@ void mapSingleErase(void)
     a.insert(ft::make_pair("c", 3));
     a.insert(ft::make_pair("a", 1));
 
-    a.erase("d");
-
-    // ft::map<std::string, int> b;
-    // ft::map<std::string, int>::iterator c = b.begin();
+    // a.erase("d");
     // a.printTree();
-    // std::cout << a["d"] << std::endl;
+    a.erase(a.begin());
+    a.erase(a.begin());
     a.printTree();
 }
 
@@ -85,7 +83,8 @@ void mapCount(void)
 void mapTests(void)
 {
     // mapSingleInsertReplace();
-    mapIterators();
-    mapCount();
+    // mapIterators();
+    // mapCount();
+    mapSingleErase();
     std::cout << std::endl;
 }

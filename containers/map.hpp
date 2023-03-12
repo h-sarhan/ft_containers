@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/12 23:03:42 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/12 23:39:15 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ class map
     // iterator insert(iterator position, const value_type &val);
     // template <class InputIterator> void insert(InputIterator first, InputIterator last);
     size_type erase(const key_type &k);
-    // void erase(iterator position);
+    void erase(iterator position);
     // void erase(iterator first, iterator last);
     // void swap(map &x);
     // void clear(void);
@@ -259,7 +259,8 @@ bool ft::map<Key, T, Compare, Alloc>::empty(void) const
 }
 
 template <class Key, class T, class Compare, class Alloc>
-typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, Alloc>::count(const key_type &k) const
+typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, Alloc>::count(
+    const key_type &k) const
 {
     if (_bst.get(k) == NULL)
     {
@@ -267,7 +268,6 @@ typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, All
     }
     return 1;
 }
-
 
 template <class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, Alloc>::size() const
@@ -332,6 +332,18 @@ typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, All
     _bst.delete_node(to_delete);
     _size -= 1;
     return 1;
+}
+
+template <class Key, class T, class Compare, class Alloc>
+void ft::map<Key, T, Compare, Alloc>::erase(iterator position)
+{
+    node_type *to_delete = _bst.get(position->first);
+    if (to_delete == NULL)
+    {
+        return;
+    }
+    _bst.delete_node(to_delete);
+    _size -= 1;
 }
 
 template <class Key, class T, class Compare, class Alloc>

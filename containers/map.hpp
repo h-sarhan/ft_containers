@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 06:04:34 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 11:19:33 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,10 +115,9 @@ class map
 
     // ** Modifiers
     pair<iterator, bool> insert(const value_type &val);
-    
-    // ! I am currently ignoring the first arg
-    iterator insert(iterator position, const value_type &val);
-    // template <class InputIterator> void insert(InputIterator first, InputIterator last);
+
+    iterator insert(iterator position, const value_type &val);    // ! I am currently ignoring the first arg
+    template <class InputIterator> void insert(InputIterator first, InputIterator last);
     size_type erase(const key_type &k);
     void erase(iterator position);
     void erase(iterator first, iterator last);
@@ -312,12 +311,22 @@ ft::pair<typename ft::map<Key, T, Compare, Alloc>::iterator, bool> ft::map<
 }
 
 template <class Key, class T, class Compare, class Alloc>
-typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<
-    Key, T, Compare, Alloc>::insert(iterator hint, const value_type &val)
+typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::insert(
+    iterator hint, const value_type &val)
 {
     // ! This is just ignoring the hint
-    (void)hint;
+    (void) hint;
     return insert(val).first;
+}
+
+template <class Key, class T, class Compare, class Alloc>
+template <class InputIterator>
+void ft::map<Key, T, Compare, Alloc>::insert(InputIterator first, InputIterator last)
+{
+    for (InputIterator it = first; it != last; it++)
+    {
+        insert();
+    }
 }
 
 template <class Key, class T, class Compare, class Alloc>

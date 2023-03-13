@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 11:19:33 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 20:46:29 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,8 @@ class map
     // ** Modifiers
     pair<iterator, bool> insert(const value_type &val);
 
-    iterator insert(iterator position, const value_type &val);    // ! I am currently ignoring the first arg
+    iterator insert(iterator position,
+                    const value_type &val);   // ! I am currently ignoring the first arg
     template <class InputIterator> void insert(InputIterator first, InputIterator last);
     size_type erase(const key_type &k);
     void erase(iterator position);
@@ -132,12 +133,12 @@ class map
     // iterator find(const key_type &k);
     // const_iterator find(const key_type &k) const;
     size_type count(const key_type &k) const;
-    // iterator lower_bound(const key_type &k);
-    // const_iterator lower_bound(const key_type &k) const;
-    // iterator upper_bound(const key_type &k);
-    // const_iterator upper_bound(const key_type &k) const;
-    // pair<iterator, iterator> equal_range(const key_type &k);
-    // pair<const_iterator, const_iterator> equal_range(const key_type &k) const;
+    iterator lower_bound(const key_type &k);
+    const_iterator lower_bound(const key_type &k) const;
+    iterator upper_bound(const key_type &k);
+    const_iterator upper_bound(const key_type &k) const;
+    pair<iterator, iterator> equal_range(const key_type &k);
+    pair<const_iterator, const_iterator> equal_range(const key_type &k) const;
 
     // ** Allocators
     allocator_type get_allocator(void) const;
@@ -179,7 +180,7 @@ typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Allo
     // node instead??
     if (empty())
     {
-        return iterator();
+        return iterator(_sentinel, _bst.root, _sentinel);
     }
     return iterator(ft::min_node(_bst.root), _bst.root, _sentinel);
 }
@@ -192,7 +193,7 @@ typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare
     // node instead??
     if (empty())
     {
-        return iterator();
+        return iterator(_sentinel, _bst.root, _sentinel);
     }
     return iterator(ft::min_node(_bst.root), _bst.root, _sentinel);
 }
@@ -284,6 +285,80 @@ typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, All
 }
 
 template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::lower_bound(
+    const key_type &k)
+{
+    for (iterator it = begin(); it != end(); it++)
+    {
+        if (_key_comp(k, it->first) == true ||
+            (_key_comp(k, it->first) == false && _key_comp(it->first, k) == false))
+        {
+            return iterator(it.base(), _bst.root, _sentinel);
+        }
+    }
+    return end();
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<
+    Key, T, Compare, Alloc>::lower_bound(const key_type &k) const
+{
+    for (iterator it = begin(); it != end(); it++)
+    {
+        if (_key_comp(k, it->first) == true ||
+            (_key_comp(k, it->first) == false && _key_comp(k, it->first) == false))
+        {
+            return iterator(it.base(), _bst.root, _sentinel);
+        }
+    }
+    return end();
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::upper_bound(
+    const key_type &k)
+{
+    for (iterator it = begin(); it != end(); it++)
+    {
+        if (_key_comp(k, it->first) == true)
+        {
+            return iterator(it.base(), _bst.root, _sentinel);
+        }
+    }
+    return end();
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<
+    Key, T, Compare, Alloc>::upper_bound(const key_type &k) const
+{
+    for (iterator it = begin(); it != end(); it++)
+    {
+        if (_key_comp(k, it->first) == true)
+        {
+            return iterator(it.base(), _bst.root, _sentinel);
+        }
+    }
+    return end();
+}
+
+template <class Key, class T, class Compare, class Alloc>
+ft::pair<typename ft::map<Key, T, Compare, Alloc>::iterator,
+         typename ft::map<Key, T, Compare, Alloc>::iterator>
+ft::map<Key, T, Compare, Alloc>::equal_range(const key_type &k)
+{
+    return ft::make_pair(lower_bound(k), upper_bound(k));
+}
+
+template <class Key, class T, class Compare, class Alloc>
+ft::pair<typename ft::map<Key, T, Compare, Alloc>::const_iterator,
+         typename ft::map<Key, T, Compare, Alloc>::const_iterator>
+ft::map<Key, T, Compare, Alloc>::equal_range(const key_type &k) const
+{
+    return ft::make_pair(lower_bound(k), upper_bound(k));
+}
+
+template <class Key, class T, class Compare, class Alloc>
 typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, Alloc>::size() const
 {
     return _size;
@@ -325,7 +400,7 @@ void ft::map<Key, T, Compare, Alloc>::insert(InputIterator first, InputIterator 
 {
     for (InputIterator it = first; it != last; it++)
     {
-        insert();
+        insert(*it);
     }
 }
 

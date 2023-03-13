@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 06:03:30 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 20:42:23 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,44 @@ void mapInsertWithReturnedIterator(void)
     strToInt.printTree();
 }
 
+void mapLowerBound(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    ft::map<int, std::string>::iterator it = strToInt.lower_bound(4);
+    // it = strToInt.end();
+    std::cout << "lower_bound == " << it->first << std::endl;
+
+    std::map<int, std::string> strToInt2;
+    strToInt2.insert(std::make_pair(1, "one"));
+    strToInt2.insert(std::make_pair(3, "three"));
+    strToInt2.insert(std::make_pair(4, "four"));
+    std::map<int, std::string>::iterator it2 = strToInt2.lower_bound(4);
+    // it = strToInt.end();
+    std::cout << "lower_bound == " << it2->first << std::endl;
+}
+
+void mapUpperBound(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    ft::map<int, std::string>::iterator it = strToInt.upper_bound(3);
+    // it = strToInt.end();
+    std::cout << "upper_bound == " << it->first << std::endl;
+
+    std::map<int, std::string> strToInt2;
+    strToInt2.insert(std::make_pair(1, "one"));
+    strToInt2.insert(std::make_pair(3, "three"));
+    strToInt2.insert(std::make_pair(4, "four"));
+    std::map<int, std::string>::iterator it2 = strToInt2.upper_bound(3);
+    // it = strToInt.end();
+    std::cout << "upper_bound == " << it2->first << std::endl;
+}
+
 void mapTests(void)
 {
     // mapSingleInsertReplace();
@@ -184,6 +222,8 @@ void mapTests(void)
     // mapClear();
     // mapSwap();
     // mapRangeBasedConstructor();
-    mapInsertWithReturnedIterator();
+    // mapInsertWithReturnedIterator();
+    mapLowerBound();
+    mapUpperBound();
     std::cout << std::endl;
 }

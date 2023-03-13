@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/12 23:59:07 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 04:43:01 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ class map
     //     const allocator_type &alloc = allocator_type());
     map(const map &x);
     // ~map(void);
-    // map												&operator=(const map &x);
+    // map &operator=(const map &x);
 
     // ** Iterator functions
     iterator begin(void);
@@ -120,7 +120,7 @@ class map
     size_type erase(const key_type &k);
     void erase(iterator position);
     void erase(iterator first, iterator last);
-    // void swap(map &x);
+    void swap(map &x);
     void clear(void);
 
     // ** Observers
@@ -353,6 +353,35 @@ void ft::map<Key, T, Compare, Alloc>::erase(iterator first, iterator last)
     {
         erase(it);
     }
+}
+
+template <class Key, class T, class Compare, class Alloc>
+void ft::map<Key, T, Compare, Alloc>::swap(map &x)
+{
+    if (this == &x)
+    {
+        return;
+    }
+    key_compare temp_key_comp = x.key_comp();
+    value_compare temp_val_comp = x.value_comp();
+    allocator_type temp_allocator = x.get_allocator();
+    bst<key_type, mapped_type, key_compare, allocator_type> temp_bst = x._bst;
+    size_type temp_size = x._size;
+    node_type *temp_sentinel = x._sentinel;
+
+    x._key_comp = _key_comp;
+    x._val_comp = _val_comp;
+    x._alloc = _alloc;
+    x._bst = _bst;
+    x._size = _size;
+    x._sentinel = _sentinel;
+
+    _key_comp = temp_key_comp;
+    _val_comp = temp_val_comp;
+    _alloc = temp_allocator;
+    _bst = temp_bst;
+    _size = temp_size;
+    _sentinel = temp_sentinel;
 }
 
 template <class Key, class T, class Compare, class Alloc>

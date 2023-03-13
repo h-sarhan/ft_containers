@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/07 09:07:27 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 04:38:23 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -857,6 +857,7 @@ template <class T, class Alloc> void ft::vector<T, Alloc>::swap(vector<T, Alloc>
     x._alloc = get_allocator();
     x._size = size();
     x._capacity = capacity();
+
     _array = temp_arr;
     _alloc = temp_alloc;
     _size = temp_size;

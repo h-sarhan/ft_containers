@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 00:00:41 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 04:43:21 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,28 @@ void mapClear(void)
     strToInt.printTree();
 }
 
+void mapSwap(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    strToInt.insert(ft::make_pair(5, "four"));
+    ft::map<int, std::string> strToInt2;
+    strToInt2.insert(ft::make_pair(6, "six"));
+    strToInt2.insert(ft::make_pair(7, "seven"));
+    strToInt2.insert(ft::make_pair(8, "eight"));
+    strToInt2.insert(ft::make_pair(9, "nine"));
+    strToInt2.insert(ft::make_pair(10, "ten"));
+
+    strToInt2.swap(strToInt);
+    assert(strToInt.count(6) == 1);
+    assert(strToInt2.count(6) == 0);
+    assert(strToInt2.count(1) == 1);
+    assert(strToInt.count(1) == 0);
+}
+
 void mapTests(void)
 {
     // mapSingleInsertReplace();
@@ -121,6 +143,9 @@ void mapTests(void)
     // mapCount();
     // mapSingleErase();
     // mapRangeErase();
-    mapClear();
+    // mapClear();
+    mapSwap();
+    std::map<int, std::string> strToInt;
+    strToInt.swap(strToInt);
     std::cout << std::endl;
 }

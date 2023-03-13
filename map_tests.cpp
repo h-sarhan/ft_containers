@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 04:43:21 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 04:58:25 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,19 @@ void mapSwap(void)
     assert(strToInt.count(1) == 0);
 }
 
+void mapRangeBasedConstructor(void)
+{
+    ft::vector<ft::pair<int, std::string> > vec;
+    vec.insert(vec.end(), ft::make_pair(3, "three"));
+    vec.insert(vec.end(), ft::make_pair(4, "four"));
+    vec.insert(vec.end(), ft::make_pair(1, "one"));
+    vec.insert(vec.end(), ft::make_pair(5, "four"));
+    vec.insert(vec.end(), ft::make_pair(2, "two"));
+    ft::map<int, std::string> strToInt(vec.begin(), vec.end());
+    strToInt.printTree();
+    assert(strToInt.size() == 5);
+}
+
 void mapTests(void)
 {
     // mapSingleInsertReplace();
@@ -144,8 +157,7 @@ void mapTests(void)
     // mapSingleErase();
     // mapRangeErase();
     // mapClear();
-    mapSwap();
-    std::map<int, std::string> strToInt;
-    strToInt.swap(strToInt);
+    // mapSwap();
+    mapRangeBasedConstructor();
     std::cout << std::endl;
 }

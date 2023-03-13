@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 04:43:01 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 04:59:37 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,9 @@ class map
   public:
     explicit map(const key_compare &comp = key_compare(),
                  const allocator_type &alloc = allocator_type());
-    // template <class InputIterator>
-    // map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(),
-    //     const allocator_type &alloc = allocator_type());
+    template <class InputIterator>
+    map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(),
+        const allocator_type &alloc = allocator_type());
     map(const map &x);
     // ~map(void);
     // map &operator=(const map &x);
@@ -149,6 +149,19 @@ ft::map<Key, T, Compare, Alloc>::map(const key_compare &comp, const allocator_ty
       _sentinel(_alloc.allocate(1))
 {
     _alloc.construct(_sentinel, node_type());
+}
+
+template <class Key, class T, class Compare, class Alloc>
+template <class InputIterator>
+ft::map<Key, T, Compare, Alloc>::map(InputIterator first, InputIterator last,
+                                     const key_compare &comp, const allocator_type &alloc)
+    : _key_comp(comp), _val_comp(comp), _alloc(alloc), _bst(NULL, comp, alloc), _size(0),
+      _sentinel(_alloc.allocate(1))
+{
+    for (InputIterator it = first; it != last; it++)
+    {
+        insert(*it);
+    }
 }
 
 template <class Key, class T, class Compare, class Alloc>

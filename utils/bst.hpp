@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/12 22:57:05 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 05:29:21 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define BST_HPP
 
 #include "node.hpp"
+#include "make_pair.hpp"
 #include <cstddef>
 #include <iostream>
 #include <memory>
@@ -51,7 +52,7 @@ template <class KeyType, class ValType, class Compare, class Alloc> class bst
         _alloc = rhs._alloc;
         return *this;
     }
-    bool insert(const value_type &val);
+    ft::pair<node_type *, bool> insert(const value_type &val);
     void traverse(node_type *node) const;
     node_type *get(const KeyType &key) const;
     void delete_node(node_type *key);
@@ -68,13 +69,14 @@ template <class NodeType> NodeType *max_node(NodeType *node);
 }   // namespace ft
 
 template <class KeyType, class ValType, class Compare, class Alloc>
-bool ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &val)
+ft::pair<typename ft::bst<KeyType, ValType, Compare, Alloc>::node_type *, bool> ft::bst<
+    KeyType, ValType, Compare, Alloc>::insert(const value_type &val)
 {
     // Is the key already in the tree?
-    const node_type *res = get(val.first);
+    node_type *res = get(val.first);
     if (res != NULL)
     {
-        return false;
+        return ft::make_pair(res, false);
     }
     node_type *new_node = _alloc.allocate(1);
     _alloc.construct(new_node, node_type(val));
@@ -109,7 +111,8 @@ bool ft::bst<KeyType, ValType, Compare, Alloc>::insert(const value_type &val)
     {
         end_parent->right = new_node;
     }
-    return true;
+    // return true;
+    return ft::make_pair(new_node, true);
 }
 
 template <class KeyType, class ValType, class Compare, class Alloc>

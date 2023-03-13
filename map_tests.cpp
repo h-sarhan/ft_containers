@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 04:58:25 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 06:03:30 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void mapClear(void)
     strToInt.insert(ft::make_pair(2, "two"));
     strToInt.insert(ft::make_pair(3, "three"));
     strToInt.insert(ft::make_pair(4, "four"));
-    strToInt.insert(ft::make_pair(5, "four"));
+    strToInt.insert(ft::make_pair(5, "five"));
     strToInt.clear();
     assert(strToInt.empty() == true);
     assert(strToInt.size() == 0);
@@ -121,7 +121,7 @@ void mapSwap(void)
     strToInt.insert(ft::make_pair(2, "two"));
     strToInt.insert(ft::make_pair(3, "three"));
     strToInt.insert(ft::make_pair(4, "four"));
-    strToInt.insert(ft::make_pair(5, "four"));
+    strToInt.insert(ft::make_pair(5, "five"));
     ft::map<int, std::string> strToInt2;
     strToInt2.insert(ft::make_pair(6, "six"));
     strToInt2.insert(ft::make_pair(7, "seven"));
@@ -142,11 +142,36 @@ void mapRangeBasedConstructor(void)
     vec.insert(vec.end(), ft::make_pair(3, "three"));
     vec.insert(vec.end(), ft::make_pair(4, "four"));
     vec.insert(vec.end(), ft::make_pair(1, "one"));
-    vec.insert(vec.end(), ft::make_pair(5, "four"));
+    vec.insert(vec.end(), ft::make_pair(5, "five"));
     vec.insert(vec.end(), ft::make_pair(2, "two"));
     ft::map<int, std::string> strToInt(vec.begin(), vec.end());
     strToInt.printTree();
     assert(strToInt.size() == 5);
+}
+
+void mapInsertWithReturnedIterator(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    ft::pair<ft::map<int, std::string>::iterator, bool> res =
+        strToInt.insert(ft::make_pair(5, "five"));
+    ft::map<int, std::string>::iterator lastIt = strToInt.end();
+    lastIt--;
+    assert(res.second == true);
+    assert(lastIt == res.first);
+    ft::pair<ft::map<int, std::string>::iterator, bool> res2 =
+        strToInt.insert(ft::make_pair(4, "four"));
+    assert(res2.second == false);
+    lastIt--;
+    assert(lastIt == res2.first);
+    ft::map<int, std::string>::iterator it = strToInt.insert(lastIt, ft::make_pair(7, "seven"));
+    lastIt = strToInt.end();
+    lastIt--;
+    assert(it == lastIt);
+    strToInt.printTree();
 }
 
 void mapTests(void)
@@ -158,6 +183,7 @@ void mapTests(void)
     // mapRangeErase();
     // mapClear();
     // mapSwap();
-    mapRangeBasedConstructor();
+    // mapRangeBasedConstructor();
+    mapInsertWithReturnedIterator();
     std::cout << std::endl;
 }

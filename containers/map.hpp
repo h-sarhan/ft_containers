@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 04:59:37 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 06:04:34 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "pair.hpp"
 #include "reverse_iterator.hpp"
 #include <cstddef>
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 
@@ -107,15 +108,16 @@ class map
     size_type max_size(void) const;
 
     // ** Element access
-    mapped_type &operator[](const key_type &k);
+    mapped_type &operator[](const key_type &k);   // ! NOT DONE
 
-    // ! THESE ONES ARE FOR TESTING PLEASE REMOVE
-    void insert(const value_type &val);
+    // ! THIS ONES ARE FOR TESTING PLEASE REMOVE
     void printTree(void) const;
 
     // ** Modifiers
-    // pair<iterator,bool> insert(const value_type &val);
-    // iterator insert(iterator position, const value_type &val);
+    pair<iterator, bool> insert(const value_type &val);
+    
+    // ! I am currently ignoring the first arg
+    iterator insert(iterator position, const value_type &val);
     // template <class InputIterator> void insert(InputIterator first, InputIterator last);
     size_type erase(const key_type &k);
     void erase(iterator position);
@@ -296,14 +298,26 @@ typename ft::map<Key, T, Compare, Alloc>::size_type ft::map<Key, T, Compare, All
 }
 
 template <class Key, class T, class Compare, class Alloc>
-void ft::map<Key, T, Compare, Alloc>::insert(const value_type &val)
+ft::pair<typename ft::map<Key, T, Compare, Alloc>::iterator, bool> ft::map<
+    Key, T, Compare, Alloc>::insert(const value_type &val)
 {
-    // ft::pair<iterator, bool> res;
+    ft::pair<node_type *, bool> res = _bst.insert(val);
 
-    if (_bst.insert(val) == true)
+    if (res.second == true)
     {
         _size += 1;
+        return ft::make_pair(iterator(res.first, _bst.root, _sentinel), true);
     }
+    return ft::make_pair(iterator(res.first, _bst.root, _sentinel), false);
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<
+    Key, T, Compare, Alloc>::insert(iterator hint, const value_type &val)
+{
+    // ! This is just ignoring the hint
+    (void)hint;
+    return insert(val).first;
 }
 
 template <class Key, class T, class Compare, class Alloc>

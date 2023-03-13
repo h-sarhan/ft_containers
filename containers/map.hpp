@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 21:56:28 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 22:07:33 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -470,9 +470,8 @@ typename ft::map<Key, T, Compare, Alloc>::mapped_type &ft::map<Key, T, Compare, 
     node_type *res = _bst.get(key);
     if (res == NULL)
     {
-        // ! You should create an element with a value of mapped_type()
-        throw std::out_of_range("key not in map");   // ! Replace this by returning a reference to
-                                                     // the value that was just added
+        insert(ft::make_pair(key, mapped_type()));
+        return _bst.get(key)->data.second;
     }
     return res->data.second;
 }

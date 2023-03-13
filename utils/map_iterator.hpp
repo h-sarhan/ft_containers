@@ -41,10 +41,10 @@ template <class T, class NodeType> class map_iterator
     map_iterator(void);
     map_iterator(node_pointer ptr, node_pointer bst_root, node_pointer sentinel);
 
+    template <class T2> map_iterator(const map_iterator<T2, NodeType> &old);
     template <class T2> map_iterator &operator=(const map_iterator<T2, NodeType> &rhs);
     ~map_iterator(void);
 
-    template <class T2> map_iterator(const map_iterator<T2, NodeType> &old);
 
     node_pointer base(void) const;
     node_pointer bst_root(void) const;
@@ -63,6 +63,8 @@ template <class T, class NodeType> class map_iterator
     // * Iterator access
     reference operator*(void);
     pointer operator->(void);
+    reference operator*(void) const;
+    const pointer operator->(void) const;
 };
 }   // namespace ft
 
@@ -82,7 +84,7 @@ ft::map_iterator<T, NodeType>::map_iterator(node_pointer ptr, node_pointer bst_r
 template <class T, class NodeType>
 template <class T2>
 ft::map_iterator<T, NodeType>::map_iterator(const map_iterator<T2, NodeType> &old)
-    : _node_ptr(old._node_ptr), _bst_root(old._bst_root), _sentinel(old._sentinel)
+    : _node_ptr(old.base()), _bst_root(old.bst_root()), _sentinel(old.sentinel())
 {
 }
 
@@ -197,7 +199,19 @@ typename ft::map_iterator<T, NodeType>::value_type &ft::map_iterator<T, NodeType
 }
 
 template <class T, class NodeType>
+typename ft::map_iterator<T, NodeType>::value_type &ft::map_iterator<T, NodeType>::operator*(void) const
+{
+    return _node_ptr->data;
+}
+
+template <class T, class NodeType>
 typename ft::map_iterator<T, NodeType>::value_type *ft::map_iterator<T, NodeType>::operator->(void)
+{
+    return &_node_ptr->data;
+}
+
+template <class T, class NodeType>
+const typename ft::map_iterator<T, NodeType>::pointer ft::map_iterator<T, NodeType>::operator->(void) const
 {
     return &_node_ptr->data;
 }

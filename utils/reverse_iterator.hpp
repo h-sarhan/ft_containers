@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:54:39 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/11 20:40:43 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 21:58:15 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ template <class Iterator> class reverse_iterator
     reverse_iterator operator--(int);     // post-decrement
 
     // * Iterator access
-    value_type &operator*(void);
-    value_type *operator->(void);
-    value_type &operator[](const difference_type b);
+    value_type &operator*(void) const;
+    value_type *operator->(void) const;
+    value_type &operator[](const difference_type b) const;
 
     // * Iterator arithmetic
     reverse_iterator operator+(difference_type n) const;
@@ -184,7 +184,8 @@ ft::reverse_iterator<Iterator> ft::reverse_iterator<Iterator>::operator--(int)
 }
 
 template <class Iterator>
-typename ft::reverse_iterator<Iterator>::value_type &ft::reverse_iterator<Iterator>::operator*(void)
+typename ft::reverse_iterator<Iterator>::value_type &ft::reverse_iterator<Iterator>::operator*(
+    void) const
 {
     iterator_type temp = _base;
     temp--;
@@ -200,14 +201,14 @@ typename ft::reverse_iterator<Iterator>::iterator_type ft::reverse_iterator<Iter
 
 template <class Iterator>
 typename ft::reverse_iterator<Iterator>::value_type *ft::reverse_iterator<Iterator>::operator->(
-    void)
+    void) const
 {
     return &(operator*());
 }
 
 template <class Iterator>
 typename ft::reverse_iterator<Iterator>::value_type &ft::reverse_iterator<Iterator>::operator[](
-    const difference_type i)
+    const difference_type i) const
 {
     return base()[-i - 1];
 }

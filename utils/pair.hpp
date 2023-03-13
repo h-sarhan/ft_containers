@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:16:13 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/08 12:18:12 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 21:52:33 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ template <class T1, class T2> ft::pair<T1, T2> &ft::pair<T1, T2>::operator=(cons
 {
     first = pr.first;
     second = pr.second;
+    return *this;
 }
 
 template <class T1, class T2> bool ft::operator==(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs)

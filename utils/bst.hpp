@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 21:29:37 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 22:01:19 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <iostream>
 #include <memory>
 
-// ! Implement sentinel nodes, because you are segfaulting whenever you increment end()
 namespace ft
 {
 template <class KeyType, class ValType, class Compare, class Alloc> class bst
@@ -48,6 +47,7 @@ template <class KeyType, class ValType, class Compare, class Alloc> class bst
     {
         if (this == &rhs)
             return *this;
+        free_nodes(root);
         root = rhs.root;
         _comp = rhs._comp;
         _alloc = rhs._alloc;

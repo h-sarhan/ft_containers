@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 21:30:04 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 21:56:28 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 #include <iostream>
 #include <memory>
 #include <stdexcept>
+
+
+// ! ADD NON-MEMBER RELATIONAL OPERATORS AND SWAP
 
 namespace ft
 {
@@ -88,7 +91,7 @@ class map
         const allocator_type &alloc = allocator_type());
     map(const map &x);
     ~map(void);
-    // map &operator=(const map &x);
+    map &operator=(const map &x);
 
     // ** Iterator functions
     iterator begin(void);
@@ -172,6 +175,24 @@ ft::map<Key, T, Compare, Alloc>::map(const map &old)
     : _key_comp(old._key_comp), _val_comp(old._val_comp), _alloc(old._alloc), _bst(old._bst),
       _size(old._size), _sentinel(old._sentinel)
 {
+}
+
+template <class Key, class T, class Compare, class Alloc>
+ft::map<Key, T, Compare, Alloc> &ft::map<Key, T, Compare, Alloc>::operator=(const map &x)
+{
+    if (&x == this)
+    {
+        return *this;
+    }
+    _key_comp = x._key_comp;
+    _val_comp = x._val_comp;
+    _alloc = x._alloc;
+    _bst = x._bst;
+    _size = x._size;
+    _alloc.destroy(_sentinel);
+    _alloc.deallocate(_sentinel, 1);
+    _sentinel = x._sentinel;
+    return *this;
 }
 
 template <class Key, class T, class Compare, class Alloc>

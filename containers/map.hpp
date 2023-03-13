@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 20:46:29 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 21:30:04 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ class map
     map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(),
         const allocator_type &alloc = allocator_type());
     map(const map &x);
-    // ~map(void);
+    ~map(void);
     // map &operator=(const map &x);
 
     // ** Iterator functions
@@ -130,8 +130,8 @@ class map
     value_compare value_comp(void) const;
 
     // ** Operations
-    // iterator find(const key_type &k);
-    // const_iterator find(const key_type &k) const;
+    iterator find(const key_type &k);
+    const_iterator find(const key_type &k) const;
     size_type count(const key_type &k) const;
     iterator lower_bound(const key_type &k);
     const_iterator lower_bound(const key_type &k) const;
@@ -160,6 +160,7 @@ ft::map<Key, T, Compare, Alloc>::map(InputIterator first, InputIterator last,
     : _key_comp(comp), _val_comp(comp), _alloc(alloc), _bst(NULL, comp, alloc), _size(0),
       _sentinel(_alloc.allocate(1))
 {
+    _alloc.construct(_sentinel, node_type());
     for (InputIterator it = first; it != last; it++)
     {
         insert(*it);
@@ -171,6 +172,13 @@ ft::map<Key, T, Compare, Alloc>::map(const map &old)
     : _key_comp(old._key_comp), _val_comp(old._val_comp), _alloc(old._alloc), _bst(old._bst),
       _size(old._size), _sentinel(old._sentinel)
 {
+}
+
+template <class Key, class T, class Compare, class Alloc>
+ft::map<Key, T, Compare, Alloc>::~map<Key, T, Compare, Alloc>(void)
+{
+    _alloc.destroy(_sentinel);
+    _alloc.deallocate(_sentinel, 1);
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -271,6 +279,30 @@ template <class Key, class T, class Compare, class Alloc>
 bool ft::map<Key, T, Compare, Alloc>::empty(void) const
 {
     return _bst.root == NULL;
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::iterator ft::map<Key, T, Compare, Alloc>::find(
+    const key_type &k)
+{
+    node_type *search = _bst.get(k);
+    if (search == NULL)
+    {
+        return end();
+    }
+    return iterator(search, _bst.root, _sentinel);
+}
+
+template <class Key, class T, class Compare, class Alloc>
+typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare, Alloc>::find(
+    const key_type &k) const
+{
+    node_type *search = _bst.get(k);
+    if (search == NULL)
+    {
+        return end();
+    }
+    return const_iterator(search, _bst.root, _sentinel);
 }
 
 template <class Key, class T, class Compare, class Alloc>

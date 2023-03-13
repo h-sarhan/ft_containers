@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 20:42:23 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 21:04:40 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,29 @@ void mapUpperBound(void)
     std::cout << "upper_bound == " << it2->first << std::endl;
 }
 
+void mapFind(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    // strToInt.insert(ft::make_pair(3, "three"));
+    // strToInt.insert(ft::make_pair(3, "three"));
+    // strToInt.insert(ft::make_pair(3, "three"));
+    // strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(345534, "three"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(31212, "three"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(321, "three"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(5, "three"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    ft::map<int, std::string>::iterator it = strToInt.find(5);
+    std::cout << "Key == " << it->first << std::endl;
+}
+
 void mapTests(void)
 {
     // mapSingleInsertReplace();
@@ -223,7 +246,8 @@ void mapTests(void)
     // mapSwap();
     // mapRangeBasedConstructor();
     // mapInsertWithReturnedIterator();
-    mapLowerBound();
-    mapUpperBound();
+    // mapLowerBound();
+    // mapUpperBound();
+    mapFind();
     std::cout << std::endl;
 }

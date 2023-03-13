@@ -6,15 +6,15 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 05:29:21 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/13 21:29:37 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BST_HPP
 #define BST_HPP
 
-#include "node.hpp"
 #include "make_pair.hpp"
+#include "node.hpp"
 #include <cstddef>
 #include <iostream>
 #include <memory>
@@ -43,6 +43,7 @@ template <class KeyType, class ValType, class Compare, class Alloc> class bst
     bst(const bst &old) : root(old.root), _comp(old._comp), _alloc(old._alloc)
     {
     }
+    ~bst(void);
     bst &operator=(const bst &rhs)
     {
         if (this == &rhs)
@@ -56,6 +57,7 @@ template <class KeyType, class ValType, class Compare, class Alloc> class bst
     void traverse(node_type *node) const;
     node_type *get(const KeyType &key) const;
     void delete_node(node_type *key);
+    void free_nodes(node_type *node);
 };
 
 // * Public helper functions
@@ -67,6 +69,25 @@ template <class NodeType> NodeType *min_node(NodeType *node);
 
 template <class NodeType> NodeType *max_node(NodeType *node);
 }   // namespace ft
+
+template <class KeyType, class ValType, class Compare, class Alloc>
+ft::bst<KeyType, ValType, Compare, Alloc>::~bst<KeyType, ValType, Compare, Alloc>(void)
+{
+    free_nodes(root);
+}
+
+template <class KeyType, class ValType, class Compare, class Alloc>
+void ft::bst<KeyType, ValType, Compare, Alloc>::free_nodes(node_type *node)
+{
+    if (node != NULL)
+    {
+        free_nodes(node->left);
+        node_type *temp = node->right;
+        _alloc.destroy(node);
+        _alloc.deallocate(node, 1);
+        free_nodes(temp);
+    }
+}
 
 template <class KeyType, class ValType, class Compare, class Alloc>
 ft::pair<typename ft::bst<KeyType, ValType, Compare, Alloc>::node_type *, bool> ft::bst<

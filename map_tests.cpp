@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 21:04:40 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/14 19:14:41 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ void mapLowerBound(void)
     strToInt.insert(ft::make_pair(1, "one"));
     strToInt.insert(ft::make_pair(3, "three"));
     strToInt.insert(ft::make_pair(4, "four"));
-    ft::map<int, std::string>::iterator it = strToInt.lower_bound(4);
+    ft::map<int, std::string>::iterator it = strToInt.lower_bound(5);
     // it = strToInt.end();
     std::cout << "lower_bound == " << it->first << std::endl;
 
@@ -188,7 +188,7 @@ void mapLowerBound(void)
     strToInt2.insert(std::make_pair(1, "one"));
     strToInt2.insert(std::make_pair(3, "three"));
     strToInt2.insert(std::make_pair(4, "four"));
-    std::map<int, std::string>::iterator it2 = strToInt2.lower_bound(4);
+    std::map<int, std::string>::iterator it2 = strToInt2.lower_bound(5);
     // it = strToInt.end();
     std::cout << "lower_bound == " << it2->first << std::endl;
 }
@@ -235,6 +235,55 @@ void mapFind(void)
     std::cout << "Key == " << it->first << std::endl;
 }
 
+#include "./containers_test/srcs/map/common.hpp"
+
+#ifdef TESTED_NAMESPACE
+#undef TESTED_NAMESPACE
+#define TESTED_NAMESPACE ft
+// #define TESTED_NAMESPACE std
+#endif
+
+#include <list>
+
+#define T1 int
+#define T2 int
+typedef _pair<const T1, T2> T3;
+
+void copyConstruct(void)
+{
+    std::list<T3> lst;
+    unsigned int lst_size = 7;
+    for (unsigned int i = 0; i < lst_size; ++i)
+        lst.push_back(T3(lst_size - i, i));
+
+    TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+    TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
+
+    TESTED_NAMESPACE::map<T1, T2> mp_range(it, --(--ite));
+    for (int i = 0; it != ite; ++it)
+        it->second = ++i * 5;
+
+    it = mp.begin();
+    ite = --(--mp.end());
+    TESTED_NAMESPACE::map<T1, T2> mp_copy(mp);
+    for (int i = 0; it != ite; ++it)
+        it->second = ++i * 7;
+
+    std::cout << "\t-- PART ONE --" << std::endl;
+    printSize(mp);
+    printSize(mp_range);
+    printSize(mp_copy);
+
+    mp = mp_copy;
+    mp_copy = mp_range;
+    mp_range.clear();
+
+    std::cout << "\t-- PART TWO --" << std::endl;
+    printSize(mp);
+    printSize(mp_range);
+    printSize(mp_copy);
+}
+
 void mapTests(void)
 {
     // mapSingleInsertReplace();
@@ -248,6 +297,7 @@ void mapTests(void)
     // mapInsertWithReturnedIterator();
     // mapLowerBound();
     // mapUpperBound();
-    mapFind();
+    // mapFind();
+    copyConstruct();
     std::cout << std::endl;
 }

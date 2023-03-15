@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 22:07:33 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/15 13:08:39 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@
 #include <memory>
 #include <stdexcept>
 
-
 // ! ADD NON-MEMBER RELATIONAL OPERATORS AND SWAP
+// ! Swap has lots of invalid reads
+// ! stupid test with const iterator that doesnt compile
 
 namespace ft
 {
@@ -172,9 +173,14 @@ ft::map<Key, T, Compare, Alloc>::map(InputIterator first, InputIterator last,
 
 template <class Key, class T, class Compare, class Alloc>
 ft::map<Key, T, Compare, Alloc>::map(const map &old)
-    : _key_comp(old._key_comp), _val_comp(old._val_comp), _alloc(old._alloc), _bst(old._bst),
-      _size(old._size), _sentinel(old._sentinel)
+    : _key_comp(old._key_comp), _val_comp(old._val_comp), _alloc(old._alloc),
+      _bst(NULL, old._key_comp, old._alloc), _size(0), _sentinel(_alloc.allocate(1))
 {
+    _alloc.construct(_sentinel, node_type());
+    for (iterator it = old.begin(); it != old.end(); it++)
+    {
+        insert(*it);
+    }
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -184,14 +190,20 @@ ft::map<Key, T, Compare, Alloc> &ft::map<Key, T, Compare, Alloc>::operator=(cons
     {
         return *this;
     }
+    clear();
     _key_comp = x._key_comp;
     _val_comp = x._val_comp;
     _alloc = x._alloc;
-    _bst = x._bst;
-    _size = x._size;
     _alloc.destroy(_sentinel);
     _alloc.deallocate(_sentinel, 1);
-    _sentinel = x._sentinel;
+    _sentinel = _alloc.allocate(1);
+    _alloc.construct(_sentinel, node_type());
+    _bst = bst<key_type, mapped_type, key_compare, allocator_type>(NULL, _key_comp, _alloc);
+    _size = 0;
+    for (iterator it = x.begin(); it != x.end(); it++)
+    {
+        insert(*it);
+    }
     return *this;
 }
 
@@ -222,9 +234,9 @@ typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare
     // node instead??
     if (empty())
     {
-        return iterator(_sentinel, _bst.root, _sentinel);
+        return const_iterator(_sentinel, _bst.root, _sentinel);
     }
-    return iterator(ft::min_node(_bst.root), _bst.root, _sentinel);
+    return const_iterator(ft::min_node(_bst.root), _bst.root, _sentinel);
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -248,7 +260,7 @@ typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<Key, T, Compare
     {
         return begin();
     }
-    return iterator(_sentinel, _bst.root, _sentinel);
+    return const_iterator(_sentinel, _bst.root, _sentinel);
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -271,7 +283,7 @@ typename ft::map<Key, T, Compare, Alloc>::const_reverse_iterator ft::map<Key, T,
     {
         // idk
     }
-    return reverse_iterator(iterator(_sentinel, _bst.root, _sentinel));
+    return const_reverse_iterator(iterator(_sentinel, _bst.root, _sentinel));
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -293,7 +305,7 @@ typename ft::map<Key, T, Compare, Alloc>::const_reverse_iterator ft::map<Key, T,
     {
         // idk
     }
-    return reverse_iterator(iterator(ft::min_node(_bst.root), _bst.root, _sentinel));
+    return const_reverse_iterator(iterator(ft::min_node(_bst.root), _bst.root, _sentinel));
 }
 
 template <class Key, class T, class Compare, class Alloc>
@@ -359,7 +371,7 @@ typename ft::map<Key, T, Compare, Alloc>::const_iterator ft::map<
     for (iterator it = begin(); it != end(); it++)
     {
         if (_key_comp(k, it->first) == true ||
-            (_key_comp(k, it->first) == false && _key_comp(k, it->first) == false))
+            (_key_comp(k, it->first) == false && _key_comp(it->first, k) == false))
         {
             return iterator(it.base(), _bst.root, _sentinel);
         }
@@ -512,9 +524,13 @@ void ft::map<Key, T, Compare, Alloc>::erase(iterator position)
 template <class Key, class T, class Compare, class Alloc>
 void ft::map<Key, T, Compare, Alloc>::erase(iterator first, iterator last)
 {
-    for (iterator it = first; it != last; it++)
+    iterator it = first;
+    while (it != last)
     {
+        iterator next = it;
+        next++;
         erase(it);
+        it = next;
     }
 }
 

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 22:01:19 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/15 10:57:33 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ ft::pair<typename ft::bst<KeyType, ValType, Compare, Alloc>::node_type *, bool> 
     new_node->parent = end_parent;
     if (end_parent == NULL)
     {
-        std::cout << "updating root " << std::endl;
+        // std::cout << "updating root " << std::endl;
         root = new_node;
     }
     else if (_comp(new_node->data.first, end_parent->data.first))
@@ -202,6 +202,7 @@ void ft::bst<KeyType, ValType, Compare, Alloc>::_move_subtree(node_type *tree1, 
 template <class KeyType, class ValType, class Compare, class Alloc>
 void ft::bst<KeyType, ValType, Compare, Alloc>::delete_node(node_type *node)
 {
+    node_type *temp = node;
     if (node->left == NULL)
     {
         // if node only has a right child replace it by its right child
@@ -262,6 +263,8 @@ void ft::bst<KeyType, ValType, Compare, Alloc>::delete_node(node_type *node)
             successor->left->parent = successor;
         }
     }
+    _alloc.destroy(temp);
+    _alloc.deallocate(temp, 1);
 }
 
 template <class NodeType> NodeType *ft::min_node(NodeType *node)

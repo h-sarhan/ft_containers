@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/15 10:57:33 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/15 14:25:32 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ template <class KeyType, class ValType, class Compare, class Alloc> class bst
     {
         if (this == &rhs)
             return *this;
-        free_nodes(root);
         root = rhs.root;
         _comp = rhs._comp;
         _alloc = rhs._alloc;
@@ -73,6 +72,10 @@ template <class NodeType> NodeType *max_node(NodeType *node);
 template <class KeyType, class ValType, class Compare, class Alloc>
 ft::bst<KeyType, ValType, Compare, Alloc>::~bst<KeyType, ValType, Compare, Alloc>(void)
 {
+    if (root == NULL)
+    {
+        return ;
+    }
     free_nodes(root);
 }
 

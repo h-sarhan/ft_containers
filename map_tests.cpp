@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/14 19:14:41 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/15 16:04:00 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,6 +284,54 @@ void copyConstruct(void)
     printSize(mp_copy);
 }
 
+#undef T1
+#define T1 char
+
+#undef T2
+#define T2 int
+
+typedef _pair<const T1, T2> T4;
+
+
+void    mapSwap2(void)
+{
+    std::list<T4> lst;
+
+	unsigned int lst_size = 7;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(T4('a' + i, lst_size - i));
+	TESTED_NAMESPACE::map<T1, T2> foo(lst.begin(), lst.end());
+
+	lst.clear(); lst_size = 4;
+	for (unsigned int i = 0; i < lst_size; ++i)
+		lst.push_back(T4('z' - i, i * 5));
+	TESTED_NAMESPACE::map<T1, T2> bar(lst.begin(), lst.end());
+
+	TESTED_NAMESPACE::map<T1, T2>::const_iterator it_foo = foo.begin();
+	TESTED_NAMESPACE::map<T1, T2>::const_iterator it_bar = bar.begin();
+
+	std::cout << "BEFORE SWAP" << std::endl;
+
+	std::cout << "foo contains:" << std::endl;
+	printSize(foo);
+	std::cout << "bar contains:" << std::endl;
+	printSize(bar);
+
+	foo.swap(bar);
+
+	std::cout << "AFTER SWAP" << std::endl;
+
+	std::cout << "foo contains:" << std::endl;
+	printSize(foo);
+	std::cout << "bar contains:" << std::endl;
+	printSize(bar);
+
+	std::cout << "Iterator validity:" << std::endl;
+	std::cout << (it_foo == bar.begin()) << std::endl;
+	std::cout << (it_bar == foo.begin()) << std::endl;
+
+}
+
 void mapTests(void)
 {
     // mapSingleInsertReplace();
@@ -298,6 +346,12 @@ void mapTests(void)
     // mapLowerBound();
     // mapUpperBound();
     // mapFind();
-    copyConstruct();
+    // copyConstruct();
+	TESTED_NAMESPACE::map<T1, T2> const mp;
+	TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin(); // <-- error expected
+    (void)it;
+
+    mapSwap();
+    mapSwap2();
     std::cout << std::endl;
 }

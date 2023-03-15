@@ -6,13 +6,13 @@
 #    By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/04 00:48:08 by hsarhan           #+#    #+#              #
-#    Updated: 2023/03/11 20:20:52 by hsarhan          ###   ########.fr        #
+#    Updated: 2023/03/15 14:26:47 by hsarhan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CXX = clang++
 
-CXXFLAGS = -Wpedantic -Wall -Wextra -Werror -std=c++98 -g3 -Iutils -Icontainers
+CXXFLAGS = -Wpedantic -Wall -Wextra -Werror -std=c++98 -g3 -Iutils -Icontainers # -fsanitize=address
 
 NAME = tests
 

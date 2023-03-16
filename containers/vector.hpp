@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/13 04:38:23 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/15 17:39:18 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -413,6 +413,10 @@ typename ft::vector<T, Alloc>::size_type ft::vector<T, Alloc>::max_size(void) co
  */
 template <class T, class Alloc> void ft::vector<T, Alloc>::resize(size_type n, value_type val)
 {
+    if (n >= max_size())
+    {
+        throw std::logic_error("Too big");
+    }
     if (n > _capacity)
     {
         _realloc(n);
@@ -462,6 +466,10 @@ template <class T, class Alloc> bool ft::vector<T, Alloc>::empty(void) const
  */
 template <class T, class Alloc> void ft::vector<T, Alloc>::reserve(size_type n)
 {
+    if (n >= max_size())
+    {
+        throw std::logic_error("Too big");
+    }
     if (n > _capacity)
     {
         _realloc(n);
@@ -696,6 +704,7 @@ typename ft::vector<T, Alloc>::iterator ft::vector<T, Alloc>::insert(iterator po
     for (size_type i = _size; i > insert_idx; i--)
     {
         _alloc.construct(&_array[i], _array[i - 1]);
+        _alloc.destroy(&_array[i - 1]);
     }
     _alloc.construct(&_array[insert_idx], val);
     _size += 1;
@@ -726,6 +735,7 @@ void ft::vector<T, Alloc>::insert(iterator position, size_type n, const value_ty
         for (size_type i = _size - 1; i >= insert_idx; i--)
         {
             _alloc.construct(&_array[i + n], _array[i]);
+            _alloc.destroy(&_array[i]);
             if (i == 0)
                 break;
         }
@@ -765,6 +775,7 @@ void ft::vector<T, Alloc>::insert(iterator position, InputIterator first, InputI
         for (size_type i = _size - 1; i >= insert_idx; i--)
         {
             _alloc.construct(&_array[i + n], _array[i]);
+            _alloc.destroy(&_array[i]);
             if (i == 0)
                 break;
         }
@@ -794,6 +805,7 @@ typename ft::vector<T, Alloc>::iterator ft::vector<T, Alloc>::erase(iterator pos
         for (size_type i = erase_idx; i < _size - 1; i++)
         {
             _alloc.construct(&_array[i], _array[i + 1]);
+            _alloc.destroy(&_array[i + 1]);
         }
     }
     if (_size > 0)
@@ -829,6 +841,7 @@ typename ft::vector<T, Alloc>::iterator ft::vector<T, Alloc>::erase(iterator fir
         for (size_type i = erase_idx; i < _size - 1; i++)
         {
             _alloc.construct(&_array[i], _array[i + n]);
+            _alloc.destroy(&_array[i + n]);
         }
     }
     if (_size > 0)

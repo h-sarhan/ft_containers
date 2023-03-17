@@ -6,7 +6,7 @@
 #    By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/04 00:48:08 by hsarhan           #+#    #+#              #
-#    Updated: 2023/03/15 14:26:47 by hsarhan          ###   ########.fr        #
+#    Updated: 2023/03/17 13:07:55 by hsarhan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,11 @@ SRC = map_tests.cpp vector_tests.cpp main.cpp
 OBJ := $(SRC:%.cpp=%.o)
 
 all: $(NAME)
+	sed -e '1s/^/[\'$$'\n''/' -e '$$s/,$$/\'$$'\n'']/' *.o.json > compile_commands.json
+	rm -rf *.o.json
+
+%.o: %.cpp
+	$(CXX) -MJ $@.json $(CXXFLAGS) -c $^ 
 
 $(NAME): $(OBJ)
 	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
@@ -31,6 +36,6 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 
-re: fclean $(NAME)
+re: fclean all
 
 .PHONY: all re fclean clean

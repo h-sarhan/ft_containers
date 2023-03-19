@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:16:13 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/19 12:41:01 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/19 13:36:12 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@ template <class T1, class T2> struct pair
     {
     }
     pair(const first_type &a, const second_type &b) : first(a), second(b)
+    {
+    }
+
+    pair(const pair &old) : first(old.first), second(old.second)
     {
     }
 

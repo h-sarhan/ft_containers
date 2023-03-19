@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/17 13:09:53 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/19 13:34:15 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void mapSingleErase(void)
     // a.printTree();
     a.erase(a.begin());
     a.erase(a.begin());
-    a.printTree();
+    // a.printTree();
 }
 
 void mapIterators(void)
@@ -97,7 +97,7 @@ void mapRangeErase(void)
     assert(strToInt.count(2) == 0);
     assert(strToInt.count(3) == 1);
     assert(strToInt.count(4) == 1);
-    strToInt.printTree();
+    // strToInt.printTree();
 }
 
 void mapClear(void)
@@ -111,7 +111,7 @@ void mapClear(void)
     strToInt.clear();
     assert(strToInt.empty() == true);
     assert(strToInt.size() == 0);
-    strToInt.printTree();
+    // strToInt.printTree();
 }
 
 void mapSwap(void)
@@ -145,7 +145,7 @@ void mapRangeBasedConstructor(void)
     vec.insert(vec.end(), ft::make_pair(5, "five"));
     vec.insert(vec.end(), ft::make_pair(2, "two"));
     ft::map<int, std::string> strToInt(vec.begin(), vec.end());
-    strToInt.printTree();
+    // strToInt.printTree();
     assert(strToInt.size() == 5);
 }
 
@@ -171,7 +171,7 @@ void mapInsertWithReturnedIterator(void)
     lastIt = strToInt.end();
     lastIt--;
     assert(it == lastIt);
-    strToInt.printTree();
+    // strToInt.printTree();
 }
 
 void mapLowerBound(void)

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/19 13:50:05 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/19 14:26:24 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ class map
     key_compare _key_comp;
     value_compare _val_comp;
     allocator_type _alloc;
-    bst<key_type, mapped_type, key_compare, allocator_type> _bst;
+    bst<ft::pair<const key_type, mapped_type>, key_compare, allocator_type> _bst;
     size_type _size;
     node_type *_sentinel;
 
@@ -129,7 +129,7 @@ class map
         _alloc.deallocate(_sentinel, 1);
         _sentinel = _alloc.allocate(1);
         _alloc.construct(_sentinel, node_type());
-        _bst = bst<key_type, mapped_type, key_compare, allocator_type>(NULL, _key_comp, _alloc);
+        _bst = bst<ft::pair<const key_type, mapped_type>, key_compare, allocator_type>(NULL, _key_comp, _alloc);
         _size = 0;
         insert(x.begin(), x.end());
         return *this;
@@ -243,7 +243,7 @@ class map
     // * Subscript operator overload
     mapped_type &operator[](const key_type &key)
     {
-        node_type *res = _bst.get(key);
+        node_type *res = _bst.map_get(key);
         if (res == NULL)
         {
             iterator ret = insert(ft::make_pair(key, mapped_type())).first;
@@ -287,7 +287,7 @@ class map
     // * Single element insert based on key
     size_type erase(const key_type &k)
     {
-        node_type *to_delete = _bst.get(k);
+        node_type *to_delete = _bst.map_get(k);
         if (to_delete == NULL)
         {
             return 0;
@@ -300,7 +300,7 @@ class map
     // * Single element insert based on iterator
     void erase(iterator position)
     {
-        node_type *to_delete = _bst.get(position->first);
+        node_type *to_delete = _bst.map_get(position->first);
         if (to_delete == NULL)
         {
             return;
@@ -371,7 +371,7 @@ class map
     // * Find a an element based on a key
     iterator find(const key_type &k)
     {
-        node_type *search = _bst.get(k);
+        node_type *search = _bst.map_get(k);
         if (search == NULL)
         {
             return end();
@@ -381,7 +381,7 @@ class map
 
     const_iterator find(const key_type &k) const
     {
-        node_type *search = _bst.get(k);
+        node_type *search = _bst.map_get(k);
         if (search == NULL)
         {
             return end();
@@ -392,7 +392,7 @@ class map
     // * Count number of elements matching key. For this container this will be 1 or 0
     size_type count(const key_type &k) const
     {
-        if (_bst.get(k) == NULL)
+        if (_bst.map_get(k) == NULL)
         {
             return 0;
         }

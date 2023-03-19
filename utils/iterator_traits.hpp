@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:48:10 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/07 09:03:52 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/19 12:36:40 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,6 @@
 
 namespace ft
 {
-struct input_iterator_tag
-{
-};
-
-struct output_iterator_tag
-{
-};
-
-struct forward_iterator_tag
-{
-};
-
-struct bidirectional_iterator_tag
-{
-};
-
-struct random_access_iterator_tag
-{
-};
 
 template <class Iterator> class iterator_traits
 {

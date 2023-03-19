@@ -28,7 +28,7 @@ template <class T, class NodeType> class map_iterator
     typedef T *pointer;
     typedef T &reference;
     typedef NodeType *node_pointer;
-    typedef bidirectional_iterator_tag iterator_category;
+    typedef std::bidirectional_iterator_tag iterator_category;
 
   private:
     // * Private attributes
@@ -75,7 +75,7 @@ template <class T, class NodeType> class const_map_iterator
     typedef const T *pointer;
     typedef const T &reference;
     typedef NodeType *node_pointer;
-    typedef bidirectional_iterator_tag iterator_category;
+    typedef std::bidirectional_iterator_tag iterator_category;
 
   private:
     // * Private attributes

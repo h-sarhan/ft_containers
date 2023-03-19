@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:44:24 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/07 09:05:49 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/19 12:49:31 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "iterator_traits.hpp"
 #include <cstddef>
+#include <iterator>
 
 namespace ft
 {
@@ -26,7 +27,7 @@ template <class T> class vector_iterator
     typedef T value_type;
     typedef T *pointer;
     typedef T &reference;
-    typedef random_access_iterator_tag iterator_category;
+    typedef std::random_access_iterator_tag iterator_category;
 
   private:
     // * Private attributes
@@ -100,7 +101,6 @@ template <class T>
 template <class U>
 ft::vector_iterator<T> &ft::vector_iterator<T>::operator=(const vector_iterator<U> &rhs)
 {
-    // _traits = rhs._traits;
     _ptr = rhs.base();
     return *this;
 }

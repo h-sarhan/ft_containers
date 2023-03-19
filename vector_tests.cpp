@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/11 20:24:36 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/19 13:00:12 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,7 +410,7 @@ void clearTests(void)
     assert(emptyVec.size() == 0);
     assert(emptyVec.capacity() == 0);
     assert(emptyVec.empty() == true);
-    ft::vector<int> intenseVec(19832, 198732);
+    ft::vector<std::string> intenseVec(19832, "198732");
     intenseVec.clear();
     intenseVec.clear();
     intenseVec.clear();
@@ -426,11 +426,15 @@ void clearTests(void)
     intenseVec.clear();
     intenseVec.clear();
     intenseVec.clear();
+    intenseVec.clear();
+    intenseVec.insert(intenseVec.begin(), 9098, "10");
+    intenseVec.clear();
+    intenseVec.push_back("p");
     intenseVec.clear();
     assert(intenseVec.size() == 0);
     assert(intenseVec.capacity() == 0);
     assert(intenseVec.empty() == true);
-    ft::vector<int> replaceVec(1902, 198732);
+    ft::vector<std::string> replaceVec(1902, "p");
     intenseVec = replaceVec;
     assert(intenseVec.size() == 1902);
     assert(intenseVec.capacity() >= 1902);
@@ -680,6 +684,10 @@ void eraseTests(void)
     ft::vector<int> b(1, 5);
     b.erase(b.begin(), b.begin() + 1);
     printVec(b, "");
+
+    ft::vector<std::string> c(234, "78");
+    c.erase(c.begin(), c.begin() + 3);
+    
 }
 
 void reverseIteratorTests(void)
@@ -761,6 +769,6 @@ void vectorTests(void)
     // pushBackTests();
     // popBackTests();
     // insertTests();
-    // eraseTests();
-    moreVectorReverseIteratorTests();
+    eraseTests();
+    // moreVectorReverseIteratorTests();
 }

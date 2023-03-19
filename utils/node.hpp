@@ -6,15 +6,15 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:07:03 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/14 19:18:20 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/19 12:37:55 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef NODE_HPP
 #define NODE_HPP
 
-#include <cstddef>
 #include "pair.hpp"
+#include <cstddef>
 
 namespace ft
 {

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/19 16:07:59 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/19 16:28:59 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,124 +236,20 @@ void mapFind(void)
     std::cout << "Key == " << it->first << std::endl;
 }
 
-#include "./mli/srcs/map/common.hpp"
-
-#ifdef TESTED_NAMESPACE
-#undef TESTED_NAMESPACE
-#define TESTED_NAMESPACE ft
-// #define TESTED_NAMESPACE std
-#endif
-
-#include <list>
-
-#define T1 int
-#define T2 int
-typedef _pair<const T1, T2> T3;
-
-void copyConstruct(void)
-{
-    std::list<T3> lst;
-    unsigned int lst_size = 7;
-    for (unsigned int i = 0; i < lst_size; ++i)
-        lst.push_back(T3(lst_size - i, i));
-
-    TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
-    TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin(), ite = mp.end();
-
-    TESTED_NAMESPACE::map<T1, T2> mp_range(it, --(--ite));
-    for (int i = 0; it != ite; ++it)
-        it->second = ++i * 5;
-
-    it = mp.begin();
-    ite = --(--mp.end());
-    TESTED_NAMESPACE::map<T1, T2> mp_copy(mp);
-    for (int i = 0; it != ite; ++it)
-        it->second = ++i * 7;
-
-    std::cout << "\t-- PART ONE --" << std::endl;
-    printSize(mp);
-    printSize(mp_range);
-    printSize(mp_copy);
-
-    mp = mp_copy;
-    mp_copy = mp_range;
-    mp_range.clear();
-
-    std::cout << "\t-- PART TWO --" << std::endl;
-    printSize(mp);
-    printSize(mp_range);
-    printSize(mp_copy);
-}
-
-#undef T1
-#define T1 char
-
-#undef T2
-#define T2 int
-
-typedef _pair<const T1, T2> T4;
-
-void mapSwap2(void)
-{
-    std::list<T4> lst;
-
-    unsigned int lst_size = 7;
-    for (unsigned int i = 0; i < lst_size; ++i)
-        lst.push_back(T4('a' + i, lst_size - i));
-    TESTED_NAMESPACE::map<T1, T2> foo(lst.begin(), lst.end());
-
-    lst.clear();
-    lst_size = 4;
-    for (unsigned int i = 0; i < lst_size; ++i)
-        lst.push_back(T4('z' - i, i * 5));
-    TESTED_NAMESPACE::map<T1, T2> bar(lst.begin(), lst.end());
-
-    TESTED_NAMESPACE::map<T1, T2>::const_iterator it_foo = foo.begin();
-    TESTED_NAMESPACE::map<T1, T2>::const_iterator it_bar = bar.begin();
-
-    std::cout << "BEFORE SWAP" << std::endl;
-
-    std::cout << "foo contains:" << std::endl;
-    printSize(foo);
-    std::cout << "bar contains:" << std::endl;
-    printSize(bar);
-
-    foo.swap(bar);
-
-    std::cout << "AFTER SWAP" << std::endl;
-
-    std::cout << "foo contains:" << std::endl;
-    printSize(foo);
-    std::cout << "bar contains:" << std::endl;
-    printSize(bar);
-
-    std::cout << "Iterator validity:" << std::endl;
-    std::cout << (it_foo == bar.begin()) << std::endl;
-    std::cout << (it_bar == foo.begin()) << std::endl;
-}
 
 void mapTests(void)
 {
-    // mapSingleInsertReplace();
-    // mapIterators();
-    // mapCount();
-    // mapSingleErase();
-    // mapRangeErase();
-    // mapClear();
-    // mapSwap();
-    // mapRangeBasedConstructor();
-    // mapInsertWithReturnedIterator();
-    // mapLowerBound();
-    // mapUpperBound();
-    // mapFind();
-    // copyConstruct();
-    // TESTED_NAMESPACE::map<T1, T2> const mp;
-    // TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin(); // <-- error expected
-    // (void)it;
-
-    // mapSwap();
-    
-    // mapSwap2();
-
+    mapIterators();
+    mapCount();
+    mapSingleErase();
+    mapRangeErase();
+    mapClear();
+    mapSwap();
+    mapRangeBasedConstructor();
+    mapInsertWithReturnedIterator();
+    mapLowerBound();
+    mapUpperBound();
+    mapFind();
+    mapSwap();
     std::cout << std::endl;
 }

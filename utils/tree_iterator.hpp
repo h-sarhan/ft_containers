@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_iterator.hpp                                :+:      :+:    :+:   */
+/*   tree_iterator.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -19,7 +19,7 @@
 
 namespace ft
 {
-template <class T, class NodeType> class map_iterator
+template <class T, class NodeType> class tree_iterator
 {
   public:
     // * Types
@@ -38,22 +38,22 @@ template <class T, class NodeType> class map_iterator
 
   public:
     // * Constructors and destructors
-    map_iterator(void);
-    map_iterator(node_pointer ptr, node_pointer bst_root, node_pointer sentinel);
+    tree_iterator(void);
+    tree_iterator(node_pointer ptr, node_pointer bst_root, node_pointer sentinel);
 
-    template <class T2> map_iterator(const map_iterator<T2, NodeType> &old);
-    template <class T2> map_iterator &operator=(const map_iterator<T2, NodeType> &rhs);
-    ~map_iterator(void);
+    template <class T2> tree_iterator(const tree_iterator<T2, NodeType> &old);
+    template <class T2> tree_iterator &operator=(const tree_iterator<T2, NodeType> &rhs);
+    ~tree_iterator(void);
 
     node_pointer base(void) const;
     node_pointer bst_root(void) const;
     node_pointer sentinel(void) const;
 
     // * Iterator traversal
-    map_iterator &operator++(void);   // pre-increment
-    map_iterator &operator--(void);   // pre-decrement
-    map_iterator operator++(int);     // post-increment
-    map_iterator operator--(int);     // post-decrement
+    tree_iterator &operator++(void);   // pre-increment
+    tree_iterator &operator--(void);   // pre-decrement
+    tree_iterator operator++(int);     // post-increment
+    tree_iterator operator--(int);     // post-decrement
 
     // * Iterator comparison
     template <class It> bool operator==(const It &rhs) const;
@@ -66,15 +66,15 @@ template <class T, class NodeType> class map_iterator
     pointer operator->(void) const;
 };
 
-template <class T, class NodeType> class const_map_iterator
+template <class T, class NodeType> class const_tree_iterator
 {
   public:
     // * Types
     typedef ptrdiff_t difference_type;
-    typedef T value_type;
+    typedef const T value_type;
     typedef const T *pointer;
     typedef const T &reference;
-    typedef NodeType *node_pointer;
+    typedef const NodeType *node_pointer;
     typedef std::bidirectional_iterator_tag iterator_category;
 
   private:
@@ -85,71 +85,70 @@ template <class T, class NodeType> class const_map_iterator
 
   public:
     // * Constructors and destructors
-    const_map_iterator(void);
-    const_map_iterator(node_pointer ptr, node_pointer bst_root, node_pointer sentinel);
+    const_tree_iterator(void);
+    const_tree_iterator(node_pointer ptr, node_pointer bst_root, node_pointer sentinel);
 
-    const_map_iterator(const const_map_iterator &old);
-    const_map_iterator(const map_iterator<T, NodeType> &old);
-    const_map_iterator &operator=(const const_map_iterator &rhs);
-    ~const_map_iterator(void);
+    const_tree_iterator(const const_tree_iterator &old);
+    const_tree_iterator(const tree_iterator<T, NodeType> &old);
+    const_tree_iterator &operator=(const const_tree_iterator &rhs);
+    ~const_tree_iterator(void);
 
     node_pointer base(void) const;
     node_pointer bst_root(void) const;
     node_pointer sentinel(void) const;
 
     // * Iterator traversal
-    const_map_iterator &operator++(void);   // pre-increment
-    const_map_iterator &operator--(void);   // pre-decrement
-    const_map_iterator operator++(int);     // post-increment
-    const_map_iterator operator--(int);     // post-decrement
+    const_tree_iterator &operator++(void);   // pre-increment
+    const_tree_iterator &operator--(void);   // pre-decrement
+    const_tree_iterator operator++(int);     // post-increment
+    const_tree_iterator operator--(int);     // post-decrement
 
     // * Iterator comparison
     template <class It> bool operator==(const It &rhs) const;
     template <class It> bool operator!=(const It &rhs) const;
 
     // * Iterator access
-    reference operator*(void);
-    pointer operator->(void);
     reference operator*(void) const;
     pointer operator->(void) const;
 };
 }   // namespace ft
 
 template <class T, class NodeType>
-ft::map_iterator<T, NodeType>::map_iterator(void)
+ft::tree_iterator<T, NodeType>::tree_iterator(void)
     : _node_ptr(NULL), _bst_root(NULL), _sentinel(NULL)
 {
 }
 
 template <class T, class NodeType>
-ft::map_iterator<T, NodeType>::map_iterator(node_pointer ptr, node_pointer bst_root,
-                                            node_pointer sentinel)
+ft::tree_iterator<T, NodeType>::tree_iterator(node_pointer ptr, node_pointer bst_root,
+                                              node_pointer sentinel)
     : _node_ptr(ptr), _bst_root(bst_root), _sentinel(sentinel)
 {
 }
 
 template <class T, class NodeType>
 template <class T2>
-ft::map_iterator<T, NodeType>::map_iterator(const map_iterator<T2, NodeType> &old)
+ft::tree_iterator<T, NodeType>::tree_iterator(const tree_iterator<T2, NodeType> &old)
     : _node_ptr(old.base()), _bst_root(old.bst_root()), _sentinel(old.sentinel())
 {
 }
 
 template <class T, class NodeType>
-typename ft::map_iterator<T, NodeType>::node_pointer ft::map_iterator<T, NodeType>::base(void) const
+typename ft::tree_iterator<T, NodeType>::node_pointer ft::tree_iterator<T, NodeType>::base(
+    void) const
 {
     return _node_ptr;
 }
 
 template <class T, class NodeType>
-typename ft::map_iterator<T, NodeType>::node_pointer ft::map_iterator<T, NodeType>::bst_root(
+typename ft::tree_iterator<T, NodeType>::node_pointer ft::tree_iterator<T, NodeType>::bst_root(
     void) const
 {
     return _bst_root;
 }
 
 template <class T, class NodeType>
-typename ft::map_iterator<T, NodeType>::node_pointer ft::map_iterator<T, NodeType>::sentinel(
+typename ft::tree_iterator<T, NodeType>::node_pointer ft::tree_iterator<T, NodeType>::sentinel(
     void) const
 {
     return _sentinel;
@@ -157,8 +156,8 @@ typename ft::map_iterator<T, NodeType>::node_pointer ft::map_iterator<T, NodeTyp
 
 template <class T, class NodeType>
 template <class T2>
-ft::map_iterator<T, NodeType> &ft::map_iterator<T, NodeType>::operator=(
-    const map_iterator<T2, NodeType> &rhs)
+ft::tree_iterator<T, NodeType> &ft::tree_iterator<T, NodeType>::operator=(
+    const tree_iterator<T2, NodeType> &rhs)
 {
     _node_ptr = rhs.base();
     _bst_root = rhs.bst_root();
@@ -166,13 +165,13 @@ ft::map_iterator<T, NodeType> &ft::map_iterator<T, NodeType>::operator=(
     return *this;
 }
 
-template <class T, class NodeType> ft::map_iterator<T, NodeType>::~map_iterator<T, NodeType>(void)
+template <class T, class NodeType> ft::tree_iterator<T, NodeType>::~tree_iterator<T, NodeType>(void)
 {
     // ??
 }
 
 template <class T, class NodeType>
-ft::map_iterator<T, NodeType> &ft::map_iterator<T, NodeType>::operator++(void)
+ft::tree_iterator<T, NodeType> &ft::tree_iterator<T, NodeType>::operator++(void)
 {
     // ? If the passed node was one behind the first element then incrementing it should give you
     // ? the first element.
@@ -191,7 +190,7 @@ ft::map_iterator<T, NodeType> &ft::map_iterator<T, NodeType>::operator++(void)
 }
 
 template <class T, class NodeType>
-ft::map_iterator<T, NodeType> &ft::map_iterator<T, NodeType>::operator--(void)
+ft::tree_iterator<T, NodeType> &ft::tree_iterator<T, NodeType>::operator--(void)
 {
     // ? If the passed node was one in front of the first element then decrementing it should give
     // ? you the last element.
@@ -210,110 +209,111 @@ ft::map_iterator<T, NodeType> &ft::map_iterator<T, NodeType>::operator--(void)
 }
 
 template <class T, class NodeType>
-ft::map_iterator<T, NodeType> ft::map_iterator<T, NodeType>::operator++(int)
+ft::tree_iterator<T, NodeType> ft::tree_iterator<T, NodeType>::operator++(int)
 {
-    map_iterator<T, NodeType> temp = *this;
+    tree_iterator<T, NodeType> temp = *this;
     ++(*this);
     return temp;
 }
 
 template <class T, class NodeType>
-ft::map_iterator<T, NodeType> ft::map_iterator<T, NodeType>::operator--(int)
+ft::tree_iterator<T, NodeType> ft::tree_iterator<T, NodeType>::operator--(int)
 {
-    map_iterator<T, NodeType> temp = *this;
+    tree_iterator<T, NodeType> temp = *this;
     --(*this);
     return temp;
 }
 
 template <class T, class NodeType>
 template <class It>
-bool ft::map_iterator<T, NodeType>::operator==(const It &rhs) const
+bool ft::tree_iterator<T, NodeType>::operator==(const It &rhs) const
 {
     return _node_ptr == rhs.base();
 }
 
 template <class T, class NodeType>
 template <class It>
-bool ft::map_iterator<T, NodeType>::operator!=(const It &rhs) const
+bool ft::tree_iterator<T, NodeType>::operator!=(const It &rhs) const
 {
     return _node_ptr != rhs.base();
 }
 
 template <class T, class NodeType>
-typename ft::map_iterator<T, NodeType>::value_type &ft::map_iterator<T, NodeType>::operator*(void)
+typename ft::tree_iterator<T, NodeType>::value_type &ft::tree_iterator<T, NodeType>::operator*(void)
 {
     return _node_ptr->data;
 }
 
 template <class T, class NodeType>
-typename ft::map_iterator<T, NodeType>::value_type &ft::map_iterator<T, NodeType>::operator*(
+typename ft::tree_iterator<T, NodeType>::value_type &ft::tree_iterator<T, NodeType>::operator*(
     void) const
 {
     return _node_ptr->data;
 }
 
 template <class T, class NodeType>
-typename ft::map_iterator<T, NodeType>::value_type *ft::map_iterator<T, NodeType>::operator->(void)
+typename ft::tree_iterator<T, NodeType>::value_type *ft::tree_iterator<T, NodeType>::operator->(
+    void)
 {
     return &_node_ptr->data;
 }
 
 template <class T, class NodeType>
-typename ft::map_iterator<T, NodeType>::pointer ft::map_iterator<T, NodeType>::operator->(
+typename ft::tree_iterator<T, NodeType>::pointer ft::tree_iterator<T, NodeType>::operator->(
     void) const
 {
     return &_node_ptr->data;
 }
 
 template <class T, class NodeType>
-ft::const_map_iterator<T, NodeType>::const_map_iterator(void)
+ft::const_tree_iterator<T, NodeType>::const_tree_iterator(void)
     : _node_ptr(NULL), _bst_root(NULL), _sentinel(NULL)
 {
 }
 
 template <class T, class NodeType>
-ft::const_map_iterator<T, NodeType>::const_map_iterator(node_pointer ptr, node_pointer bst_root,
-                                                        node_pointer sentinel)
+ft::const_tree_iterator<T, NodeType>::const_tree_iterator(node_pointer ptr, node_pointer bst_root,
+                                                          node_pointer sentinel)
     : _node_ptr(ptr), _bst_root(bst_root), _sentinel(sentinel)
 {
 }
 
 template <class T, class NodeType>
-ft::const_map_iterator<T, NodeType>::const_map_iterator(const const_map_iterator &old)
+ft::const_tree_iterator<T, NodeType>::const_tree_iterator(const const_tree_iterator &old)
     : _node_ptr(old.base()), _bst_root(old.bst_root()), _sentinel(old.sentinel())
 {
 }
 
 template <class T, class NodeType>
-ft::const_map_iterator<T, NodeType>::const_map_iterator(const map_iterator<T, NodeType> &old)
+ft::const_tree_iterator<T, NodeType>::const_tree_iterator(const tree_iterator<T, NodeType> &old)
     : _node_ptr(old.base()), _bst_root(old.bst_root()), _sentinel(old.sentinel())
 {
 }
 
 template <class T, class NodeType>
-typename ft::const_map_iterator<T, NodeType>::node_pointer ft::const_map_iterator<
+typename ft::const_tree_iterator<T, NodeType>::node_pointer ft::const_tree_iterator<
     T, NodeType>::base(void) const
 {
     return _node_ptr;
 }
 
 template <class T, class NodeType>
-typename ft::const_map_iterator<T, NodeType>::node_pointer ft::const_map_iterator<
+typename ft::const_tree_iterator<T, NodeType>::node_pointer ft::const_tree_iterator<
     T, NodeType>::bst_root(void) const
 {
     return _bst_root;
 }
 
 template <class T, class NodeType>
-typename ft::const_map_iterator<T, NodeType>::node_pointer ft::const_map_iterator<
+typename ft::const_tree_iterator<T, NodeType>::node_pointer ft::const_tree_iterator<
     T, NodeType>::sentinel(void) const
 {
     return _sentinel;
 }
 
 template <class T, class NodeType>
-ft::const_map_iterator<T, NodeType> &ft::const_map_iterator<T, NodeType>::operator=(
-    const const_map_iterator &rhs)
+ft::const_tree_iterator<T, NodeType> &ft::const_tree_iterator<T, NodeType>::operator=(
+    const const_tree_iterator &rhs)
 {
     _node_ptr = rhs.base();
     _bst_root = rhs.bst_root();
@@ -322,13 +322,13 @@ ft::const_map_iterator<T, NodeType> &ft::const_map_iterator<T, NodeType>::operat
 }
 
 template <class T, class NodeType>
-ft::const_map_iterator<T, NodeType>::~const_map_iterator<T, NodeType>(void)
+ft::const_tree_iterator<T, NodeType>::~const_tree_iterator<T, NodeType>(void)
 {
     // ??
 }
 
 template <class T, class NodeType>
-ft::const_map_iterator<T, NodeType> &ft::const_map_iterator<T, NodeType>::operator++(void)
+ft::const_tree_iterator<T, NodeType> &ft::const_tree_iterator<T, NodeType>::operator++(void)
 {
     // ? If the passed node was one behind the first element then incrementing it should give you
     // ? the first element.
@@ -347,7 +347,7 @@ ft::const_map_iterator<T, NodeType> &ft::const_map_iterator<T, NodeType>::operat
 }
 
 template <class T, class NodeType>
-ft::const_map_iterator<T, NodeType> &ft::const_map_iterator<T, NodeType>::operator--(void)
+ft::const_tree_iterator<T, NodeType> &ft::const_tree_iterator<T, NodeType>::operator--(void)
 {
     // ? If the passed node was one in front of the first element then decrementing it should give
     // ? you the last element.
@@ -366,58 +366,44 @@ ft::const_map_iterator<T, NodeType> &ft::const_map_iterator<T, NodeType>::operat
 }
 
 template <class T, class NodeType>
-ft::const_map_iterator<T, NodeType> ft::const_map_iterator<T, NodeType>::operator++(int)
+ft::const_tree_iterator<T, NodeType> ft::const_tree_iterator<T, NodeType>::operator++(int)
 {
-    const_map_iterator<T, NodeType> temp = *this;
+    const_tree_iterator<T, NodeType> temp = *this;
     ++(*this);
     return temp;
 }
 
 template <class T, class NodeType>
-ft::const_map_iterator<T, NodeType> ft::const_map_iterator<T, NodeType>::operator--(int)
+ft::const_tree_iterator<T, NodeType> ft::const_tree_iterator<T, NodeType>::operator--(int)
 {
-    const_map_iterator<T, NodeType> temp = *this;
+    const_tree_iterator<T, NodeType> temp = *this;
     --(*this);
     return temp;
 }
 
 template <class T, class NodeType>
 template <class It>
-bool ft::const_map_iterator<T, NodeType>::operator==(const It &rhs) const
+bool ft::const_tree_iterator<T, NodeType>::operator==(const It &rhs) const
 {
     return _node_ptr == rhs.base();
 }
 
 template <class T, class NodeType>
 template <class It>
-bool ft::const_map_iterator<T, NodeType>::operator!=(const It &rhs) const
+bool ft::const_tree_iterator<T, NodeType>::operator!=(const It &rhs) const
 {
     return _node_ptr != rhs.base();
 }
 
 template <class T, class NodeType>
-typename ft::const_map_iterator<T, NodeType>::reference ft::const_map_iterator<
-    T, NodeType>::operator*(void)
-{
-    return _node_ptr->data;
-}
-
-template <class T, class NodeType>
-typename ft::const_map_iterator<T, NodeType>::reference ft::const_map_iterator<
+typename ft::const_tree_iterator<T, NodeType>::reference ft::const_tree_iterator<
     T, NodeType>::operator*(void) const
 {
     return _node_ptr->data;
 }
 
 template <class T, class NodeType>
-typename ft::const_map_iterator<T, NodeType>::pointer ft::const_map_iterator<
-    T, NodeType>::operator->(void)
-{
-    return &_node_ptr->data;
-}
-
-template <class T, class NodeType>
-typename ft::const_map_iterator<T, NodeType>::pointer ft::const_map_iterator<
+typename ft::const_tree_iterator<T, NodeType>::pointer ft::const_tree_iterator<
     T, NodeType>::operator->(void) const
 {
     return &_node_ptr->data;

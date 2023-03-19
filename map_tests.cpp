@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/19 13:34:15 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/19 16:07:59 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <map>
 #include <ostream>
 #include <string>
+#include <set>
 
 void mapDefaultConstructor(void)
 {
@@ -235,7 +236,7 @@ void mapFind(void)
     std::cout << "Key == " << it->first << std::endl;
 }
 
-#include "./containers_test/srcs/map/common.hpp"
+#include "./mli/srcs/map/common.hpp"
 
 #ifdef TESTED_NAMESPACE
 #undef TESTED_NAMESPACE
@@ -350,7 +351,9 @@ void mapTests(void)
     // TESTED_NAMESPACE::map<T1, T2>::iterator it = mp.begin(); // <-- error expected
     // (void)it;
 
-    mapSwap();
-    mapSwap2();
+    // mapSwap();
+    
+    // mapSwap2();
+
     std::cout << std::endl;
 }

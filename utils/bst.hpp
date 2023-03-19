@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/19 14:26:56 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/19 15:28:38 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ template <class T, class Compare, class Alloc> class bst
         return *this;
     }
 
-    ft::pair<node_type *, bool> insert(const T &val)
+    ft::pair<node_type *, bool> map_insert(const T &val)
     {
         // Is the key already in the tree?
         node_type *res = map_get(val.first);
@@ -120,6 +120,51 @@ template <class T, class Compare, class Alloc> class bst
             root = new_node;
         }
         else if (_comp(new_node->data.first, end_parent->data.first))
+        {
+            end_parent->left = new_node;
+        }
+        else
+        {
+            end_parent->right = new_node;
+        }
+        // return true;
+        return ft::make_pair(new_node, true);
+    }  
+
+    ft::pair<node_type *, bool> set_insert(const T &val)
+    {
+        // Is the key already in the tree?
+        node_type *res = set_get(val);
+        if (res != NULL)
+        {
+            return ft::make_pair(res, false);
+        }
+        node_type *new_node = _alloc.allocate(1);
+        _alloc.construct(new_node, node_type(val));
+
+        node_type *end = root;
+        node_type *end_parent = NULL;
+        while (end != NULL)
+        {
+            end_parent = end;
+            if (_comp(new_node->data, end->data))
+            {
+                // less than
+                end = end->left;
+            }
+            else
+            {
+                // greater tahn
+                end = end->right;
+            }
+        }
+        new_node->parent = end_parent;
+        if (end_parent == NULL)
+        {
+            // std::cout << "updating root " << std::endl;
+            root = new_node;
+        }
+        else if (_comp(new_node->data, end_parent->data))
         {
             end_parent->left = new_node;
         }

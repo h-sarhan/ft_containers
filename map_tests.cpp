@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/19 16:28:59 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/26 02:22:57 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,13 +185,13 @@ void mapLowerBound(void)
     // it = strToInt.end();
     std::cout << "lower_bound == " << it->first << std::endl;
 
-    std::map<int, std::string> strToInt2;
-    strToInt2.insert(std::make_pair(1, "one"));
-    strToInt2.insert(std::make_pair(3, "three"));
-    strToInt2.insert(std::make_pair(4, "four"));
-    std::map<int, std::string>::iterator it2 = strToInt2.lower_bound(5);
-    // it = strToInt.end();
-    std::cout << "lower_bound == " << it2->first << std::endl;
+    // std::map<int, std::string> strToInt2;
+    // strToInt2.insert(std::make_pair(1, "one"));
+    // strToInt2.insert(std::make_pair(3, "three"));
+    // strToInt2.insert(std::make_pair(4, "four"));
+    // std::map<int, std::string>::iterator it2 = strToInt2.lower_bound(5);
+    // // it = strToInt.end();
+    // std::cout << "lower_bound == " << it2->first << std::endl;
 }
 
 void mapUpperBound(void)
@@ -236,6 +236,9 @@ void mapFind(void)
     std::cout << "Key == " << it->first << std::endl;
 }
 
+void    mapRotations(void)
+{
+}
 
 void mapTests(void)
 {

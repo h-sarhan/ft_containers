@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:07:03 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/25 15:06:16 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/25 23:12:38 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 #include "pair.hpp"
 #include <cstddef>
+
+#define BLACK false
+#define RED true
 
 namespace ft
 {
@@ -26,22 +29,22 @@ template <class DataType> struct node
     node<DataType> *parent;
     node<DataType> *left;
     node<DataType> *right;
-    bool is_black;
+    bool color;
 
     // * Default constructor
-    node(void) : data(), parent(NULL), left(NULL), right(NULL), is_black(false)
+    node(void) : data(), parent(NULL), left(NULL), right(NULL), color(BLACK)
     {
     }
 
     // * Constructor
-    node(const DataType &data) : data(data), parent(NULL), left(NULL), right(NULL), is_black(false)
+    node(const DataType &data, bool color)
+        : data(data), parent(NULL), left(NULL), right(NULL), color(color)
     {
     }
 
     // * Copy constructor
     node(const node &old)
-        : data(old.data), parent(old.parent), left(old.left), right(old.right),
-          is_black(old.is_black)
+        : data(old.data), parent(old.parent), left(old.left), right(old.right), color(old.color)
     {
     }
 
@@ -54,7 +57,7 @@ template <class DataType> struct node
         parent = rhs.parent;
         left = rhs.left;
         right = rhs.right;
-        is_black = rhs.is_black;
+        color = rhs.color;
         return *this;
     }
 };

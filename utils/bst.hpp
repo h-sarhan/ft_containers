@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/23 17:42:38 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/26 02:31:30 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,123 @@ template <class T, class Compare, class Alloc> class bst
         }
     }
 
+    void _left_rotate(node_type *x)
+    {
+        node_type *y = x->right;
+        x->right = y->left;
+        if (y->left != NULL)
+        {
+            y->left->parent = x;
+        }
+        y->parent = x->parent;
+        if (x->parent == NULL)
+        {
+            root = y;
+        }
+        else if (x == x->parent->left)
+        {
+            x->parent->left = y;
+        }
+        else
+        {
+            x->parent->right = y;
+        }
+        y->left = x;
+        x->parent = y;
+    }
+
+    void _right_rotate(node_type *x)
+    {
+        node_type *y = x->left;
+        x->left = y->right;
+        if (y->right != NULL)
+        {
+            y->right->parent = x;
+        }
+        y->parent = x->parent;
+        if (x->parent == NULL)
+        {
+            root = y;
+        }
+        else if (x == x->parent->right)
+        {
+            x->parent->right = y;
+        }
+        else
+        {
+            x->parent->left = y;
+        }
+        y->right = x;
+        x->parent = y;
+    }
+
+    void _insert_fixup(node_type *node)
+    {
+        // while there is a red node whose parent is a red node
+        while (node->parent != NULL && node->parent->color == RED)
+        {
+            // if node's parent is a left child
+            if (node->parent == node->parent->parent->left)
+            {
+                // get the node's uncle which will be its grandparent's right child
+                node_type *uncle = node->parent->parent->right;
+                // if the uncle's color is red
+                if (uncle != NULL && uncle->color == RED)
+                {
+                    // case 1: involves only recoloring
+                    // recolor parent and uncle to black
+                    node->parent->color = BLACK;
+                    uncle->color = BLACK;
+
+                    // recolor grandparent to red
+                    node->parent->parent->color = RED;
+                    // traverse up the tree
+                    node = node->parent->parent;
+                }
+                else
+                {
+                    // if node is a right child
+                    if (node == node->parent->right)
+                    {
+                        // case 2
+                        // just left rotate it to become a left child
+                        node = node->parent;
+                        _left_rotate(node);
+                    }
+                    // case 3
+                    // recolor and right rotate to fix the violation
+                    node->parent->color = BLACK;
+                    node->parent->parent->color = RED;
+                    _right_rotate(node->parent->parent);
+                }
+            }
+            else
+            {
+                node_type *uncle = node->parent->parent->left;
+                if (uncle != NULL && uncle->color == RED)
+                {
+                    node->parent->color = BLACK;
+                    uncle->color = BLACK;
+                    node->parent->parent->color = RED;
+                    node = node->parent->parent;
+                }
+                else
+                {
+                    if (node == node->parent->left)
+                    {
+                        node = node->parent;
+                        _right_rotate(node);
+                    }
+                    node->parent->color = BLACK;
+                    node->parent->parent->color = RED;
+                    _left_rotate(node->parent->parent);
+                }
+            }
+        }
+        // root of a red black tree has to be black
+        root->color = BLACK;
+    }
+
   public:
     // * Constructor
     bst(node_type *root, Compare comp, Alloc allocator) : root(root), _comp(comp), _alloc(allocator)
@@ -75,7 +192,7 @@ template <class T, class Compare, class Alloc> class bst
         {
             return;
         }
-        free_nodes(root);
+        clear(root);
     }
 
     // * Copy assignment constructor
@@ -99,7 +216,7 @@ template <class T, class Compare, class Alloc> class bst
             return ft::make_pair(res, false);
         }
         node_type *new_node = _alloc.allocate(1);
-        _alloc.construct(new_node, node_type(val));
+        _alloc.construct(new_node, node_type(val, RED));
 
         node_type *end = root;
         node_type *end_parent = NULL;
@@ -120,7 +237,6 @@ template <class T, class Compare, class Alloc> class bst
         new_node->parent = end_parent;
         if (end_parent == NULL)
         {
-            // std::cout << "updating root " << std::endl;
             root = new_node;
         }
         else if (_comp(new_node->data.first, end_parent->data.first))
@@ -131,7 +247,9 @@ template <class T, class Compare, class Alloc> class bst
         {
             end_parent->right = new_node;
         }
-        // return true;
+        new_node->left = NULL;
+        new_node->right = NULL;
+        _insert_fixup(new_node);
         return ft::make_pair(new_node, true);
     }
 
@@ -145,7 +263,7 @@ template <class T, class Compare, class Alloc> class bst
             return ft::make_pair(res, false);
         }
         node_type *new_node = _alloc.allocate(1);
-        _alloc.construct(new_node, node_type(val));
+        _alloc.construct(new_node, node_type(val, RED));
 
         node_type *end = root;
         node_type *end_parent = NULL;
@@ -166,7 +284,6 @@ template <class T, class Compare, class Alloc> class bst
         new_node->parent = end_parent;
         if (end_parent == NULL)
         {
-            // std::cout << "updating root " << std::endl;
             root = new_node;
         }
         else if (_comp(new_node->data, end_parent->data))
@@ -177,7 +294,9 @@ template <class T, class Compare, class Alloc> class bst
         {
             end_parent->right = new_node;
         }
-        // return true;
+        new_node->left = NULL;
+        new_node->right = NULL;
+        _insert_fixup(new_node);
         return ft::make_pair(new_node, true);
     }
 
@@ -306,15 +425,15 @@ template <class T, class Compare, class Alloc> class bst
     }
 
     // * Free the nodes from a tree
-    void free_nodes(node_type *node)
+    void clear(node_type *node)
     {
         if (node != NULL)
         {
-            free_nodes(node->left);
+            clear(node->left);
             node_type *temp = node->right;
             _alloc.destroy(node);
             _alloc.deallocate(node, 1);
-            free_nodes(temp);
+            clear(temp);
         }
     }
 };

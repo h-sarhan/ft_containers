@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/19 13:13:42 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/25 17:36:24 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ template <class T, class Alloc = std::allocator<T> > class vector
         }
     }
 
+    // ! Protect this somehow
+    // ? Make distance compare function
     // * Iterator range constructor
     template <class InputIterator>
     vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),

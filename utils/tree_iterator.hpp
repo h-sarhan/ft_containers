@@ -38,32 +38,128 @@ template <class T, class NodeType> class tree_iterator
 
   public:
     // * Constructors and destructors
-    tree_iterator(void);
-    tree_iterator(node_pointer ptr, node_pointer bst_root, node_pointer sentinel);
+    tree_iterator(void) : _node_ptr(NULL), _bst_root(NULL), _sentinel(NULL)
+    {
+    }
 
-    template <class T2> tree_iterator(const tree_iterator<T2, NodeType> &old);
-    template <class T2> tree_iterator &operator=(const tree_iterator<T2, NodeType> &rhs);
-    ~tree_iterator(void);
+    tree_iterator(node_pointer ptr, node_pointer bst_root, node_pointer sentinel)
+        : _node_ptr(ptr), _bst_root(bst_root), _sentinel(sentinel)
+    {
+    }
 
-    node_pointer base(void) const;
-    node_pointer bst_root(void) const;
-    node_pointer sentinel(void) const;
+    template <class T2>
+    tree_iterator(const tree_iterator<T2, NodeType> &old)
+        : _node_ptr(old.base()), _bst_root(old.bst_root()), _sentinel(old.sentinel())
+    {
+    }
+
+    template <class T2> tree_iterator &operator=(const tree_iterator<T2, NodeType> &rhs)
+    {
+        _node_ptr = rhs.base();
+        _bst_root = rhs.bst_root();
+        _sentinel = rhs.sentinel();
+        return *this;
+    }
+
+    ~tree_iterator(void)
+    {
+        // ??
+    }
+
+    node_pointer base(void) const
+    {
+        return _node_ptr;
+    }
+
+    node_pointer bst_root(void) const
+    {
+        return _bst_root;
+    }
+
+    node_pointer sentinel(void) const
+    {
+        return _sentinel;
+    }
 
     // * Iterator traversal
-    tree_iterator &operator++(void);   // pre-increment
-    tree_iterator &operator--(void);   // pre-decrement
-    tree_iterator operator++(int);     // post-increment
-    tree_iterator operator--(int);     // post-decrement
+    tree_iterator &operator++(void)   // pre-increment
+    {
+        // ? If the passed node was one behind the first element then incrementing it should give
+        // you ? the first element.
+        if (_node_ptr == _sentinel)
+        {
+            // ? Get the first element of the map
+            _node_ptr = ft::min_node(_bst_root);
+            return *this;
+        }
+        _node_ptr = ft::successor_node(_node_ptr);
+        if (_node_ptr == NULL)
+        {
+            _node_ptr = _sentinel;
+        }
+        return *this;
+    }
+
+    tree_iterator &operator--(void)   // pre-decrement
+    {
+        // ? If the passed node was one in front of the first element then decrementing it should
+        // give ? you the last element.
+        if (_node_ptr == _sentinel)
+        {
+            // ? Get the last element of the map
+            _node_ptr = ft::max_node(_bst_root);
+            return *this;
+        }
+        _node_ptr = ft::predecessor_node(_node_ptr);
+        if (_node_ptr == NULL)
+        {
+            _node_ptr = _sentinel;
+        }
+        return *this;
+    }
+
+    tree_iterator operator++(int)   // post-increment
+    {
+        tree_iterator<T, NodeType> temp = *this;
+        ++(*this);
+        return temp;
+    }
+
+    tree_iterator operator--(int)   // post-decrement
+    {
+        tree_iterator<T, NodeType> temp = *this;
+        --(*this);
+        return temp;
+    }
 
     // * Iterator comparison
-    template <class It> bool operator==(const It &rhs) const;
-    template <class It> bool operator!=(const It &rhs) const;
+    template <class It> bool operator==(const It &rhs) const
+    {
+        return _node_ptr == rhs.base();
+    }
+    template <class It> bool operator!=(const It &rhs) const
+    {
+        return _node_ptr != rhs.base();
+    }
 
     // * Iterator access
-    reference operator*(void);
-    pointer operator->(void);
-    reference operator*(void) const;
-    pointer operator->(void) const;
+    reference operator*(void)
+    {
+        return _node_ptr->data;
+    }
+
+    pointer operator->(void)
+    {
+        return &_node_ptr->data;
+    }
+    reference operator*(void) const
+    {
+        return _node_ptr->data;
+    }
+    pointer operator->(void) const
+    {
+        return &_node_ptr->data;
+    }
 };
 
 template <class T, class NodeType> class const_tree_iterator
@@ -85,328 +181,120 @@ template <class T, class NodeType> class const_tree_iterator
 
   public:
     // * Constructors and destructors
-    const_tree_iterator(void);
-    const_tree_iterator(node_pointer ptr, node_pointer bst_root, node_pointer sentinel);
+    const_tree_iterator(void) : _node_ptr(NULL), _bst_root(NULL), _sentinel(NULL)
+    {
+    }
+    const_tree_iterator(node_pointer ptr, node_pointer bst_root, node_pointer sentinel)
+        : _node_ptr(ptr), _bst_root(bst_root), _sentinel(sentinel)
+    {
+    }
 
-    const_tree_iterator(const const_tree_iterator &old);
-    const_tree_iterator(const tree_iterator<T, NodeType> &old);
-    const_tree_iterator &operator=(const const_tree_iterator &rhs);
-    ~const_tree_iterator(void);
+    const_tree_iterator(const const_tree_iterator &old)
+        : _node_ptr(old.base()), _bst_root(old.bst_root()), _sentinel(old.sentinel())
+    {
+    }
 
-    node_pointer base(void) const;
-    node_pointer bst_root(void) const;
-    node_pointer sentinel(void) const;
+    const_tree_iterator(const tree_iterator<T, NodeType> &old)
+        : _node_ptr(old.base()), _bst_root(old.bst_root()), _sentinel(old.sentinel())
+    {
+    }
+
+    const_tree_iterator &operator=(const const_tree_iterator &rhs)
+    {
+        _node_ptr = rhs.base();
+        _bst_root = rhs.bst_root();
+        _sentinel = rhs.sentinel();
+        return *this;
+    }
+
+    ~const_tree_iterator(void)
+    {
+    }
+
+    node_pointer base(void) const
+    {
+        return _node_ptr;
+    }
+
+    node_pointer bst_root(void) const
+    {
+        return _bst_root;
+    }
+
+    node_pointer sentinel(void) const
+    {
+        return _sentinel;
+    }
 
     // * Iterator traversal
-    const_tree_iterator &operator++(void);   // pre-increment
-    const_tree_iterator &operator--(void);   // pre-decrement
-    const_tree_iterator operator++(int);     // post-increment
-    const_tree_iterator operator--(int);     // post-decrement
+    const_tree_iterator &operator++(void)   // pre-increment
+    {
+        // ? If the passed node was one behind the first element then incrementing it should give
+        // you ? the first element.
+        if (_node_ptr == _sentinel)
+        {
+            // ? Get the first element of the map
+            _node_ptr = ft::min_node(_bst_root);
+            return *this;
+        }
+        _node_ptr = ft::successor_node(_node_ptr);
+        if (_node_ptr == NULL)
+        {
+            _node_ptr = _sentinel;
+        }
+        return *this;
+    }
+    const_tree_iterator &operator--(void)   // pre-decrement
+    {
+        // ? If the passed node was one in front of the first element then decrementing it should
+        // give ? you the last element.
+        if (_node_ptr == _sentinel)
+        {
+            // ? Get the last element of the map
+            _node_ptr = ft::max_node(_bst_root);
+            return *this;
+        }
+        _node_ptr = ft::predecessor_node(_node_ptr);
+        if (_node_ptr == NULL)
+        {
+            _node_ptr = _sentinel;
+        }
+        return *this;
+    }
+
+    const_tree_iterator operator++(int)   // post-increment
+    {
+        const_tree_iterator<T, NodeType> temp = *this;
+        ++(*this);
+        return temp;
+    }
+    const_tree_iterator operator--(int)   // post-decrement
+    {
+        const_tree_iterator<T, NodeType> temp = *this;
+        --(*this);
+        return temp;
+    }
 
     // * Iterator comparison
-    template <class It> bool operator==(const It &rhs) const;
-    template <class It> bool operator!=(const It &rhs) const;
+    template <class It> bool operator==(const It &rhs) const
+    {
+        return _node_ptr == rhs.base();
+    }
+    template <class It> bool operator!=(const It &rhs) const
+    {
+        return _node_ptr != rhs.base();
+    }
 
     // * Iterator access
-    reference operator*(void) const;
-    pointer operator->(void) const;
+    reference operator*(void) const
+    {
+        return _node_ptr->data;
+    }
+    pointer operator->(void) const
+    {
+        return &_node_ptr->data;
+    }
 };
 }   // namespace ft
-
-template <class T, class NodeType>
-ft::tree_iterator<T, NodeType>::tree_iterator(void)
-    : _node_ptr(NULL), _bst_root(NULL), _sentinel(NULL)
-{
-}
-
-template <class T, class NodeType>
-ft::tree_iterator<T, NodeType>::tree_iterator(node_pointer ptr, node_pointer bst_root,
-                                              node_pointer sentinel)
-    : _node_ptr(ptr), _bst_root(bst_root), _sentinel(sentinel)
-{
-}
-
-template <class T, class NodeType>
-template <class T2>
-ft::tree_iterator<T, NodeType>::tree_iterator(const tree_iterator<T2, NodeType> &old)
-    : _node_ptr(old.base()), _bst_root(old.bst_root()), _sentinel(old.sentinel())
-{
-}
-
-template <class T, class NodeType>
-typename ft::tree_iterator<T, NodeType>::node_pointer ft::tree_iterator<T, NodeType>::base(
-    void) const
-{
-    return _node_ptr;
-}
-
-template <class T, class NodeType>
-typename ft::tree_iterator<T, NodeType>::node_pointer ft::tree_iterator<T, NodeType>::bst_root(
-    void) const
-{
-    return _bst_root;
-}
-
-template <class T, class NodeType>
-typename ft::tree_iterator<T, NodeType>::node_pointer ft::tree_iterator<T, NodeType>::sentinel(
-    void) const
-{
-    return _sentinel;
-}
-
-template <class T, class NodeType>
-template <class T2>
-ft::tree_iterator<T, NodeType> &ft::tree_iterator<T, NodeType>::operator=(
-    const tree_iterator<T2, NodeType> &rhs)
-{
-    _node_ptr = rhs.base();
-    _bst_root = rhs.bst_root();
-    _sentinel = rhs.sentinel();
-    return *this;
-}
-
-template <class T, class NodeType> ft::tree_iterator<T, NodeType>::~tree_iterator<T, NodeType>(void)
-{
-    // ??
-}
-
-template <class T, class NodeType>
-ft::tree_iterator<T, NodeType> &ft::tree_iterator<T, NodeType>::operator++(void)
-{
-    // ? If the passed node was one behind the first element then incrementing it should give you
-    // ? the first element.
-    if (_node_ptr == _sentinel)
-    {
-        // ? Get the first element of the map
-        _node_ptr = ft::min_node(_bst_root);
-        return *this;
-    }
-    _node_ptr = ft::successor_node(_node_ptr);
-    if (_node_ptr == NULL)
-    {
-        _node_ptr = _sentinel;
-    }
-    return *this;
-}
-
-template <class T, class NodeType>
-ft::tree_iterator<T, NodeType> &ft::tree_iterator<T, NodeType>::operator--(void)
-{
-    // ? If the passed node was one in front of the first element then decrementing it should give
-    // ? you the last element.
-    if (_node_ptr == _sentinel)
-    {
-        // ? Get the last element of the map
-        _node_ptr = ft::max_node(_bst_root);
-        return *this;
-    }
-    _node_ptr = ft::predecessor_node(_node_ptr);
-    if (_node_ptr == NULL)
-    {
-        _node_ptr = _sentinel;
-    }
-    return *this;
-}
-
-template <class T, class NodeType>
-ft::tree_iterator<T, NodeType> ft::tree_iterator<T, NodeType>::operator++(int)
-{
-    tree_iterator<T, NodeType> temp = *this;
-    ++(*this);
-    return temp;
-}
-
-template <class T, class NodeType>
-ft::tree_iterator<T, NodeType> ft::tree_iterator<T, NodeType>::operator--(int)
-{
-    tree_iterator<T, NodeType> temp = *this;
-    --(*this);
-    return temp;
-}
-
-template <class T, class NodeType>
-template <class It>
-bool ft::tree_iterator<T, NodeType>::operator==(const It &rhs) const
-{
-    return _node_ptr == rhs.base();
-}
-
-template <class T, class NodeType>
-template <class It>
-bool ft::tree_iterator<T, NodeType>::operator!=(const It &rhs) const
-{
-    return _node_ptr != rhs.base();
-}
-
-template <class T, class NodeType>
-typename ft::tree_iterator<T, NodeType>::value_type &ft::tree_iterator<T, NodeType>::operator*(void)
-{
-    return _node_ptr->data;
-}
-
-template <class T, class NodeType>
-typename ft::tree_iterator<T, NodeType>::value_type &ft::tree_iterator<T, NodeType>::operator*(
-    void) const
-{
-    return _node_ptr->data;
-}
-
-template <class T, class NodeType>
-typename ft::tree_iterator<T, NodeType>::value_type *ft::tree_iterator<T, NodeType>::operator->(
-    void)
-{
-    return &_node_ptr->data;
-}
-
-template <class T, class NodeType>
-typename ft::tree_iterator<T, NodeType>::pointer ft::tree_iterator<T, NodeType>::operator->(
-    void) const
-{
-    return &_node_ptr->data;
-}
-
-template <class T, class NodeType>
-ft::const_tree_iterator<T, NodeType>::const_tree_iterator(void)
-    : _node_ptr(NULL), _bst_root(NULL), _sentinel(NULL)
-{
-}
-
-template <class T, class NodeType>
-ft::const_tree_iterator<T, NodeType>::const_tree_iterator(node_pointer ptr, node_pointer bst_root,
-                                                          node_pointer sentinel)
-    : _node_ptr(ptr), _bst_root(bst_root), _sentinel(sentinel)
-{
-}
-
-template <class T, class NodeType>
-ft::const_tree_iterator<T, NodeType>::const_tree_iterator(const const_tree_iterator &old)
-    : _node_ptr(old.base()), _bst_root(old.bst_root()), _sentinel(old.sentinel())
-{
-}
-
-template <class T, class NodeType>
-ft::const_tree_iterator<T, NodeType>::const_tree_iterator(const tree_iterator<T, NodeType> &old)
-    : _node_ptr(old.base()), _bst_root(old.bst_root()), _sentinel(old.sentinel())
-{
-}
-
-template <class T, class NodeType>
-typename ft::const_tree_iterator<T, NodeType>::node_pointer ft::const_tree_iterator<
-    T, NodeType>::base(void) const
-{
-    return _node_ptr;
-}
-
-template <class T, class NodeType>
-typename ft::const_tree_iterator<T, NodeType>::node_pointer ft::const_tree_iterator<
-    T, NodeType>::bst_root(void) const
-{
-    return _bst_root;
-}
-
-template <class T, class NodeType>
-typename ft::const_tree_iterator<T, NodeType>::node_pointer ft::const_tree_iterator<
-    T, NodeType>::sentinel(void) const
-{
-    return _sentinel;
-}
-
-template <class T, class NodeType>
-ft::const_tree_iterator<T, NodeType> &ft::const_tree_iterator<T, NodeType>::operator=(
-    const const_tree_iterator &rhs)
-{
-    _node_ptr = rhs.base();
-    _bst_root = rhs.bst_root();
-    _sentinel = rhs.sentinel();
-    return *this;
-}
-
-template <class T, class NodeType>
-ft::const_tree_iterator<T, NodeType>::~const_tree_iterator<T, NodeType>(void)
-{
-    // ??
-}
-
-template <class T, class NodeType>
-ft::const_tree_iterator<T, NodeType> &ft::const_tree_iterator<T, NodeType>::operator++(void)
-{
-    // ? If the passed node was one behind the first element then incrementing it should give you
-    // ? the first element.
-    if (_node_ptr == _sentinel)
-    {
-        // ? Get the first element of the map
-        _node_ptr = ft::min_node(_bst_root);
-        return *this;
-    }
-    _node_ptr = ft::successor_node(_node_ptr);
-    if (_node_ptr == NULL)
-    {
-        _node_ptr = _sentinel;
-    }
-    return *this;
-}
-
-template <class T, class NodeType>
-ft::const_tree_iterator<T, NodeType> &ft::const_tree_iterator<T, NodeType>::operator--(void)
-{
-    // ? If the passed node was one in front of the first element then decrementing it should give
-    // ? you the last element.
-    if (_node_ptr == _sentinel)
-    {
-        // ? Get the last element of the map
-        _node_ptr = ft::max_node(_bst_root);
-        return *this;
-    }
-    _node_ptr = ft::predecessor_node(_node_ptr);
-    if (_node_ptr == NULL)
-    {
-        _node_ptr = _sentinel;
-    }
-    return *this;
-}
-
-template <class T, class NodeType>
-ft::const_tree_iterator<T, NodeType> ft::const_tree_iterator<T, NodeType>::operator++(int)
-{
-    const_tree_iterator<T, NodeType> temp = *this;
-    ++(*this);
-    return temp;
-}
-
-template <class T, class NodeType>
-ft::const_tree_iterator<T, NodeType> ft::const_tree_iterator<T, NodeType>::operator--(int)
-{
-    const_tree_iterator<T, NodeType> temp = *this;
-    --(*this);
-    return temp;
-}
-
-template <class T, class NodeType>
-template <class It>
-bool ft::const_tree_iterator<T, NodeType>::operator==(const It &rhs) const
-{
-    return _node_ptr == rhs.base();
-}
-
-template <class T, class NodeType>
-template <class It>
-bool ft::const_tree_iterator<T, NodeType>::operator!=(const It &rhs) const
-{
-    return _node_ptr != rhs.base();
-}
-
-template <class T, class NodeType>
-typename ft::const_tree_iterator<T, NodeType>::reference ft::const_tree_iterator<
-    T, NodeType>::operator*(void) const
-{
-    return _node_ptr->data;
-}
-
-template <class T, class NodeType>
-typename ft::const_tree_iterator<T, NodeType>::pointer ft::const_tree_iterator<
-    T, NodeType>::operator->(void) const
-{
-    return &_node_ptr->data;
-}
 
 #endif

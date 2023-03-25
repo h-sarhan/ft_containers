@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/19 15:28:38 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/23 17:42:38 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ template <class T, class Compare, class Alloc> class bst
     }
 
   public:
+    // * Constructor
     bst(node_type *root, Compare comp, Alloc allocator) : root(root), _comp(comp), _alloc(allocator)
     {
     }
@@ -67,6 +68,7 @@ template <class T, class Compare, class Alloc> class bst
     {
     }
 
+    // * Destructor
     ~bst(void)
     {
         if (root == NULL)
@@ -76,6 +78,7 @@ template <class T, class Compare, class Alloc> class bst
         free_nodes(root);
     }
 
+    // * Copy assignment constructor
     bst &operator=(const bst &rhs)
     {
         if (this == &rhs)
@@ -86,6 +89,7 @@ template <class T, class Compare, class Alloc> class bst
         return *this;
     }
 
+    // * Insert into a map
     ft::pair<node_type *, bool> map_insert(const T &val)
     {
         // Is the key already in the tree?
@@ -129,8 +133,9 @@ template <class T, class Compare, class Alloc> class bst
         }
         // return true;
         return ft::make_pair(new_node, true);
-    }  
+    }
 
+    // * Insert into a set
     ft::pair<node_type *, bool> set_insert(const T &val)
     {
         // Is the key already in the tree?
@@ -176,6 +181,7 @@ template <class T, class Compare, class Alloc> class bst
         return ft::make_pair(new_node, true);
     }
 
+    // * Print the elements of a tree
     void traverse(node_type *node) const
     {
         if (node != NULL)
@@ -187,6 +193,7 @@ template <class T, class Compare, class Alloc> class bst
         }
     }
 
+    // * Get an element from a map
     template <class KeyType> node_type *map_get(const KeyType &key) const
     {
         if (root == NULL)
@@ -207,7 +214,8 @@ template <class T, class Compare, class Alloc> class bst
         }
         return search;
     }
-   
+
+    // * Get an element from a set
     template <class KeyType> node_type *set_get(const KeyType &key) const
     {
         if (root == NULL)
@@ -229,6 +237,7 @@ template <class T, class Compare, class Alloc> class bst
         return search;
     }
 
+    // * Delete a node from the tree
     void delete_node(node_type *node)
     {
         node_type *temp = node;
@@ -296,6 +305,7 @@ template <class T, class Compare, class Alloc> class bst
         _alloc.deallocate(temp, 1);
     }
 
+    // * Free the nodes from a tree
     void free_nodes(node_type *node)
     {
         if (node != NULL)
@@ -309,7 +319,9 @@ template <class T, class Compare, class Alloc> class bst
     }
 };
 
-// * Public helper functions
+// ** Public helper functions
+
+// * Get the next node in sorted order
 template <class NodeType> NodeType *successor_node(NodeType *node)
 {
     if (node->right != NULL)
@@ -328,6 +340,7 @@ template <class NodeType> NodeType *successor_node(NodeType *node)
     return up;
 }
 
+// * Get the previous node in sorted order
 template <class NodeType> NodeType *predecessor_node(NodeType *node)
 {
     if (node->left != NULL)
@@ -346,6 +359,7 @@ template <class NodeType> NodeType *predecessor_node(NodeType *node)
     return up;
 }
 
+// * Get the minimum node
 template <class NodeType> NodeType *min_node(NodeType *node)
 {
     while (node->left != NULL)
@@ -355,6 +369,7 @@ template <class NodeType> NodeType *min_node(NodeType *node)
     return node;
 }
 
+// * Get the maximum node
 template <class NodeType> NodeType *max_node(NodeType *node)
 {
     while (node->right != NULL)

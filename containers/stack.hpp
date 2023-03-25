@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 16:25:38 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/19 16:53:39 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/23 17:38:51 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ template <class T, class Container = vector<T> > class stack
 
     template <class Type, class Cont>
     friend bool operator!=(const stack<Type, Cont> &lhs, const stack<Type, Cont> &rhs);
-    
+
     template <class Type, class Cont>
     friend bool operator<(const stack<Type, Cont> &lhs, const stack<Type, Cont> &rhs);
 
@@ -75,7 +75,7 @@ template <class T, class Container = vector<T> > class stack
 
     template <class Type, class Cont>
     friend bool operator>(const stack<Type, Cont> &lhs, const stack<Type, Cont> &rhs);
-    
+
     template <class Type, class Cont>
     friend bool operator>=(const stack<Type, Cont> &lhs, const stack<Type, Cont> &rhs);
 };

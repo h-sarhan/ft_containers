@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/19 16:18:15 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/25 14:45:08 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,8 @@ class map
     }
 
     // ** Iterator functions
+
+    // * Begin iterator
     iterator begin(void)
     {
         // ! Check if this is correct behaviour with std::map on linux and mac
@@ -165,6 +167,7 @@ class map
         return const_iterator(ft::min_node(_bst.root), _bst.root, _sentinel);
     }
 
+    // * End iterator
     iterator end(void)
     {
         // ! Check if this is correct behaviour with std::map on linux and mac. Maybe return
@@ -184,6 +187,7 @@ class map
         return const_iterator(_sentinel, _bst.root, _sentinel);
     }
 
+    // * Reverse begin iterator
     reverse_iterator rbegin(void)
     {
         if (empty())
@@ -203,6 +207,7 @@ class map
         return const_reverse_iterator(iterator(_sentinel, _bst.root, _sentinel));
     }
 
+    // * Reverse end iterator
     reverse_iterator rend(void)
     {
         if (empty())
@@ -359,10 +364,13 @@ class map
         erase(begin(), end());
     }
 
+    // * Return key comp
     key_compare key_comp(void) const
     {
         return _key_comp;
     }
+
+    // * Return value comp
     value_compare value_comp(void) const
     {
         return _val_comp;
@@ -380,7 +388,6 @@ class map
         }
         return iterator(search, _bst.root, _sentinel);
     }
-
     const_iterator find(const key_type &k) const
     {
         node_type *search = _bst.map_get(k);
@@ -401,6 +408,7 @@ class map
         return 1;
     }
 
+    // * Return lower bound
     iterator lower_bound(const key_type &k)
     {
         for (iterator it = begin(); it != end(); it++)
@@ -413,7 +421,6 @@ class map
         }
         return end();
     }
-
     const_iterator lower_bound(const key_type &k) const
     {
         for (const_iterator it = begin(); it != end(); it++)
@@ -427,6 +434,7 @@ class map
         return end();
     }
 
+    // * Return upper bound
     iterator upper_bound(const key_type &k)
     {
         for (iterator it = begin(); it != end(); it++)
@@ -438,7 +446,6 @@ class map
         }
         return end();
     }
-
     const_iterator upper_bound(const key_type &k) const
     {
         for (const_iterator it = begin(); it != end(); it++)
@@ -451,6 +458,7 @@ class map
         return end();
     }
 
+    // * Return pair of upper and lower bound
     pair<iterator, iterator> equal_range(const key_type &k)
     {
         return ft::make_pair(lower_bound(k), upper_bound(k));

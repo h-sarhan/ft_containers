@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/25 14:45:08 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/29 02:43:29 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <memory>
 #include <stdexcept>
 
+// ! Consider allocating sentinel node on the stack
 namespace ft
 {
 template <class Key, class T, class Compare = std::less<Key>,
@@ -79,6 +80,7 @@ class map
     allocator_type _alloc;
     bst<ft::pair<const key_type, mapped_type>, key_compare, allocator_type> _bst;
     size_type _size;
+    // node_type _sentinel_node;
     node_type *_sentinel;
 
     // ** Constructors and destructors

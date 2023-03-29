@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:07:03 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/25 23:12:38 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/29 11:25:22 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,34 +18,41 @@
 
 #define BLACK false
 #define RED true
+#define LEFT 0
+#define RIGHT 1
 
 namespace ft
 {
 template <class DataType> struct node
 {
+    typedef bool color;
     typedef DataType pair_type;
 
     DataType data;
-    node<DataType> *parent;
-    node<DataType> *left;
-    node<DataType> *right;
-    bool color;
+    node<DataType> *child[2];
+    color col;
 
     // * Default constructor
-    node(void) : data(), parent(NULL), left(NULL), right(NULL), color(BLACK)
+    node(void) : data(), col(BLACK)
     {
+        child[LEFT] = NULL;
+        child[RIGHT] = NULL;
     }
 
     // * Constructor
     node(const DataType &data, bool color)
-        : data(data), parent(NULL), left(NULL), right(NULL), color(color)
+        : data(data), col(color)
     {
+        child[LEFT] = NULL;
+        child[RIGHT] = NULL;
     }
 
     // * Copy constructor
     node(const node &old)
-        : data(old.data), parent(old.parent), left(old.left), right(old.right), color(old.color)
+        : data(old.data), col(old.color)
     {
+        child[LEFT] = old.child[LEFT];
+        child[RIGHT] = old.child[RIGHT];
     }
 
     // * Copy assignment constructor
@@ -54,10 +61,9 @@ template <class DataType> struct node
         if (this == &rhs)
             return *this;
         data = rhs.data;
-        parent = rhs.parent;
-        left = rhs.left;
-        right = rhs.right;
-        color = rhs.color;
+        child[LEFT] = rhs.child[LEFT];
+        child[RIGHT] = rhs.child[RIGHT];
+        col = rhs.col;
         return *this;
     }
 };

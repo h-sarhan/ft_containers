@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:16:13 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/19 13:36:12 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/29 17:17:54 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ template <class T1, class T2> struct pair
     }
 
     // * Copy assignment
-    pair &operator=(const pair &pr)
-    {
-        first = pr.first;
-        second = pr.second;
-        return *this;
-    }
+    // pair &operator=(const pair &pr)
+    // {
+    //     first = pr.first;
+    //     second = pr.second;
+    //     return *this;
+    // }
 };
 
 // * Relational operators

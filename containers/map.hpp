@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/29 02:43:29 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/29 16:27:26 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 #include <memory>
 #include <stdexcept>
 
-// ! Consider allocating sentinel node on the stack
 namespace ft
 {
 template <class Key, class T, class Compare = std::less<Key>,
@@ -74,13 +73,31 @@ class map
     // ** Private member attributes
   private:
     typedef node<value_type> node_type;
+    template <class NodeType> struct node_compare : std::binary_function<NodeType, NodeType, bool>
+    {
+        bool operator()(const NodeType *x, const NodeType *y) const
+        {
+            return x->data.first < y->data.first;
+        }
+
+        template <class KeyType> bool operator()(const NodeType *node, const KeyType &key) const
+        {
+            return node->data.first < key;
+        }
+
+        template <class KeyType> bool operator()(const KeyType &key, const NodeType *node) const
+        {
+            return key < node->data.first;
+        }
+    };
 
     key_compare _key_comp;
+    node_compare<node_type> _node_comp;
     value_compare _val_comp;
     allocator_type _alloc;
-    bst<ft::pair<const key_type, mapped_type>, key_compare, allocator_type> _bst;
+    bst<ft::pair<const key_type, mapped_type>, node_compare<node_type>, allocator_type> _bst;
     size_type _size;
-    // node_type _sentinel_node;
+    node_type _sentinel_node;
     node_type *_sentinel;
 
     // ** Constructors and destructors
@@ -88,20 +105,18 @@ class map
     // * Default constructor
     explicit map(const key_compare &comp = key_compare(),
                  const allocator_type &alloc = allocator_type())
-        : _key_comp(comp), _val_comp(comp), _alloc(alloc), _bst(NULL, comp, alloc), _size(0),
-          _sentinel(_alloc.allocate(1))
+        : _key_comp(comp), _node_comp(), _val_comp(comp), _alloc(alloc),
+          _bst(NULL, _node_comp, alloc), _size(0), _sentinel_node(), _sentinel(&_sentinel_node)
     {
-        _alloc.construct(_sentinel, node_type());
     }
 
     // * Range-based iterator constructor
     template <class InputIterator>
     map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(),
         const allocator_type &alloc = allocator_type())
-        : _key_comp(comp), _val_comp(comp), _alloc(alloc), _bst(NULL, comp, alloc), _size(0),
-          _sentinel(_alloc.allocate(1))
+        : _key_comp(comp), _node_comp(), _val_comp(comp), _alloc(alloc),
+          _bst(NULL, _node_comp, alloc), _size(0), _sentinel_node(), _sentinel(&_sentinel_node)
     {
-        _alloc.construct(_sentinel, node_type());
         for (InputIterator it = first; it != last; it++)
         {
             insert(*it);
@@ -110,10 +125,9 @@ class map
 
     // * Copy constructor
     map(const map &old)
-        : _key_comp(old._key_comp), _val_comp(old._val_comp), _alloc(old._alloc),
-          _bst(NULL, old._key_comp, old._alloc), _size(0), _sentinel(_alloc.allocate(1))
+        : _key_comp(old._key_comp), _node_comp(), _val_comp(old._val_comp), _alloc(old._alloc),
+          _bst(NULL, _node_comp, old._alloc), _size(0), _sentinel_node(), _sentinel(&_sentinel_node)
     {
-        _alloc.construct(_sentinel, node_type());
         insert(old.begin(), old.end());
     }
 
@@ -127,13 +141,12 @@ class map
         clear();
         _key_comp = x._key_comp;
         _val_comp = x._val_comp;
+        _node_comp = x._node_comp;
+        _sentinel_node = x._sentinel_node;
+        _sentinel = x._sentinel;
         _alloc = x._alloc;
-        _alloc.destroy(_sentinel);
-        _alloc.deallocate(_sentinel, 1);
-        _sentinel = _alloc.allocate(1);
-        _alloc.construct(_sentinel, node_type());
         _bst = bst<ft::pair<const key_type, mapped_type>, key_compare, allocator_type>(
-            NULL, _key_comp, _alloc);
+            NULL, _node_comp, _alloc);
         _size = 0;
         insert(x.begin(), x.end());
         return *this;
@@ -142,8 +155,6 @@ class map
     // * Destructor
     ~map(void)
     {
-        _alloc.destroy(_sentinel);
-        _alloc.deallocate(_sentinel, 1);
     }
 
     // ** Iterator functions
@@ -252,7 +263,7 @@ class map
     // * Subscript operator overload
     mapped_type &operator[](const key_type &key)
     {
-        node_type *res = _bst.map_get(key);
+        node_type *res = _bst.get(key);
         if (res == NULL)
         {
             iterator ret = insert(ft::make_pair(key, mapped_type())).first;
@@ -266,7 +277,7 @@ class map
     // * Single element insert
     pair<iterator, bool> insert(const value_type &val)
     {
-        ft::pair<node_type *, bool> res = _bst.map_insert(val);
+        ft::pair<node_type *, bool> res = _bst.insert(val);
 
         if (res.second == true)
         {
@@ -309,7 +320,7 @@ class map
     // * Single element insert based on iterator
     void erase(iterator position)
     {
-        node_type *to_delete = _bst.map_get(position->first);
+        node_type *to_delete = _bst.get(position->first);
         if (to_delete == NULL)
         {
             return;
@@ -383,7 +394,7 @@ class map
     // * Find a an element based on a key
     iterator find(const key_type &k)
     {
-        node_type *search = _bst.map_get(k);
+        node_type *search = _bst.get(k);
         if (search == NULL)
         {
             return end();
@@ -403,7 +414,7 @@ class map
     // * Count number of elements matching key. For this container this will be 1 or 0
     size_type count(const key_type &k) const
     {
-        if (_bst.map_get(k) == NULL)
+        if (_bst.get(k) == NULL)
         {
             return 0;
         }

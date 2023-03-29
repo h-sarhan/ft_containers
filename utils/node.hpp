@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:07:03 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/29 11:25:22 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/29 16:27:18 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 #include <cstddef>
 
 #define BLACK false
-#define RED true
-#define LEFT 0
+#define RED   true
+#define LEFT  0
 #define RIGHT 1
 
 namespace ft
@@ -26,7 +26,7 @@ namespace ft
 template <class DataType> struct node
 {
     typedef bool color;
-    typedef DataType pair_type;
+    typedef DataType data_type;
 
     DataType data;
     node<DataType> *child[2];
@@ -40,16 +40,14 @@ template <class DataType> struct node
     }
 
     // * Constructor
-    node(const DataType &data, bool color)
-        : data(data), col(color)
+    node(const DataType &data, bool color) : data(data), col(color)
     {
         child[LEFT] = NULL;
         child[RIGHT] = NULL;
     }
 
     // * Copy constructor
-    node(const node &old)
-        : data(old.data), col(old.color)
+    node(const node &old) : data(old.data), col(old.col)
     {
         child[LEFT] = old.child[LEFT];
         child[RIGHT] = old.child[RIGHT];

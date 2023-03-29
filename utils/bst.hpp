@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/29 02:44:01 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/29 17:21:02 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,35 @@ template <class T, class Compare, class Alloc> class bst
     Alloc _alloc;
 
   private:
+    bool _node_equal(const node_type *node1, const node_type *node2) const
+    {
+        return _comp(node1, node2) == false && _comp(node2, node1) == false;
+    }
+
+    bool _node_less(const node_type *node1, const node_type *node2) const
+    {
+        return _comp(node1, node2) == true;
+    }
+
+    bool _node_greater(const node_type *node1, const node_type *node2) const
+    {
+        return _comp(node2, node1) == true;
+    }
+
+    template <class KeyType> bool _key_equal(const KeyType &key, const node_type *node) const
+    {
+        return _comp(node, key) == false && _comp(key, node) == false;
+    }
+
+    template <class KeyType> bool _key_less(const KeyType &key, const node_type *node) const
+    {
+        return _comp(node, key) == true;
+    }
+
+    template <class KeyType> bool _key_greater(const KeyType &key, const node_type *node) const
+    {
+        return _comp(key, node) == true;
+    }
 
   public:
     // * Constructor
@@ -67,20 +96,39 @@ template <class T, class Compare, class Alloc> class bst
     }
 
     // * Insert into a map
-    // ! Make this use a node compare function
     ft::pair<node_type *, bool> insert(const T &val)
     {
         // Is the key already in the tree?
-        node_type *res = map_get(val.first);
+        node_type *res = get(val.first);
         if (res != NULL)
         {
             return ft::make_pair(res, false);
         }
         node_type *new_node = _alloc.allocate(1);
         _alloc.construct(new_node, node_type(val, RED));
+        if (root == NULL)
+        {
+            root = new_node;
+        }
+        else
+        {
+            node_type *it = root;
 
+            bool dir;
+            while (1)
+            {
 
-
+                dir = !_node_less(new_node, it);
+                // if dir == true then we go to the left node
+                // if dir == false then we go to the left node
+                if (it->child[dir] == NULL)
+                {
+                    break;
+                }
+                it = it->child[dir];
+            }
+            it->child[dir] = new_node;
+        }
         return ft::make_pair(new_node, true);
     }
 
@@ -89,45 +137,91 @@ template <class T, class Compare, class Alloc> class bst
     {
         if (node != NULL)
         {
-            traverse(node->left);
+            traverse(node->child[LEFT]);
             std::cout << "key == " << node->data.first << " value == " << node->data.second
                       << std::endl;
-            traverse(node->right);
+            traverse(node->child[RIGHT]);
         }
     }
 
     // * Get an element from a map
     // ! Make this use a node compare function
+    // ! This should use a temporary node to be able to use the node compare function
     template <class KeyType> node_type *get(const KeyType &key) const
     {
-        if (root == NULL)
+        node_type *it = root;
+
+        // creating temp node to compare with
+        while (it != NULL)
         {
-            return NULL;
-        }
-        node_type *search = root;
-        while (search != NULL && (_comp(key, search->data.first) || _comp(search->data.first, key)))
-        {
-            if (_comp(key, search->data.first))
+            if (_key_equal(key, it))
             {
-                search = search->left;
+                return it;
             }
             else
             {
-                search = search->right;
+                bool dir = !_key_less(key, it);
+                // if dir == true then we go to the left node
+                // if dir == false then we go to the left node
+                it = it->child[dir];
             }
         }
-        return search;
+        return (NULL);
     }
 
     // * Delete a node from the tree
     void delete_node(node_type *node)
     {
-        node_type *temp = node;
+        if (root == NULL)
+            return ;
+        // node_type *to_free = node;
+        node_type *parent = NULL;
+        node_type *successor;
+        node_type *it = root;
+        bool    dir;
 
+        while (1)
+        {
+            if ( it == NULL )
+                return ;
+            else if (_node_equal(it, node))
+                break;
+            dir = !_node_less(it, node);
+            parent = it;
+            it = it->child[dir];
+        }
 
+     if ( it->child[LEFT] != NULL && it->child[RIGHT] != NULL )
+     {
+       parent = it;
+       successor = it->child[RIGHT];
 
-        _alloc.destroy(temp);
-        _alloc.deallocate(temp, 1);
+       while ( successor->child[LEFT] != NULL )
+       {
+         parent = successor;
+         successor = successor->child[LEFT];
+       }
+ 
+     // ! I CANNOT DO THIS
+    //    it->data = successor->data;
+    //    parent->child[parent->child[RIGHT] == successor] = successor->child[RIGHT];
+ 
+    //    free ( succ );
+     }
+     else {
+       dir = it->child[LEFT] == NULL;
+ 
+       if ( parent == NULL )
+         root = it->child[dir];
+       else
+         parent->child[parent->child[RIGHT] == it] = it->child[dir];
+ 
+    //    free ( it );
+     }
+//    }
+ 
+        // _alloc.destroy(to_free);
+        // _alloc.deallocate(to_free, 1);
     }
 
     // * Free the nodes from a tree
@@ -135,8 +229,8 @@ template <class T, class Compare, class Alloc> class bst
     {
         if (node != NULL)
         {
-            clear(node->left);
-            node_type *temp = node->right;
+            clear(node->child[LEFT]);
+            node_type *temp = node->child[RIGHT];
             _alloc.destroy(node);
             _alloc.deallocate(node, 1);
             clear(temp);
@@ -149,47 +243,25 @@ template <class T, class Compare, class Alloc> class bst
 // * Get the next node in sorted order
 template <class NodeType> NodeType *successor_node(NodeType *node)
 {
-    if (node->right != NULL)
-    {
-        // return smallest (left-most) node in right subtree
-        return min_node(node->right);
-    }
-    // traverse upwards through the tree till you find an ancestor of node
-    // whose left child is also an ancestor of node
-    NodeType *up = node->parent;
-    while (up != NULL && node != up->left)
-    {
-        node = up;
-        up = up->parent;
-    }
-    return up;
+    // ! find some other way to implement this without using parent pointers lol
+    (void) node;
+    return (NULL);
 }
 
 // * Get the previous node in sorted order
 template <class NodeType> NodeType *predecessor_node(NodeType *node)
 {
-    if (node->left != NULL)
-    {
-        // return largest (right-most) node in left subtree
-        return max_node(node->left);
-    }
-    // traverse upwards through the tree till you find an ancestor of node
-    // whose right child is also an ancestor of node
-    NodeType *up = node->parent;
-    while (up != NULL && node != up->right)
-    {
-        node = up;
-        up = up->parent;
-    }
-    return up;
+    // ! find some other way to implement this without using parent pointers lol
+    (void) node;
+    return (NULL);
 }
 
 // * Get the minimum node
 template <class NodeType> NodeType *min_node(NodeType *node)
 {
-    while (node->left != NULL)
+    while (node->child[LEFT] != NULL)
     {
-        node = node->left;
+        node = node->child[LEFT];
     }
     return node;
 }
@@ -197,9 +269,9 @@ template <class NodeType> NodeType *min_node(NodeType *node)
 // * Get the maximum node
 template <class NodeType> NodeType *max_node(NodeType *node)
 {
-    while (node->right != NULL)
+    while (node->child[RIGHT] != NULL)
     {
-        node = node->right;
+        node = node->child[RIGHT];
     }
     return node;
 }

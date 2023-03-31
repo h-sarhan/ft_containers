@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/29 16:27:26 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/29 18:26:43 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,17 @@ class map
     {
         bool operator()(const NodeType *x, const NodeType *y) const
         {
-            return x->data.first < y->data.first;
+            return x->data->first < y->data->first;
         }
 
         template <class KeyType> bool operator()(const NodeType *node, const KeyType &key) const
         {
-            return node->data.first < key;
+            return node->data->first < key;
         }
 
         template <class KeyType> bool operator()(const KeyType &key, const NodeType *node) const
         {
-            return key < node->data.first;
+            return key < node->data->first;
         }
     };
 
@@ -269,7 +269,7 @@ class map
             iterator ret = insert(ft::make_pair(key, mapped_type())).first;
             return ret->second;
         }
-        return res->data.second;
+        return res->data->second;
     }
 
     // ** Modifiers

@@ -145,20 +145,20 @@ template <class T, class NodeType> class tree_iterator
     // * Iterator access
     reference operator*(void)
     {
-        return _node_ptr->data;
+        return *_node_ptr->data;
     }
 
     pointer operator->(void)
     {
-        return &_node_ptr->data;
+        return _node_ptr->data;
     }
     reference operator*(void) const
     {
-        return _node_ptr->data;
+        return *_node_ptr->data;
     }
     pointer operator->(void) const
     {
-        return &_node_ptr->data;
+        return _node_ptr->data;
     }
 };
 
@@ -288,7 +288,7 @@ template <class T, class NodeType> class const_tree_iterator
     // * Iterator access
     reference operator*(void) const
     {
-        return _node_ptr->data;
+        return *_node_ptr->data;
     }
     pointer operator->(void) const
     {

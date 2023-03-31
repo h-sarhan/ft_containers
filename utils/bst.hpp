@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/29 17:21:02 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/31 07:01:51 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,17 +173,17 @@ template <class T, class Compare, class Alloc> class bst
     void delete_node(node_type *node)
     {
         if (root == NULL)
-            return ;
+            return;
         // node_type *to_free = node;
         node_type *parent = NULL;
         node_type *successor;
         node_type *it = root;
-        bool    dir;
+        bool dir;
 
         while (1)
         {
-            if ( it == NULL )
-                return ;
+            if (it == NULL)
+                return;
             else if (_node_equal(it, node))
                 break;
             dir = !_node_less(it, node);
@@ -191,35 +191,30 @@ template <class T, class Compare, class Alloc> class bst
             it = it->child[dir];
         }
 
-     if ( it->child[LEFT] != NULL && it->child[RIGHT] != NULL )
-     {
-       parent = it;
-       successor = it->child[RIGHT];
+        if (it->child[LEFT] != NULL && it->child[RIGHT] != NULL)
+        {
+            parent = it;
+            successor = it->child[RIGHT];
 
-       while ( successor->child[LEFT] != NULL )
-       {
-         parent = successor;
-         successor = successor->child[LEFT];
-       }
- 
-     // ! I CANNOT DO THIS
-    //    it->data = successor->data;
-    //    parent->child[parent->child[RIGHT] == successor] = successor->child[RIGHT];
- 
-    //    free ( succ );
-     }
-     else {
-       dir = it->child[LEFT] == NULL;
- 
-       if ( parent == NULL )
-         root = it->child[dir];
-       else
-         parent->child[parent->child[RIGHT] == it] = it->child[dir];
- 
-    //    free ( it );
-     }
-//    }
- 
+            while (successor->child[LEFT] != NULL)
+            {
+                parent = successor;
+                successor = successor->child[LEFT];
+            }
+
+            it->data = successor->data;
+            parent->child[parent->child[RIGHT] == successor] = successor->child[RIGHT];
+
+        }
+        else
+        {
+            dir = it->child[LEFT] == NULL;
+
+            if (parent == NULL)
+                root = it->child[dir];
+            else
+                parent->child[parent->child[RIGHT] == it] = it->child[dir];
+        }
         // _alloc.destroy(to_free);
         // _alloc.deallocate(to_free, 1);
     }

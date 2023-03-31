@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/29 18:26:43 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/31 12:32:09 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,6 +323,7 @@ class map
         node_type *to_delete = _bst.get(position->first);
         if (to_delete == NULL)
         {
+            std::cout << position->first << " not found" << std::endl;
             return;
         }
         _bst.delete_node(to_delete);
@@ -488,10 +489,10 @@ class map
     }
 
     // ? For debugging
-    // void printTree(void) const
-    // {
-    //     _bst.traverse(_bst.root);
-    // }
+    void printTree(void) const
+    {
+        _bst.traverse(_bst.root);
+    }
 };
 
 // ** Relational operators

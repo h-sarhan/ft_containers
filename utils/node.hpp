@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:07:03 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/29 18:16:48 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/31 12:15:09 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ template <class DataType> struct node
     }
 
     // * Constructor
-    node(const DataType &val, bool color)
+    node(const data_type &val, bool color)
         : _alloc(allocator_type()), data(_alloc.allocate(1)), col(color)
     {
         _alloc.construct(data, val);
@@ -77,6 +77,20 @@ template <class DataType> struct node
         child[RIGHT] = rhs.child[RIGHT];
         col = rhs.col;
         return *this;
+    }
+
+    void    replace_data(data_type &new_data)
+    {
+        _alloc.destroy(data);
+        _alloc.deallocate(data, 1);
+        data = _alloc.allocate(1);
+        _alloc.construct(data, new_data);
+    }
+
+    ~node(void)
+    {
+        _alloc.destroy(data);
+        _alloc.deallocate(data, 1);
     }
 };
 }   // namespace ft

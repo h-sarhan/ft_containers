@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/31 07:01:51 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/31 12:33:56 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ template <class T, class Compare, class Alloc> class bst
 
     template <class KeyType> bool _key_less(const KeyType &key, const node_type *node) const
     {
-        return _comp(node, key) == true;
+        return _comp(key, node) == true;
     }
 
     template <class KeyType> bool _key_greater(const KeyType &key, const node_type *node) const
     {
-        return _comp(key, node) == true;
+        return _comp(node, key) == true;
     }
 
   public:
@@ -138,7 +138,7 @@ template <class T, class Compare, class Alloc> class bst
         if (node != NULL)
         {
             traverse(node->child[LEFT]);
-            std::cout << "key == " << node->data.first << " value == " << node->data.second
+            std::cout << "key == " << node->data->first << " value == " << node->data->second
                       << std::endl;
             traverse(node->child[RIGHT]);
         }
@@ -151,7 +151,6 @@ template <class T, class Compare, class Alloc> class bst
     {
         node_type *it = root;
 
-        // creating temp node to compare with
         while (it != NULL)
         {
             if (_key_equal(key, it))
@@ -160,6 +159,7 @@ template <class T, class Compare, class Alloc> class bst
             }
             else
             {
+                // std::cout << it->data->first << std::endl;
                 bool dir = !_key_less(key, it);
                 // if dir == true then we go to the left node
                 // if dir == false then we go to the left node
@@ -173,50 +173,119 @@ template <class T, class Compare, class Alloc> class bst
     void delete_node(node_type *node)
     {
         if (root == NULL)
+        {
+            std::cout << "ROOT IS NULL" << std::endl;
             return;
+        }
         // node_type *to_free = node;
         node_type *parent = NULL;
         node_type *successor;
         node_type *it = root;
         bool dir;
 
+        // go through tree till we find node to delete
         while (1)
         {
             if (it == NULL)
                 return;
             else if (_node_equal(it, node))
                 break;
-            dir = !_node_less(it, node);
+            if (_node_less(node, it) == true)
+            {
+                dir = LEFT;
+            }
+            else
+            {
+                dir = RIGHT;
+            }
             parent = it;
             it = it->child[dir];
         }
+        // at this point `it` is the node we want to delete
+        // `parent` is `it`'s parent
 
+        // if the node we want to delete has two children, we need to find the successor
         if (it->child[LEFT] != NULL && it->child[RIGHT] != NULL)
         {
             parent = it;
-            successor = it->child[RIGHT];
 
+            // we find the successor by getting the left-most node in the right child of the node we
+            // want to delete
+            successor = it->child[RIGHT];
             while (successor->child[LEFT] != NULL)
             {
                 parent = successor;
                 successor = successor->child[LEFT];
             }
+            // now we have the successor
 
-            it->data = successor->data;
-            parent->child[parent->child[RIGHT] == successor] = successor->child[RIGHT];
+            // we want to replace the successor's data with the node we want to delete and then
+            // delete the successor
+            it->replace_data(*successor->data);
 
+            // if the successor is a right child?
+            if (successor == parent->child[RIGHT])
+            {
+                // then dir is right
+                dir = RIGHT;
+            }
+            else
+            {
+                // then dir is left
+                dir = LEFT;
+            }
+            // successor's parent now points to successor's child since the successor has been
+            // removed
+            parent->child[dir] = successor->child[RIGHT];
+
+            //  delete successor here
+            _alloc.destroy(successor);
+            _alloc.deallocate(successor, 1);
         }
         else
         {
-            dir = it->child[LEFT] == NULL;
+            // if the node we want to delete has one child
 
-            if (parent == NULL)
-                root = it->child[dir];
+            // if the node we want to delete has a right child
+            if (it->child[RIGHT] != NULL)
+            {
+                // then dir is right
+                dir = RIGHT;
+            }
             else
-                parent->child[parent->child[RIGHT] == it] = it->child[dir];
+            {
+                // then dir is left
+                dir = LEFT;
+            }
+
+
+            // Special case: we are deleting the root
+            if (parent == NULL)
+            {
+                // does the node have a right child?
+                // in this case the new root is it's child and we delete `it`
+                root = it->child[dir];
+            }
+            else
+            {
+                // if `it` is a right child?
+                if (it == parent->child[RIGHT])
+                {
+                    // then dir is right
+                    // `it`'s parent now points to `it`'s child since `it` has been removed
+                    parent->child[RIGHT] = it->child[dir];
+                }
+                else
+                {
+                    // then dir is left
+                    // `it`'s parent now points to `it`'s child since `it` has been removed
+                    parent->child[LEFT] = it->child[dir];
+                }
+
+                _alloc.destroy(it);
+                _alloc.deallocate(it, 1);
+            }
         }
-        // _alloc.destroy(to_free);
-        // _alloc.deallocate(to_free, 1);
     }
 
     // * Free the nodes from a tree

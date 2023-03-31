@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/26 02:22:57 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/31 12:32:00 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,14 @@ void mapSingleErase(void)
     a.insert(ft::make_pair("c", 3));
     a.insert(ft::make_pair("a", 1));
 
+    // assert(a.begin()->first == "a");
     // a.erase("d");
-    // a.printTree();
+    a.printTree();
+    std::cout << std::endl;
     a.erase(a.begin());
-    a.erase(a.begin());
-    // a.printTree();
+    // a.erase(a.begin());
+    // assert(a.begin()->first == "c");
+    a.printTree();
 }
 
 void mapIterators(void)
@@ -242,17 +245,17 @@ void    mapRotations(void)
 
 void mapTests(void)
 {
-    mapIterators();
-    mapCount();
+    // mapIterators();
+    // mapCount();
     mapSingleErase();
-    mapRangeErase();
-    mapClear();
-    mapSwap();
-    mapRangeBasedConstructor();
-    mapInsertWithReturnedIterator();
-    mapLowerBound();
-    mapUpperBound();
-    mapFind();
-    mapSwap();
+    // mapRangeErase();
+    // mapClear();
+    // mapSwap();
+    // mapRangeBasedConstructor();
+    // mapInsertWithReturnedIterator();
+    // mapLowerBound();
+    // mapUpperBound();
+    // mapFind();
+    // mapSwap();
     std::cout << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/25 17:36:24 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/31 21:25:10 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // * Iterator range constructor
     template <class InputIterator>
     vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),
-           typename enable_if<!is_integral<InputIterator>::value>::type * = 0)
+           typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
         : _alloc(alloc), _array(_alloc.allocate(iterator_distance(first, last))),
           _size(iterator_distance(first, last)), _capacity(_size)
     {
@@ -321,7 +321,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // * Iterator-based range assign
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last,
-                typename enable_if<!is_integral<InputIterator>::value>::type * = 0)
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
     {
         const size_type count = iterator_distance(first, last);
         if (count > _capacity)
@@ -435,7 +435,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
 
     template <class InputIterator>
     void insert(iterator position, InputIterator first, InputIterator last,
-                typename enable_if<!is_integral<InputIterator>::value>::type * = 0)
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
     {
         const size_type insert_idx = position - begin();
         const size_type n = iterator_distance(first, last);
@@ -615,7 +615,7 @@ bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
     {
         return false;
     }
-    return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+    return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
 template <class T, class Alloc>

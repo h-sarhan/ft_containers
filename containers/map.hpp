@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/31 12:56:01 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/31 22:52:17 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,18 @@
 #include <memory>
 #include <stdexcept>
 
+// ! SWAP HAS ISSUES
 namespace ft
 {
 template <class Key, class T, class Compare = std::less<Key>,
-          class Alloc = std::allocator<pair<const Key, T> > >
+          class Alloc = std::allocator<ft::pair<const Key, T> > >
 class map
 {
     // ** Member types
   public:
     typedef Key key_type;
     typedef T mapped_type;
-    typedef pair<const key_type, mapped_type> value_type;
+    typedef ft::pair<const key_type, mapped_type> value_type;
     typedef size_t size_type;
 
     typedef Compare key_compare;
@@ -42,17 +43,46 @@ class map
     typedef typename allocator_type::reference reference;
     typedef typename allocator_type::const_reference const_reference;
 
+  private:
+    typedef node<value_type> node_type;
+
+    template <class NodeType> class node_compare : std::binary_function<NodeType, NodeType, bool>
+    {
+      private:
+        key_compare _comp;
+
+      public:
+        node_compare(key_compare comp) : _comp(comp)
+        {
+        }
+        bool operator()(const NodeType *x, const NodeType *y) const
+        {
+            return _comp(x->data->first, y->data->first);
+        }
+
+        template <class KeyType> bool operator()(const NodeType *node, const KeyType &key) const
+        {
+            return _comp(node->data->first, key);
+        }
+
+        template <class KeyType> bool operator()(const KeyType &key, const NodeType *node) const
+        {
+            return _comp(key, node->data->first);
+        }
+    };
+    typedef bst<ft::pair<const key_type, mapped_type>, node_compare<node_type>, allocator_type>
+        tree_type;
+
+  public:
     typedef typename allocator_type::pointer pointer;
     typedef typename allocator_type::const_pointer const_pointer;
-
-    typedef tree_iterator<value_type, node<value_type> > iterator;
-    typedef const_tree_iterator<value_type, node<value_type> > const_iterator;
+    typedef tree_iterator<value_type, node<value_type>, tree_type> iterator;
+    typedef const_tree_iterator<value_type, node<value_type>, tree_type> const_iterator;
     typedef ft::reverse_iterator<iterator> reverse_iterator;
     typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
-    typedef typename iterator_traits<iterator>::difference_type difference_type;
+    typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
 
     // ** Nested value_compare class
-  public:
     class value_compare : public std::binary_function<value_type, value_type, bool>
     {
         friend class map;
@@ -70,43 +100,21 @@ class map
         }
     };
 
-    // ** Private member attributes
   private:
-    typedef node<value_type> node_type;
-    template <class NodeType> struct node_compare : std::binary_function<NodeType, NodeType, bool>
-    {
-        bool operator()(const NodeType *x, const NodeType *y) const
-        {
-            return x->data->first < y->data->first;
-        }
-
-        template <class KeyType> bool operator()(const NodeType *node, const KeyType &key) const
-        {
-            return node->data->first < key;
-        }
-
-        template <class KeyType> bool operator()(const KeyType &key, const NodeType *node) const
-        {
-            return key < node->data->first;
-        }
-    };
-
     key_compare _key_comp;
     node_compare<node_type> _node_comp;
     value_compare _val_comp;
     allocator_type _alloc;
-    bst<ft::pair<const key_type, mapped_type>, node_compare<node_type>, allocator_type> _bst;
+    tree_type _bst;
     size_type _size;
-    node_type _sentinel_node;
-    node_type *_sentinel;
 
     // ** Constructors and destructors
   public:
     // * Default constructor
     explicit map(const key_compare &comp = key_compare(),
                  const allocator_type &alloc = allocator_type())
-        : _key_comp(comp), _node_comp(), _val_comp(comp), _alloc(alloc),
-          _bst(NULL, _node_comp, alloc), _size(0), _sentinel_node(), _sentinel(&_sentinel_node)
+        : _key_comp(comp), _node_comp(_key_comp), _val_comp(comp), _alloc(alloc),
+          _bst(NULL, _node_comp, alloc), _size(0)
     {
     }
 
@@ -114,8 +122,8 @@ class map
     template <class InputIterator>
     map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(),
         const allocator_type &alloc = allocator_type())
-        : _key_comp(comp), _node_comp(), _val_comp(comp), _alloc(alloc),
-          _bst(NULL, _node_comp, alloc), _size(0), _sentinel_node(), _sentinel(&_sentinel_node)
+        : _key_comp(comp), _node_comp(_key_comp), _val_comp(comp), _alloc(alloc),
+          _bst(NULL, _node_comp, alloc), _size(0)
     {
         for (InputIterator it = first; it != last; it++)
         {
@@ -125,8 +133,8 @@ class map
 
     // * Copy constructor
     map(const map &old)
-        : _key_comp(old._key_comp), _node_comp(), _val_comp(old._val_comp), _alloc(old._alloc),
-          _bst(NULL, _node_comp, old._alloc), _size(0), _sentinel_node(), _sentinel(&_sentinel_node)
+        : _key_comp(old._key_comp), _node_comp(_key_comp), _val_comp(old._val_comp), _alloc(old._alloc),
+          _bst(NULL, _node_comp, _alloc), _size(0)
     {
         insert(old.begin(), old.end());
     }
@@ -142,10 +150,8 @@ class map
         _key_comp = x._key_comp;
         _val_comp = x._val_comp;
         _node_comp = x._node_comp;
-        _sentinel_node = x._sentinel_node;
-        _sentinel = x._sentinel;
         _alloc = x._alloc;
-        _bst = bst<ft::pair<const key_type, mapped_type>, key_compare, allocator_type>(
+        _bst = bst<ft::pair<const key_type, mapped_type>, node_compare<node_type>, allocator_type>(
             NULL, _node_comp, _alloc);
         _size = 0;
         insert(x.begin(), x.end());
@@ -165,9 +171,9 @@ class map
         // ! Check if this is correct behaviour with std::map on linux and mac
         if (empty())
         {
-            return iterator(_sentinel, _bst.root, _sentinel);
+            return iterator(_bst.sentinel, &_bst);
         }
-        return iterator(ft::min_node(_bst.root), _bst.root, _sentinel);
+        return iterator(_bst.min_node(_bst.root), &_bst);
     }
     const_iterator begin(void) const
     {
@@ -175,9 +181,9 @@ class map
         // sentinel node instead??
         if (empty())
         {
-            return const_iterator(_sentinel, _bst.root, _sentinel);
+            return const_iterator(_bst.sentinel, &_bst);
         }
-        return const_iterator(ft::min_node(_bst.root), _bst.root, _sentinel);
+        return const_iterator(_bst.min_node(_bst.root), &_bst);
     }
 
     // * End iterator
@@ -189,7 +195,7 @@ class map
         {
             return begin();
         }
-        return iterator(_sentinel, _bst.root, _sentinel);
+        return iterator(_bst.sentinel, &_bst);
     }
     const_iterator end(void) const
     {
@@ -197,7 +203,7 @@ class map
         {
             return begin();
         }
-        return const_iterator(_sentinel, _bst.root, _sentinel);
+        return const_iterator(_bst.sentinel, &_bst);
     }
 
     // * Reverse begin iterator
@@ -208,7 +214,7 @@ class map
             // idk
         }
 
-        return reverse_iterator(iterator(_sentinel, _bst.root, _sentinel));
+        return reverse_iterator(iterator(_bst.sentinel, &_bst));
     }
     const_reverse_iterator rbegin(void) const
     {
@@ -217,7 +223,7 @@ class map
             // idk
         }
 
-        return const_reverse_iterator(iterator(_sentinel, _bst.root, _sentinel));
+        return const_reverse_iterator(iterator(_bst.sentinel, &_bst));
     }
 
     // * Reverse end iterator
@@ -227,7 +233,7 @@ class map
         {
             // idk
         }
-        return reverse_iterator(iterator(ft::min_node(_bst.root), _bst.root, _sentinel));
+        return reverse_iterator(iterator(_bst.min_node(_bst.root), &_bst));
     }
     const_reverse_iterator rend(void) const
     {
@@ -235,7 +241,7 @@ class map
         {
             // idk
         }
-        return const_reverse_iterator(iterator(ft::min_node(_bst.root), _bst.root, _sentinel));
+        return const_reverse_iterator(iterator(_bst.min_node(_bst.root), &_bst));
     }
 
     // ** Capacity
@@ -275,16 +281,16 @@ class map
     // ** Modifiers
 
     // * Single element insert
-    pair<iterator, bool> insert(const value_type &val)
+    ft::pair<iterator, bool> insert(const value_type &val)
     {
         ft::pair<node_type *, bool> res = _bst.insert(val);
 
         if (res.second == true)
         {
             _size += 1;
-            return ft::make_pair(iterator(res.first, _bst.root, _sentinel), true);
+            return ft::make_pair(iterator(res.first, &_bst), true);
         }
-        return ft::make_pair(iterator(res.first, _bst.root, _sentinel), false);
+        return ft::make_pair(iterator(res.first, &_bst), false);
     }
 
     // * Single element insert with hint. Hint is just ignored lol!
@@ -307,7 +313,7 @@ class map
     // * Single element insert based on key
     size_type erase(const key_type &k)
     {
-        node_type *to_delete = _bst.map_get(k);
+        node_type *to_delete = _bst.get(k);
         if (to_delete == NULL)
         {
             return 0;
@@ -320,10 +326,12 @@ class map
     // * Single element insert based on iterator
     void erase(iterator position)
     {
+        if (_size == 0 || _bst.root == NULL)
+            return;
         node_type *to_delete = _bst.get(position->first);
         if (to_delete == NULL)
         {
-            std::cout << position->first << " not found" << std::endl;
+            // std::cout << position->first << " not found" << std::endl;
             return;
         }
         _bst.delete_node(to_delete);
@@ -350,32 +358,35 @@ class map
         {
             return;
         }
+        // allocator_type _alloc;
+        // tree_type _bst;
+        // size_type _size;
         key_compare temp_key_comp = x.key_comp();
         value_compare temp_val_comp = x.value_comp();
+        node_compare<node_type> temp_node_comp = x._node_comp;
         allocator_type temp_allocator = x.get_allocator();
-        node_type *temp_bst_root = x._bst.root;
         size_type temp_size = x._size;
-        node_type *temp_sentinel = x._sentinel;
 
         x._key_comp = _key_comp;
         x._val_comp = _val_comp;
+        x._node_comp = _node_comp;
         x._alloc = _alloc;
-        x._bst.root = _bst.root;
         x._size = _size;
-        x._sentinel = _sentinel;
 
         _key_comp = temp_key_comp;
         _val_comp = temp_val_comp;
+        _node_comp = temp_node_comp;
         _alloc = temp_allocator;
-        _bst.root = temp_bst_root;
         _size = temp_size;
-        _sentinel = temp_sentinel;
+        _bst.swap(x._bst);
     }
 
     // * Erase all elements from a map
     void clear(void)
     {
         erase(begin(), end());
+        _bst.root = NULL;
+        _size = 0;
     }
 
     // * Return key comp
@@ -400,16 +411,16 @@ class map
         {
             return end();
         }
-        return iterator(search, _bst.root, _sentinel);
+        return iterator(search, &_bst);
     }
     const_iterator find(const key_type &k) const
     {
-        node_type *search = _bst.map_get(k);
+        node_type *search = _bst.get(k);
         if (search == NULL)
         {
             return end();
         }
-        return const_iterator(search, _bst.root, _sentinel);
+        return const_iterator(search, &_bst);
     }
 
     // * Count number of elements matching key. For this container this will be 1 or 0
@@ -430,7 +441,7 @@ class map
             if (_key_comp(k, it->first) == true ||
                 (_key_comp(k, it->first) == false && _key_comp(it->first, k) == false))
             {
-                return iterator(it.base(), _bst.root, _sentinel);
+                return iterator(it.base(), &_bst);
             }
         }
         return end();
@@ -442,7 +453,7 @@ class map
             if (_key_comp(k, it->first) == true ||
                 (_key_comp(k, it->first) == false && _key_comp(it->first, k) == false))
             {
-                return const_iterator(it.base(), _bst.root, _sentinel);
+                return const_iterator(it.base(), &_bst);
             }
         }
         return end();
@@ -455,7 +466,7 @@ class map
         {
             if (_key_comp(k, it->first) == true)
             {
-                return iterator(it.base(), _bst.root, _sentinel);
+                return iterator(it.base(), &_bst);
             }
         }
         return end();
@@ -466,18 +477,18 @@ class map
         {
             if (_key_comp(k, it->first) == true)
             {
-                return const_iterator(it.base(), _bst.root, _sentinel);
+                return const_iterator(it.base(), &_bst);
             }
         }
         return end();
     }
 
     // * Return pair of upper and lower bound
-    pair<iterator, iterator> equal_range(const key_type &k)
+    ft::pair<iterator, iterator> equal_range(const key_type &k)
     {
         return ft::make_pair(lower_bound(k), upper_bound(k));
     }
-    pair<const_iterator, const_iterator> equal_range(const key_type &k) const
+    ft::pair<const_iterator, const_iterator> equal_range(const key_type &k) const
     {
         return ft::make_pair(lower_bound(k), upper_bound(k));
     }
@@ -531,7 +542,7 @@ bool operator<(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare
     {
         return false;
     }
-    return lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+    return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
 
 template <class Key, class T, class Compare, class Alloc>

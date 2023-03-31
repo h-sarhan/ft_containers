@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:07:03 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/31 12:15:09 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/31 21:17:35 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ template <class DataType> struct node
     {
         if (this == &rhs)
             return *this;
-        node *old_data = data;
-        _alloc.allocate(data, 1);
+        data_type *old_data = data;
+        data = _alloc.allocate(1);
         _alloc.construct(data, *rhs.data);
         _alloc.destroy(old_data);
         _alloc.deallocate(old_data, 1);

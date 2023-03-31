@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/31 12:33:56 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/03/31 22:51:08 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,21 @@
 #include <iostream>
 #include <memory>
 
-// ! add node_compare function
+// ! Make sentinel part of tree class
 namespace ft
 {
 template <class T, class Compare, class Alloc> class bst
 {
-  public:
-    typedef node<T> node_type;
-    node_type *root;
-
   private:
+    typedef node<T> node_type;
+
     Compare _comp;
     Alloc _alloc;
+    node_type _sentinel_node;
+
+  public:
+    node_type *sentinel;
+    node_type *root;
 
   private:
     bool _node_equal(const node_type *node1, const node_type *node2) const
@@ -66,11 +69,19 @@ template <class T, class Compare, class Alloc> class bst
 
   public:
     // * Constructor
-    bst(node_type *root, Compare comp, Alloc allocator) : root(root), _comp(comp), _alloc(allocator)
+    bst(void)
+        : _comp(), _alloc(), _sentinel_node(node_type()), sentinel(&_sentinel_node), root(NULL)
+    {
+    }
+    bst(node_type *root, Compare comp, Alloc allocator)
+        : _comp(comp), _alloc(allocator), _sentinel_node(node_type()), sentinel(&_sentinel_node),
+          root(root)
     {
     }
 
-    bst(const bst &old) : root(old.root), _comp(old._comp), _alloc(old._alloc)
+    bst(const bst &old)
+        : _comp(old._comp), _alloc(old._alloc), _sentinel_node(old._sentinel_node),
+          sentinel(old.sentinel), root(old.root)
     {
     }
 
@@ -92,10 +103,13 @@ template <class T, class Compare, class Alloc> class bst
         root = rhs.root;
         _comp = rhs._comp;
         _alloc = rhs._alloc;
+        _sentinel_node = rhs._sentinel_node;
+        sentinel = rhs.sentinel;
         return *this;
     }
 
     // * Insert into a map
+    // ! LOOK INTO THIS AGAIN
     ft::pair<node_type *, bool> insert(const T &val)
     {
         // Is the key already in the tree?
@@ -117,7 +131,7 @@ template <class T, class Compare, class Alloc> class bst
             bool dir;
             while (1)
             {
-
+                // ! REWRITE THIS
                 dir = !_node_less(new_node, it);
                 // if dir == true then we go to the left node
                 // if dir == false then we go to the left node
@@ -159,7 +173,7 @@ template <class T, class Compare, class Alloc> class bst
             }
             else
             {
-                // std::cout << it->data->first << std::endl;
+                // ! REWRITE THIS
                 bool dir = !_key_less(key, it);
                 // if dir == true then we go to the left node
                 // if dir == false then we go to the left node
@@ -174,10 +188,8 @@ template <class T, class Compare, class Alloc> class bst
     {
         if (root == NULL)
         {
-            std::cout << "ROOT IS NULL" << std::endl;
             return;
         }
-        // node_type *to_free = node;
         node_type *parent = NULL;
         node_type *successor;
         node_type *it = root;
@@ -257,8 +269,6 @@ template <class T, class Compare, class Alloc> class bst
                 // then dir is left
                 dir = LEFT;
             }
-
-
             // Special case: we are deleting the root
             if (parent == NULL)
             {
@@ -281,10 +291,9 @@ template <class T, class Compare, class Alloc> class bst
                     // `it`'s parent now points to `it`'s child since `it` has been removed
                     parent->child[LEFT] = it->child[dir];
                 }
-
-                _alloc.destroy(it);
-                _alloc.deallocate(it, 1);
             }
+            _alloc.destroy(it);
+            _alloc.deallocate(it, 1);
         }
     }
 
@@ -300,45 +309,133 @@ template <class T, class Compare, class Alloc> class bst
             clear(temp);
         }
     }
+
+    // * Get the next node in sorted order
+    node_type *successor_node(node_type *node) const
+    {
+        node_type *successor;
+
+        if (node->child[RIGHT] != NULL)
+        {
+            // Successor is just the min node of the right subtree
+            return min_node(node->child[RIGHT]);
+        }
+        else
+        {
+            // If the node doesn't have a right sub tree then its successor is above it in the tree
+            // Since we do not have an easy way to go up the tree we need to start searching for a
+            // potential successor from the root
+            successor = NULL;
+            node_type *search = root;
+            // the search terminates at a leaf node or when we reach the node itself
+            while (search != NULL || search == node)
+            {
+                if (_node_greater(search, node) == true)
+                {
+                    // the search node is greater so it could be a successor
+                    successor = search;
+                    // we assign search to its left child to see if there are any potential
+                    // successors smaller than it
+                    search = search->child[LEFT];
+                }
+                else
+                {
+                    // the search node is smaller than the node so it can not be a successor
+                    // so we reassign search to be its right child to look for nodes greater than it
+                    // that could be a successor
+                    search = search->child[RIGHT];
+                }
+            }
+        }
+        return (successor);
+    }
+
+
+    void    swap(bst &other)
+    {
+        if (this == &other)
+        {
+            return ;
+        }
+        Compare temp_comp = _comp;
+        Alloc temp_alloc = _alloc;
+        node_type temp_sentinel_node = _sentinel_node;
+
+        node_type *temp_root = root;
+
+        _comp = other._comp;
+        _alloc = other._alloc;
+        _sentinel_node = other._sentinel_node;
+        sentinel = other.sentinel;
+        root = other.root;
+
+        other._comp = temp_comp;
+        other._alloc = temp_alloc;
+        other._sentinel_node = temp_sentinel_node;
+        other.sentinel = &other._sentinel_node;
+        other.root = temp_root;
+
+    }
+    // * Get the previous node in sorted order
+    node_type *predecessor_node(node_type *node) const
+    {
+        node_type *predecessor;
+
+        if (node->child[LEFT] != NULL)
+        {
+            // Predecessor is just the max node of the left subtree
+            return max_node(node->child[LEFT]);
+        }
+        else
+        {
+            // If the node doesn't have a left sub tree then its predecessor is above it in the tree
+            // Since we do not have an easy way to go up the tree we need to start searching for a
+            // potential predecessor from the root
+            predecessor = NULL;
+            node_type *search = root;
+            // the search terminates at a leaf node or when we reach the node itself
+            while (search != NULL || search == node)
+            {
+                if (_node_less(search, node) == true)
+                {
+                    // the search node is less than the node so it could be a predecessor
+                    predecessor = search;
+                    // we assign search to its right child to see if there are any potential
+                    // predecessors greater than it
+                    search = search->child[RIGHT];
+                }
+                else
+                {
+                    // the search node is greater than the node so it can not be a predecessor
+                    // so we reassign search to be its left child to look for nodes less than it
+                    // that could be a predecessor
+                    search = search->child[LEFT];
+                }
+            }
+        }
+        return (predecessor);
+    }
+
+    // * Get the minimum node
+    static node_type *min_node(node_type *node)
+    {
+        while (node->child[LEFT] != NULL)
+        {
+            node = node->child[LEFT];
+        }
+        return node;
+    }
+
+    // * Get the maximum node
+    static node_type *max_node(node_type *node)
+    {
+        while (node->child[RIGHT] != NULL)
+        {
+            node = node->child[RIGHT];
+        }
+        return node;
+    }
 };
-
-// ** Public helper functions
-
-// * Get the next node in sorted order
-template <class NodeType> NodeType *successor_node(NodeType *node)
-{
-    // ! find some other way to implement this without using parent pointers lol
-    (void) node;
-    return (NULL);
-}
-
-// * Get the previous node in sorted order
-template <class NodeType> NodeType *predecessor_node(NodeType *node)
-{
-    // ! find some other way to implement this without using parent pointers lol
-    (void) node;
-    return (NULL);
-}
-
-// * Get the minimum node
-template <class NodeType> NodeType *min_node(NodeType *node)
-{
-    while (node->child[LEFT] != NULL)
-    {
-        node = node->child[LEFT];
-    }
-    return node;
-}
-
-// * Get the maximum node
-template <class NodeType> NodeType *max_node(NodeType *node)
-{
-    while (node->child[RIGHT] != NULL)
-    {
-        node = node->child[RIGHT];
-    }
-    return node;
-}
 }   // namespace ft
 
 #endif

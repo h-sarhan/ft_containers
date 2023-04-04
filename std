@@ -1,0 +1,253 @@
+--------------------------------------------------
+map::empty() = false
+map::size() = 15
+Contents:
+Key = 12327   |   Value = 11729
+Key = 12612   |   Value = 34303
+Key = 13042   |   Value = 37987
+Key = 13810   |   Value = 37633
+Key = 14440   |   Value = 18165
+Key = 17826   |   Value = 13512
+Key = 18930   |   Value = 31272
+Key = 20878   |   Value = 37923
+Key = 20933   |   Value = 13099
+Key = 21816   |   Value = 15335
+Key = 21967   |   Value = 30672
+Key = 25249   |   Value = 20073
+Key = 27709   |   Value = 17157
+Key = 29149   |   Value = 16579
+Key = 29336   |   Value = 25485
+
+--------------------------------------------------
+map::empty() = false
+map::size() = 8
+Contents:
+Key = 15228   |   Value = 34091
+Key = 16357   |   Value = 35001
+Key = 17408   |   Value = 28228
+Key = 19530   |   Value = 20903
+Key = 21490   |   Value = 18124
+Key = 24666   |   Value = 28549
+Key = 26708   |   Value = 27944
+Key = 27801   |   Value = 16853
+
+Is map_1.begin() == it_begin_1? false
+Is map_1.end() == it_end_1? true
+Is map_2.begin() == it_begin_2? false
+Is map_2.end() == it_end_2? true
+--------------------------------------------------
+map::empty() = false
+map::size() = 8
+Contents:
+Key = 15228   |   Value = 34091
+Key = 16357   |   Value = 35001
+Key = 17408   |   Value = 28228
+Key = 19530   |   Value = 20903
+Key = 21490   |   Value = 18124
+Key = 24666   |   Value = 28549
+Key = 26708   |   Value = 27944
+Key = 27801   |   Value = 16853
+
+--------------------------------------------------
+map::empty() = false
+map::size() = 15
+Contents:
+Key = 12327   |   Value = 11729
+Key = 12612   |   Value = 34303
+Key = 13042   |   Value = 37987
+Key = 13810   |   Value = 37633
+Key = 14440   |   Value = 18165
+Key = 17826   |   Value = 13512
+Key = 18930   |   Value = 31272
+Key = 20878   |   Value = 37923
+Key = 20933   |   Value = 13099
+Key = 21816   |   Value = 15335
+Key = 21967   |   Value = 30672
+Key = 25249   |   Value = 20073
+Key = 27709   |   Value = 17157
+Key = 29149   |   Value = 16579
+Key = 29336   |   Value = 25485
+
+Is map_1.begin() == it_begin_1? false
+Is map_1.begin() == it_begin_2? true
+Is map_2.begin() == it_begin_1? true
+Is map_2.begin() == it_begin_2? false
+Is map_3.begin() == it_begin_1? false
+Is map_3.begin() == it_begin_2? false
+--------------------------------------------------
+map::empty() = false
+map::size() = 15
+Contents:
+Key = 12327   |   Value = 11729
+Key = 12612   |   Value = 34303
+Key = 13042   |   Value = 37987
+Key = 13810   |   Value = 37633
+Key = 14440   |   Value = 18165
+Key = 17826   |   Value = 13512
+Key = 18930   |   Value = 31272
+Key = 20878   |   Value = 37923
+Key = 20933   |   Value = 13099
+Key = 21816   |   Value = 15335
+Key = 21967   |   Value = 30672
+Key = 25249   |   Value = 20073
+Key = 27709   |   Value = 17157
+Key = 29149   |   Value = 16579
+Key = 29336   |   Value = 25485
+
+--------------------------------------------------
+map::empty() = false
+map::size() = 8
+Contents:
+Key = 15228   |   Value = 34091
+Key = 16357   |   Value = 35001
+Key = 17408   |   Value = 28228
+Key = 19530   |   Value = 20903
+Key = 21490   |   Value = 18124
+Key = 24666   |   Value = 28549
+Key = 26708   |   Value = 27944
+Key = 27801   |   Value = 16853
+
+--------------------------------------------------
+map::empty() = false
+map::size() = 8
+Contents:
+Key = 15228   |   Value = 34091
+Key = 16357   |   Value = 35001
+Key = 17408   |   Value = 28228
+Key = 19530   |   Value = 20903
+Key = 21490   |   Value = 18124
+Key = 24666   |   Value = 28549
+Key = 26708   |   Value = 27944
+Key = 27801   |   Value = 16853
+
+--------------------------------------------------
+map::empty() = false
+map::size() = 15
+Contents:
+Key = 12327   |   Value = 11729
+Key = 12612   |   Value = 34303
+Key = 13042   |   Value = 37987
+Key = 13810   |   Value = 37633
+Key = 14440   |   Value = 18165
+Key = 17826   |   Value = 13512
+Key = 18930   |   Value = 31272
+Key = 20878   |   Value = 37923
+Key = 20933   |   Value = 13099
+Key = 21816   |   Value = 15335
+Key = 21967   |   Value = 30672
+Key = 25249   |   Value = 20073
+Key = 27709   |   Value = 17157
+Key = 29149   |   Value = 16579
+Key = 29336   |   Value = 25485
+
+--------------------------------------------------
+map::empty() = false
+map::size() = 15
+Contents:
+Key = 12327   |   Value = 11729
+Key = 12612   |   Value = 34303
+Key = 13042   |   Value = 37987
+Key = 13810   |   Value = 37633
+Key = 14440   |   Value = 18165
+Key = 17826   |   Value = 13512
+Key = 18930   |   Value = 31272
+Key = 20878   |   Value = 37923
+Key = 20933   |   Value = 13099
+Key = 21816   |   Value = 15335
+Key = 21967   |   Value = 30672
+Key = 25249   |   Value = 20073
+Key = 27709   |   Value = 17157
+Key = 29149   |   Value = 16579
+Key = 29336   |   Value = 25485
+
+--------------------------------------------------
+map::empty() = false
+map::size() = 8
+Contents:
+Key = 15228   |   Value = 34091
+Key = 16357   |   Value = 35001
+Key = 17408   |   Value = 28228
+Key = 19530   |   Value = 20903
+Key = 21490   |   Value = 18124
+Key = 24666   |   Value = 28549
+Key = 26708   |   Value = 27944
+Key = 27801   |   Value = 16853
+
+--------------------------------------------------
+map::empty() = true
+map::size() = 0
+Contents:
+
+Is map_1.begin() == it_begin_1? false
+Is map_1.end() == it_end_1? true
+Is map_2.begin() == it_begin_2? false
+Is map_2.end() == it_end_2? true
+--------------------------------------------------
+map::empty() = false
+map::size() = 3
+Contents:
+Key = '   |   Value = The quick brown fox jumps over the lazy dog
+Key = @   |   Value = 
+Key = G   |   Value = Lorem ipsum dolor sit amet
+
+--------------------------------------------------
+map::empty() = false
+map::size() = 7
+Contents:
+Key =     |   Value = Tom can't remember all his passwords, so he keeps them in a list disguised as phone numbers.
+Key = !   |   Value = Let's all just take a moment to breathe, please!
+Key = 0   |   Value = There was a big earthquake last night.
+Key = \   |   Value = It's fascinating that you know all the planets.
+Key = ^   |   Value = Have you heard the news?
+Key = b   |   Value = I admire your courage but I don't admire your singing ability.
+Key = q   |   Value =  Your reputation as an eccentric will rapidly grow in the neighborhood if you're seen walking a pet ostrich on a leash every morning.
+
+Is map_1.begin() == it_begin_1? false
+Is map_1.begin() == it_begin_2? true
+Is map_2.begin() == it_begin_1? true
+Is map_2.begin() == it_begin_2? false
+Is map_3.begin() == it_begin_1? false
+Is map_3.begin() == it_begin_2? false
+--------------------------------------------------
+map::empty() = false
+map::size() = 3
+Contents:
+Key = '   |   Value = The quick brown fox jumps over the lazy dog
+Key = @   |   Value = 
+Key = G   |   Value = Lorem ipsum dolor sit amet
+
+--------------------------------------------------
+map::empty() = false
+map::size() = 7
+Contents:
+Key =     |   Value = Tom can't remember all his passwords, so he keeps them in a list disguised as phone numbers.
+Key = !   |   Value = Let's all just take a moment to breathe, please!
+Key = 0   |   Value = There was a big earthquake last night.
+Key = \   |   Value = It's fascinating that you know all the planets.
+Key = ^   |   Value = Have you heard the news?
+Key = b   |   Value = I admire your courage but I don't admire your singing ability.
+Key = q   |   Value =  Your reputation as an eccentric will rapidly grow in the neighborhood if you're seen walking a pet ostrich on a leash every morning.
+
+--------------------------------------------------
+map::empty() = false
+map::size() = 3
+Contents:
+Key = '   |   Value = The quick brown fox jumps over the lazy dog
+Key = @   |   Value = 
+Key = G   |   Value = Lorem ipsum dolor sit amet
+
+--------------------------------------------------
+map::empty() = false
+map::size() = 3
+Contents:
+Key = '   |   Value = The quick brown fox jumps over the lazy dog
+Key = @   |   Value = 
+Key = G   |   Value = Lorem ipsum dolor sit amet
+
+--------------------------------------------------
+map::empty() = true
+map::size() = 0
+Contents:
+
+0.507 ms
+

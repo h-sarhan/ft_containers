@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/04/04 18:14:47 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/04/05 09:15:27 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -393,51 +393,91 @@ void gerardSwap(void)
     std::cout << std::fixed << std::setprecision(3) << (end - start) / 1000 << " ms" << std::endl;
 }
 
-void gerardErase()
+void gerardErase(void)
 {
-    timeval exec_time;
-    gettimeofday(&exec_time, NULL);
-    double start = 1.0e6 * exec_time.tv_sec + exec_time.tv_usec;
+    // timeval exec_time;
+    // gettimeofday(&exec_time, NULL);
+    // double start = 1.0e6 * exec_time.tv_sec + exec_time.tv_usec;
 
     NAMESPACE::map<int, int> test;
     insertRandomValues(test, 30);
-    printContent(test);
+    // printContent(test);
 
     NAMESPACE::map<int, int> clone(test);
-    printContent(clone);
+    // printContent(clone);
 
     clone.erase(1234);
     clone.erase(2339);
     clone.erase(9876);
     clone.erase(3919);
-    printContent(clone);
+    // printContent(clone);
 
     clone.erase(clone.begin(), clone.begin());
     clone.erase(clone.end(), clone.end());
-    printContent(clone);
+    // printContent(clone);
 
     clone.swap(test);
-    printContent(test);
-    printContent(clone);
+    // printContent(test);
+    // printContent(clone);
 
     clone.erase(++(++(clone.begin())));
     clone.erase(++(clone.begin()));
     clone.erase(--clone.end());
-    printContent(clone);
+    // printContent(clone);
 
     clone.erase(++(++clone.begin()), clone.end());
-    printContent(clone);
+    // printContent(clone);
 
     test.erase(test.begin(), test.end());
-    printContent(test);
+    // printContent(test);
 
-    gettimeofday(&exec_time, NULL);
-    double end = 1.0e6 * exec_time.tv_sec + exec_time.tv_usec;
-    std::cout << std::fixed << std::setprecision(3) << (end - start) / 1000 << " ms" << std::endl;
+    // gettimeofday(&exec_time, NULL);
+    // double end = 1.0e6 * exec_time.tv_sec + exec_time.tv_usec;
+    // std::cout << std::fixed << std::setprecision(3) << (end - start) / 1000 << " ms" << std::endl;
 }
+
+void    hassanErase(void)
+{
+    NAMESPACE::map<int, int> test;
+
+    for (int i = 1; i <= 30; i++)
+    {
+        test.insert(NAMESPACE::make_pair(rand(), 0));
+    }
+
+    NAMESPACE::map<int, int> clone(test);
+
+
+    clone.erase(20);
+    clone.erase(10);
+    clone.erase(5);
+    clone.erase(15);
+
+    clone.erase(clone.begin(), clone.begin());
+    clone.erase(clone.end(), clone.end());
+
+    clone.swap(test);
+
+    clone.erase(++(++(clone.begin())));
+    clone.erase(++(clone.begin()));
+    clone.erase(--clone.end());
+
+    for (NAMESPACE::map<int, int>::iterator it = test.begin(); it != test.end(); it++)
+    {
+        std::cout << it->first << std::endl;
+    }
+    // clone.erase((clone.begin()), clone.end());
+    // clone.erase(++(clone.begin()));
+    clone.erase(++((clone.begin())), ((clone.end())));
+
+    // test.erase(test.begin(), test.end());
+}
+
 
 void mapTests(void)
 {
+    hassanErase();
+    // gerardErase();
     // mapIterators();
     // mapCount();
     // mapSingleErase();
@@ -451,7 +491,6 @@ void mapTests(void)
     // mapFind();
     // mapSwap();
     // gerardSwap();
-    gerardErase();
     // std::cout << std::endl;
     // ft::map<int, std::string> strToInt;
     // strToInt.insert(ft::make_pair(1, "one"));

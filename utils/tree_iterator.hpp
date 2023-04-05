@@ -50,7 +50,7 @@ template <class T, class NodeType, class Compare> class tree_iterator
 
     template <class T2>
     tree_iterator(const tree_iterator<T2, NodeType, Compare> &old)
-        : _root(old._root), _node_ptr(old.base()), _comp(old._comp)
+        : _root(old._root), _node_ptr(old._node_ptr), _comp(old._comp)
     {
     }
 

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 11:07:09 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/04/04 16:38:24 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/04/05 07:58:22 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@
 // * Get the minimum node
 template <class NodeType> NodeType *min_node(NodeType *node)
 {
+    if (node == NULL)
+    {
+        return NULL;
+    }
     while (node->child[LEFT] != NULL)
     {
         node = node->child[LEFT];
@@ -31,6 +35,10 @@ template <class NodeType> NodeType *min_node(NodeType *node)
 // * Get the maximum node
 template <class NodeType> NodeType *max_node(NodeType *node)
 {
+    if (node == NULL)
+    {
+        return NULL;
+    }
     while (node->child[RIGHT] != NULL)
     {
         node = node->child[RIGHT];
@@ -42,6 +50,10 @@ template <class NodeType> NodeType *max_node(NodeType *node)
 template <class NodeType, class Compare>
 NodeType *successor_node(NodeType *root, NodeType *node, const Compare &comp)
 {
+    if (root == NULL || node == NULL)
+    {
+        return NULL;
+    }
     NodeType *successor;
 
     if (node->child[RIGHT] != NULL)
@@ -85,6 +97,10 @@ NodeType *successor_node(NodeType *root, NodeType *node, const Compare &comp)
 template <class NodeType, class Compare>
 NodeType *predecessor_node(NodeType *root, NodeType *node, const Compare &comp)
 {
+    if (root == NULL || node == NULL)
+    {
+        return NULL;
+    }
     NodeType *predecessor;
 
     if (node->child[LEFT] != NULL)

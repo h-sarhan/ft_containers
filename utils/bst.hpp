@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/04/04 18:31:33 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/04/05 09:22:07 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,47 @@ template <class T, class Compare, class Alloc> class bst
     }
 
     // * Delete a node from the tree
+    void delete_node2(node_type *node)
+    {
+        if (root != NULL)
+        {
+            node_type head;
+            node_type *it = &head;
+            node_type *p = NULL;
+            node_type  *f = NULL;
+            bool dir = RIGHT;
+
+            it->child[RIGHT] = root;
+
+            while (it->child[dir] != NULL)
+            {
+                p = it;
+                it = it->child[dir];
+                if (node_less(it, node, _comp) || node_equal(it, node, _comp))
+                {
+                    dir = RIGHT;
+                }
+                else
+                {
+                    dir = LEFT;
+                }
+
+                if (node_equal(it, node, _comp))
+                    f = it;
+            }
+
+            if (f != NULL)
+            {
+                // f->data = it->data;
+                f->replace(*it->data);
+                p->child[p->child[RIGHT] == it] = it->child[it->child[LEFT] == NULL];
+                // free(it);
+                // _alloc.destroy(it);
+                _alloc.deallocate(it, 1);
+            }
+            root = head.child[RIGHT];
+        }
+    }
     void delete_node(node_type *node)
     {
         if (root == NULL)
@@ -192,7 +233,7 @@ template <class T, class Compare, class Alloc> class bst
 
             // we want to replace the successor's data with the node we want to delete and then
             // delete the successor
-            it->replace_data(*successor->data);
+            it->replace(*successor->data);
 
             // if the successor is a right child?
             if (successor == parent->child[RIGHT])
@@ -209,9 +250,11 @@ template <class T, class Compare, class Alloc> class bst
             // removed
             parent->child[dir] = successor->child[RIGHT];
 
+            // std::cout << "DELETING NODE1 " << successor->data->first << std::endl;
             //  delete successor here
             _alloc.destroy(successor);
             _alloc.deallocate(successor, 1);
+            traverse(root);
         }
         else
         {
@@ -251,6 +294,7 @@ template <class T, class Compare, class Alloc> class bst
                     parent->child[LEFT] = it->child[dir];
                 }
             }
+            // std::cout << "DELETING NODE2 " << it->data->first << std::endl;
             _alloc.destroy(it);
             _alloc.deallocate(it, 1);
         }
@@ -268,7 +312,6 @@ template <class T, class Compare, class Alloc> class bst
             clear(temp);
         }
     }
-
 };
 }   // namespace ft
 

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/04/04 18:32:46 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/04/05 09:17:30 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,9 +363,9 @@ class map
         while (it != last)
         {
             iterator next = it;
+            std::cout << it->first << std::endl;
             next++;
             erase(it);
-            _bst->traverse(_bst->root);
             it = next;
         }
     }

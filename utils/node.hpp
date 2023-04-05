@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:07:03 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/31 21:17:35 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/04/05 08:30:28 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ template <class DataType> struct node
         return *this;
     }
 
-    void    replace_data(data_type &new_data)
+    void    replace(data_type &new_data)
     {
         _alloc.destroy(data);
         _alloc.deallocate(data, 1);

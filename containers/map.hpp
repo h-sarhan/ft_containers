@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/04/05 09:17:30 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/04/06 16:08:12 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,37 +48,7 @@ class map
   private:
     typedef node<value_type> node_type;
 
-    template <class NodeType> class node_compare : std::binary_function<NodeType, NodeType, bool>
-    {
-      private:
-        key_compare _comp;
-
-      public:
-        node_compare() : _comp(key_compare())
-        {
-        }
-        node_compare(key_compare comp) : _comp(comp)
-        {
-        }
-        node_compare(const node_compare &old) : _comp(old._comp)
-        {
-        }
-        bool operator()(const NodeType *x, const NodeType *y) const
-        {
-            return _comp(x->data->first, y->data->first);
-        }
-
-        template <class KeyType> bool operator()(const NodeType *node, const KeyType &key) const
-        {
-            return _comp(node->data->first, key);
-        }
-
-        template <class KeyType> bool operator()(const KeyType &key, const NodeType *node) const
-        {
-            return _comp(key, node->data->first);
-        }
-    };
-    typedef bst<ft::pair<const key_type, mapped_type>, node_compare<node_type>, allocator_type>
+    typedef bst<ft::pair<const key_type, mapped_type>, allocator_type>
         tree_type;
 
   public:

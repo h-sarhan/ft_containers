@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/04/05 09:22:07 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/04/06 16:14:28 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,25 @@
 
 namespace ft
 {
-template <class T, class Compare, class Alloc> class bst
+template <class T> class bst
 {
   private:
     typedef node<T> node_type;
 
-    Compare _comp;
     Alloc _alloc;
 
   public:
     node_type *root;
 
     // * Constructor
-    bst(void) : _comp(), _alloc(), root(NULL)
+    bst(void) : _alloc(), root(NULL)
     {
     }
-    bst(node_type *root, Compare comp, Alloc allocator) : _comp(comp), _alloc(allocator), root(root)
+    bst(node_type *root) : _alloc(), root(root)
     {
     }
 
-    bst(const bst &old) : _comp(old._comp), _alloc(old._alloc), root(old.root)
+    bst(const bst &old) : _alloc(old._alloc), root(old.root)
     {
     }
 

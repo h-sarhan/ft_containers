@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 16:25:38 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/23 17:38:51 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/01 11:27:16 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@ namespace ft
 template <class T, class Container = vector<T> > class stack
 {
   public:
-    typedef T value_type;
     typedef Container container_type;
-    typedef size_t size_type;
+    typedef typename Container::value_type value_type;
+    typedef typename Container::size_type size_type;
+    typedef typename Container::reference reference;
+    typedef typename Container::const_reference const_reference;
 
   protected:
     container_type c;

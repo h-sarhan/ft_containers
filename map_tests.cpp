@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/04/05 09:15:27 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/04/05 16:24:02 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -466,18 +466,18 @@ void    hassanErase(void)
     {
         std::cout << it->first << std::endl;
     }
-    // clone.erase((clone.begin()), clone.end());
-    // clone.erase(++(clone.begin()));
+    clone.erase((clone.begin()), clone.end());
+    clone.erase(++(clone.begin()));
     clone.erase(++((clone.begin())), ((clone.end())));
 
-    // test.erase(test.begin(), test.end());
+    test.erase(test.begin(), test.end());
 }
 
 
 void mapTests(void)
 {
     hassanErase();
-    // gerardErase();
+    gerardErase();
     // mapIterators();
     // mapCount();
     // mapSingleErase();

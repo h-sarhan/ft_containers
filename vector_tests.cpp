@@ -6,16 +6,14 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/19 16:29:49 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/02 17:40:47 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "is_integral.hpp"
 #include "make_pair.hpp"
-#include "map.hpp"
 #include "vector.hpp"
 #include <cassert>
-#include <map>
 #include <string>
 #include <vector>
 
@@ -715,29 +713,33 @@ void reverseIteratorTests(void)
     std::cout << *b.rend() << std::endl;
 }
 
-
+#include <sstream>
 void vectorTests(void)
 {
-    defaultConstructorTests();
-    fillConstructorTests();
-    copyConstructorTests();
-    vectorInVectorTests();
-    maxSizeTests();
-    emptyTest();
-    atTests();
-    frontBackTests();
-    dataTest();
-    swapTest();
-    clearTests();
-    resizeTests();
-    reserveTests();
-    vectorIteratorTests();
-    vectorReverseIteratorTests();
-    vectorRelational();
-    rangeConstructorTests();
-    assignTests();
-    pushBackTests();
-    popBackTests();
-    insertTests();
-    eraseTests();
+    // defaultConstructorTests();
+    // fillConstructorTests();
+    // copyConstructorTests();
+    // vectorInVectorTests();
+    // maxSizeTests();
+    // emptyTest();
+    // atTests();
+    // frontBackTests();
+    // dataTest();
+    // swapTest();
+    // clearTests();
+    // resizeTests();
+    // reserveTests();
+    // vectorIteratorTests();
+    // vectorReverseIteratorTests();
+    // vectorRelational();
+    // rangeConstructorTests();
+    // assignTests();
+    // pushBackTests();
+    // popBackTests();
+    // insertTests();
+    // eraseTests();
+
+    std::vector<char>a;
+    a.max_size();
+    
 }

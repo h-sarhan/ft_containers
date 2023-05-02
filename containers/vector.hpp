@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/31 21:25:10 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/02 17:55:50 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <memory>
 #include <stdexcept>
 #include <vector>
+#include <algorithm>
 
 #include "enable_if.hpp"
 #include "is_integral.hpp"
@@ -66,7 +67,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
 
     // * Default constructor
     explicit vector(const allocator_type &alloc = allocator_type())
-        : _alloc(alloc), _array(_alloc.allocate(0)), _size(0), _capacity(0)
+        : _alloc(alloc), _array(NULL), _size(0), _capacity(0)
     {
     }
 
@@ -75,6 +76,8 @@ template <class T, class Alloc = std::allocator<T> > class vector
                     const allocator_type &alloc = allocator_type())
         : _alloc(alloc), _size(n), _capacity(n)
     {
+        if (n >= max_size())
+            throw std::length_error("big");
         _array = _alloc.allocate(n);
         for (size_type i = 0; i < n; i++)
         {
@@ -88,25 +91,32 @@ template <class T, class Alloc = std::allocator<T> > class vector
     template <class InputIterator>
     vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),
            typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
-        : _alloc(alloc), _array(_alloc.allocate(iterator_distance(first, last))),
-          _size(iterator_distance(first, last)), _capacity(_size)
+        : _alloc(alloc), _array(NULL), _size(0), _capacity(0)
     {
+        _realloc(100);
         size_type i = 0;
         for (InputIterator it = first; it != last; it++)
         {
+            if (i >= _capacity)
+                _realloc((_capacity + 1) * 2);
+            _alloc.destroy(&_array[i]);
             _alloc.construct(&_array[i], *it);
+            _size++;
             i++;
         }
     }
 
     // * Copy constructor
-    vector(const vector &old)
-        : _alloc(old._alloc), _array(_alloc.allocate(old._capacity)), _size(old._size),
-          _capacity(old._capacity)
+    vector(const vector &old) : _alloc(old._alloc), _size(old._size), _capacity(old._capacity)
     {
+        _array = _alloc.allocate(old._capacity);
         for (size_type i = 0; i < _size; i++)
         {
             _alloc.construct(&_array[i], old._array[i]);
+        }
+        for (size_type i = _size; i < _capacity; i++)
+        {
+            _alloc.construct(&_array[i], value_type());
         }
     }
 
@@ -117,17 +127,22 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             return (*this);
         }
-        for (size_type i = 0; i < _size; i++)
+        for (size_type i = 0; i < _capacity; i++)
         {
             _alloc.destroy(&_array[i]);
         }
-        _alloc.deallocate(_array, _capacity);
+        if (_array != NULL)
+            _alloc.deallocate(_array, _capacity);
         _capacity = x.capacity();
         _size = x.size();
         _array = _alloc.allocate(_capacity);
+        for (size_type i = 0; i < _capacity; i++)
+        {
+            _alloc.construct(&_array[i], value_type());
+        }
         for (size_type i = 0; i < _size; i++)
         {
-            _alloc.construct(&_array[i], x._array[i]);
+            _array[i] = x._array[i];
         }
         return (*this);
     }
@@ -135,7 +150,9 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // * Destructor
     ~vector(void)
     {
-        for (size_type i = 0; i < _size; i++)
+        if (_array == NULL)
+            return;
+        for (size_type i = 0; i < _capacity; i++)
         {
             _alloc.destroy(&_array[i]);
         }
@@ -203,7 +220,8 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // * Max number of elements the vector can hold
     size_type max_size(void) const
     {
-        return _alloc.max_size();
+        // return ;
+        return std::min<size_type>(_alloc.max_size(), std::numeric_limits<difference_type>::max());
     }
 
     // * Resize the vector, adding extra elements if the new size is greater than the old size
@@ -212,7 +230,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
     {
         if (n >= max_size())
         {
-            throw std::logic_error("Too big");
+            throw std::length_error("Too big");
         }
         if (n > _capacity)
         {
@@ -222,7 +240,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             for (size_type i = _size; i < n; i++)
             {
-                _alloc.construct(&_array[i], val);
+                _array[i] = val;
             }
         }
         else if (n < _size)
@@ -230,6 +248,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
             for (size_type i = n; i < _size; i++)
             {
                 _alloc.destroy(&_array[i]);
+                _alloc.construct(&_array[i], value_type());
             }
         }
         _size = n;
@@ -252,7 +271,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
     {
         if (n >= max_size())
         {
-            throw std::logic_error("Too big");
+            throw std::length_error("Too big");
         }
         if (n > _capacity)
         {
@@ -323,21 +342,22 @@ template <class T, class Alloc = std::allocator<T> > class vector
     void assign(InputIterator first, InputIterator last,
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
     {
-        const size_type count = iterator_distance(first, last);
-        if (count > _capacity)
+        // const size_type count = std::distance(first, last);
+        // if (count > _capacity)
+        // {
+        // }
+        size_type i;
+        _size = 0;
+        for (i = 0; first != last; i++)
         {
-            _realloc(count);
-        }
-        for (size_type i = 0; i < count; i++)
-        {
-            if (i < _size)
-            {
-                _alloc.destroy(&_array[i]);
-            }
+            if (i >= _capacity)
+                _realloc((_capacity + 1) * 2);
+            _alloc.destroy(&_array[i]);
             _alloc.construct(&_array[i], *first);
             first++;
+            _size++;
         }
-        _size = count;
+        // _size = i;
     }
 
     // * Fill assign
@@ -352,8 +372,12 @@ template <class T, class Alloc = std::allocator<T> > class vector
             if (i < _size)
             {
                 _alloc.destroy(&_array[i]);
+                _alloc.construct(&_array[i], val);
             }
-            _alloc.construct(&_array[i], val);
+            else
+            {
+                _array[i] = val;
+            }
         }
         _size = n;
     }
@@ -366,7 +390,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             reserve((_capacity + 1) * 2);
         }
-        _alloc.construct(&_array[_size], val_copy);
+        _array[_size] = val_copy;
         _size += 1;
     }
 
@@ -378,6 +402,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
             return;
         }
         _alloc.destroy(&_array[_size - 1]);
+        _alloc.construct(&_array[_size - 1], value_type());
         _size -= 1;
     }
 
@@ -392,10 +417,11 @@ template <class T, class Alloc = std::allocator<T> > class vector
         }
         for (size_type i = _size; i > insert_idx; i--)
         {
-            _alloc.construct(&_array[i], _array[i - 1]);
+            _array[i] = _array[i - 1];
             _alloc.destroy(&_array[i - 1]);
+            _alloc.construct(&_array[i - 1], value_type());
         }
-        _alloc.construct(&_array[insert_idx], val);
+        _array[insert_idx] = val;
         _size += 1;
         return iterator(&_array[insert_idx]);
     }
@@ -417,22 +443,22 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             for (size_type i = _size - 1; i >= insert_idx; i--)
             {
-                _alloc.construct(&_array[i + n], _array[i]);
+                _array[i + n] = _array[i];
                 _alloc.destroy(&_array[i]);
+                _alloc.construct(&_array[i], value_type());
                 if (i == 0)
                     break;
             }
         }
         for (size_type i = 0; i < n; i++)
         {
-            _alloc.construct(&_array[i + insert_idx], val);
+            _array[i + insert_idx] = val;
         }
         _size += n;
     }
 
     // * Inserts elements between first and last into the position specified by the given iterator
-    // ! CAN BE PROTECTED
-
+    //! WRONG
     template <class InputIterator>
     void insert(iterator position, InputIterator first, InputIterator last,
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
@@ -440,7 +466,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
         const size_type insert_idx = position - begin();
         const size_type n = iterator_distance(first, last);
 
-        if (n == 0)
+        if (first == last)
         {
             return;
         }
@@ -452,15 +478,16 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             for (size_type i = _size - 1; i >= insert_idx; i--)
             {
-                _alloc.construct(&_array[i + n], _array[i]);
+                _array[i + n] = _array[i];
                 _alloc.destroy(&_array[i]);
+                _alloc.construct(&_array[i], value_type());
                 if (i == 0)
                     break;
             }
         }
         for (size_type i = 0; i < n; i++)
         {
-            _alloc.construct(&_array[i + insert_idx], *first);
+            _array[i + insert_idx] = *first;
             first++;
         }
         _size += n;
@@ -472,19 +499,22 @@ template <class T, class Alloc = std::allocator<T> > class vector
     {
         const size_type erase_idx = position - begin();
 
-        _alloc.destroy(&_array[erase_idx]);
+        // _alloc.destroy(&_array[erase_idx]);
+        // _alloc.construct(&_array[erase_idx], value_type());
         if (_size > 1)
         {
             for (size_type i = erase_idx; i < _size - 1; i++)
             {
+                _alloc.destroy(&_array[i]);
                 _alloc.construct(&_array[i], _array[i + 1]);
-                _alloc.destroy(&_array[i + 1]);
             }
         }
         if (_size > 0)
         {
             _size -= 1;
         }
+        if (erase_idx >= _size)
+            return iterator(&_array[_size]);
         return iterator(&_array[erase_idx]);
     }
 
@@ -501,14 +531,16 @@ template <class T, class Alloc = std::allocator<T> > class vector
         for (iterator it = first; it != last; it++)
         {
             _alloc.destroy(it.base());
+            _alloc.construct(it.base(), value_type());
         }
         if (_size > 1)
         {
             iterator replace = first;
             for (iterator it = last; it != end(); it++)
             {
-                _alloc.construct(replace.base(), *it);
+                *replace.base() = *it;
                 _alloc.destroy(it.base());
+                _alloc.construct(it.base(), value_type());
                 replace++;
             }
         }
@@ -543,12 +575,15 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // * Clears all elements in the vector
     void clear(void)
     {
-        for (size_type i = 0; i < _size; i++)
+        if (_array != NULL)
         {
-            _alloc.destroy(&_array[i]);
+            for (size_type i = 0; i < _capacity; i++)
+            {
+                _alloc.destroy(&_array[i]);
+            }
+            _alloc.deallocate(_array, _capacity);
+            _array = NULL;
         }
-        _alloc.deallocate(_array, _capacity);
-        _array = _alloc.allocate(0);
         _capacity = 0;
         _size = 0;
     }
@@ -558,7 +593,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // * Returns allocator
     allocator_type get_allocator(void) const
     {
-        return _alloc;
+        return allocator_type();
     }
 
   private:
@@ -567,13 +602,23 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // * Rellocates the underlying array of elements
     void _realloc(size_type new_capacity)
     {
+        if (new_capacity >= max_size())
+            throw std::length_error("big");
         value_type *new_array = _alloc.allocate(new_capacity);
+        for (size_type i = 0; i < new_capacity; i++)
+        {
+            _alloc.construct(&new_array[i], value_type());
+        }
         for (size_type i = 0; i < _size; i++)
         {
-            _alloc.construct(&new_array[i], _array[i]);
+            new_array[i] = _array[i];
+        }
+        for (size_type i = 0; i < _capacity; i++)
+        {
             _alloc.destroy(&_array[i]);
         }
-        _alloc.deallocate(_array, _capacity);
+        if (_array != NULL)
+            _alloc.deallocate(_array, _capacity);
         _capacity = new_capacity;
         _array = new_array;
     }

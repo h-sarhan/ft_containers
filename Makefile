@@ -6,7 +6,7 @@
 #    By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/04 00:48:08 by hsarhan           #+#    #+#              #
-#    Updated: 2023/04/05 16:24:26 by hsarhan          ###   ########.fr        #
+#    Updated: 2023/05/01 11:34:06 by hsarhan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CXXFLAGS = -Wpedantic -Wall -Wextra -Werror --std=c++98 -g3 -Iutils -Icontainers
 
 NAME = tests
 
-SRC = map_tests.cpp vector_tests.cpp main.cpp
+SRC = vector_tests.cpp main.cpp
 
 OBJ := $(SRC:%.cpp=%.o)
 

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/02 17:55:50 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/02 18:21:25 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,10 @@
 #include "enable_if.hpp"
 #include "is_integral.hpp"
 #include "iterator_comparison.hpp"
-#include "iterator_distance.hpp"
 #include "reverse_iterator.hpp"
 #include "vector_iterator.hpp"
 
-// ! Check iterator ranges: if first == last || last < first
-// ! Check if size == 0
+// ! VALIDATE ITERATORS
 namespace ft
 {
 template <class T, class Alloc = std::allocator<T> > class vector
@@ -86,7 +84,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
     }
 
     // ! Protect this somehow
-    // ? Make distance compare function
     // * Iterator range constructor
     template <class InputIterator>
     vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),
@@ -342,10 +339,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
     void assign(InputIterator first, InputIterator last,
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
     {
-        // const size_type count = std::distance(first, last);
-        // if (count > _capacity)
-        // {
-        // }
         size_type i;
         _size = 0;
         for (i = 0; first != last; i++)
@@ -357,7 +350,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
             first++;
             _size++;
         }
-        // _size = i;
     }
 
     // * Fill assign
@@ -458,39 +450,40 @@ template <class T, class Alloc = std::allocator<T> > class vector
     }
 
     // * Inserts elements between first and last into the position specified by the given iterator
-    //! WRONG
     template <class InputIterator>
     void insert(iterator position, InputIterator first, InputIterator last,
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
     {
-        const size_type insert_idx = position - begin();
-        const size_type n = iterator_distance(first, last);
-
         if (first == last)
         {
             return;
         }
-        if (_size + n > _capacity)
+        const size_type insert_idx = position - begin();
+        vector<value_type> temp;
+        for (InputIterator it = first; it != last; it++)
         {
-            _realloc(_size + n);
+            temp.push_back(*it);
+        }
+        if (_size + temp.size() > _capacity)
+        {
+            _realloc(_size + temp.size());
         }
         if (empty() == false)
         {
             for (size_type i = _size - 1; i >= insert_idx; i--)
             {
-                _array[i + n] = _array[i];
+                _array[i + temp.size()] = _array[i];
                 _alloc.destroy(&_array[i]);
                 _alloc.construct(&_array[i], value_type());
                 if (i == 0)
                     break;
             }
         }
-        for (size_type i = 0; i < n; i++)
+        for (size_type i = 0; i < temp.size(); i++)
         {
-            _array[i + insert_idx] = *first;
-            first++;
+            _array[i + insert_idx] = temp[i];
         }
-        _size += n;
+        _size += temp.size();
     }
 
     // * Erases element at position pointed to by iterator
@@ -523,7 +516,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // ! TEST THIS FUNCTION WHEN LAST - FIRST == 1
     iterator erase(iterator first, iterator last)
     {
-
         if (first == last)
         {
             return first;

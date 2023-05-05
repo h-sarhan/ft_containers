@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/05 19:52:00 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/06 03:28:00 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,13 @@
 #include <limits>
 #include <memory>
 #include <stdexcept>
-#include <vector>
 
 #include "enable_if.hpp"
 #include "is_integral.hpp"
 #include "iterator_comparison.hpp"
+#include "iterator_validation.hpp"
 #include "reverse_iterator.hpp"
 #include "vector_iterator.hpp"
-#include "iterator_validation.hpp"
 
 // ! VALIDATE ITERATORS
 namespace ft
@@ -92,9 +91,9 @@ template <class T, class Alloc = std::allocator<T> > class vector
            typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
         : _alloc(alloc), _array(NULL), _size(0), _capacity(0)
     {
-        if (std::distance(first, last) < 0)
+        if (validate_iterators(first, last, max_size()) == false)
         {
-            throw std::length_error("too big 😳");
+            throw std::length_error("Invalid iterator 😔");
         }
         _realloc(100);
         size_type i = 0;
@@ -287,13 +286,13 @@ template <class T, class Alloc = std::allocator<T> > class vector
     reference at(size_type n)
     {
         if (n >= _size)
-            throw std::out_of_range("Index is out of range");
+            throw std::out_of_range("Index is out of range 😭");
         return (_array[n]);
     }
     const_reference at(size_type n) const
     {
         if (n >= _size)
-            throw std::out_of_range("Index is out of range");
+            throw std::out_of_range("Index is out of range 😭");
         return (_array[n]);
     }
 
@@ -334,13 +333,24 @@ template <class T, class Alloc = std::allocator<T> > class vector
     void assign(InputIterator first, InputIterator last,
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
     {
+        if (validate_iterators(first, last, max_size()) == false)
+            return;
+        for (size_type i = 0; i < _size; i++)
+        {
+            _alloc.destroy(&_array[i]);
+        }
         size_type i;
         _size = 0;
         for (i = 0; first != last; i++)
         {
             if (i >= _capacity)
+            {
                 _realloc((_capacity + 1) * 2);
-            _alloc.construct(&_array[i], *first);
+            }
+            if (i >= _size)
+                _alloc.construct(&_array[i], *first);
+            else
+                _array[i] = *first;
             first++;
             _size++;
         }
@@ -353,16 +363,13 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             _realloc(n);
         }
+        for (size_type i = 0; i < _size; i++)
+        {
+            _alloc.destroy(&_array[i]);
+        }
         for (size_type i = 0; i < n; i++)
         {
-            if (i < _size)
-            {
-                _alloc.construct(&_array[i], val);
-            }
-            else
-            {
-                _array[i] = val;
-            }
+            _alloc.construct(&_array[i], val);
         }
         _size = n;
     }
@@ -453,7 +460,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
     void insert(iterator position, InputIterator first, InputIterator last,
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
     {
-        if (first == last)
+        if (first == last || validate_iterators(first, last, max_size()) == false)
         {
             return;
         }
@@ -594,7 +601,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
     void _realloc(size_type new_capacity)
     {
         if (new_capacity >= max_size())
-            throw std::length_error("big");
+            throw std::length_error("too big 😳");
         value_type *new_array = _alloc.allocate(new_capacity);
 
         for (size_type i = 0; i < _size; i++)

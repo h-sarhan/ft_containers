@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/02 18:21:25 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/05 19:52:00 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,21 @@
 
 #define VECTOR_HPP
 
+#include <algorithm>
 #include <cstddef>
 #include <iostream>
 #include <iterator>
+#include <limits>
 #include <memory>
 #include <stdexcept>
 #include <vector>
-#include <algorithm>
 
 #include "enable_if.hpp"
 #include "is_integral.hpp"
 #include "iterator_comparison.hpp"
 #include "reverse_iterator.hpp"
 #include "vector_iterator.hpp"
+#include "iterator_validation.hpp"
 
 // ! VALIDATE ITERATORS
 namespace ft
@@ -90,13 +92,16 @@ template <class T, class Alloc = std::allocator<T> > class vector
            typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
         : _alloc(alloc), _array(NULL), _size(0), _capacity(0)
     {
+        if (std::distance(first, last) < 0)
+        {
+            throw std::length_error("too big 😳");
+        }
         _realloc(100);
         size_type i = 0;
         for (InputIterator it = first; it != last; it++)
         {
             if (i >= _capacity)
                 _realloc((_capacity + 1) * 2);
-            _alloc.destroy(&_array[i]);
             _alloc.construct(&_array[i], *it);
             _size++;
             i++;
@@ -111,10 +116,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             _alloc.construct(&_array[i], old._array[i]);
         }
-        for (size_type i = _size; i < _capacity; i++)
-        {
-            _alloc.construct(&_array[i], value_type());
-        }
     }
 
     // * Copy assignment constructor
@@ -124,7 +125,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             return (*this);
         }
-        for (size_type i = 0; i < _capacity; i++)
+        for (size_type i = 0; i < _size; i++)
         {
             _alloc.destroy(&_array[i]);
         }
@@ -133,13 +134,9 @@ template <class T, class Alloc = std::allocator<T> > class vector
         _capacity = x.capacity();
         _size = x.size();
         _array = _alloc.allocate(_capacity);
-        for (size_type i = 0; i < _capacity; i++)
-        {
-            _alloc.construct(&_array[i], value_type());
-        }
         for (size_type i = 0; i < _size; i++)
         {
-            _array[i] = x._array[i];
+            _alloc.construct(&_array[i], x._array[i]);
         }
         return (*this);
     }
@@ -149,7 +146,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
     {
         if (_array == NULL)
             return;
-        for (size_type i = 0; i < _capacity; i++)
+        for (size_type i = 0; i < _size; i++)
         {
             _alloc.destroy(&_array[i]);
         }
@@ -217,7 +214,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // * Max number of elements the vector can hold
     size_type max_size(void) const
     {
-        // return ;
         return std::min<size_type>(_alloc.max_size(), std::numeric_limits<difference_type>::max());
     }
 
@@ -227,7 +223,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
     {
         if (n >= max_size())
         {
-            throw std::length_error("Too big");
+            throw std::length_error("too big 😳");
         }
         if (n > _capacity)
         {
@@ -237,7 +233,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             for (size_type i = _size; i < n; i++)
             {
-                _array[i] = val;
+                _alloc.construct(&_array[i], val);
             }
         }
         else if (n < _size)
@@ -245,7 +241,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
             for (size_type i = n; i < _size; i++)
             {
                 _alloc.destroy(&_array[i]);
-                _alloc.construct(&_array[i], value_type());
             }
         }
         _size = n;
@@ -268,7 +263,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
     {
         if (n >= max_size())
         {
-            throw std::length_error("Too big");
+            throw std::length_error("too big 😳");
         }
         if (n > _capacity)
         {
@@ -345,7 +340,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             if (i >= _capacity)
                 _realloc((_capacity + 1) * 2);
-            _alloc.destroy(&_array[i]);
             _alloc.construct(&_array[i], *first);
             first++;
             _size++;
@@ -363,7 +357,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             if (i < _size)
             {
-                _alloc.destroy(&_array[i]);
                 _alloc.construct(&_array[i], val);
             }
             else
@@ -382,7 +375,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             reserve((_capacity + 1) * 2);
         }
-        _array[_size] = val_copy;
+        _alloc.construct(&_array[_size], val_copy);
         _size += 1;
     }
 
@@ -394,7 +387,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
             return;
         }
         _alloc.destroy(&_array[_size - 1]);
-        _alloc.construct(&_array[_size - 1], value_type());
         _size -= 1;
     }
 
@@ -407,13 +399,18 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             _realloc((_capacity + 1) * 2);
         }
+        if (_size == 0)
+            _alloc.construct(&_array[0], value_type());
+        else
+            _alloc.construct(&_array[_size], _array[_size - 1]);
         for (size_type i = _size; i > insert_idx; i--)
         {
             _array[i] = _array[i - 1];
-            _alloc.destroy(&_array[i - 1]);
-            _alloc.construct(&_array[i - 1], value_type());
         }
-        _array[insert_idx] = val;
+        // ! Destroy element at insert_idx
+        if (insert_idx < _size)
+            _alloc.destroy(&_array[insert_idx]);
+        _alloc.construct(&_array[insert_idx], val);
         _size += 1;
         return iterator(&_array[insert_idx]);
     }
@@ -435,16 +432,18 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             for (size_type i = _size - 1; i >= insert_idx; i--)
             {
-                _array[i + n] = _array[i];
-                _alloc.destroy(&_array[i]);
-                _alloc.construct(&_array[i], value_type());
+                if (i + n < _size)
+                    _alloc.destroy(&_array[i + n]);
+                _alloc.construct(&_array[i + n], _array[i]);
                 if (i == 0)
                     break;
             }
         }
         for (size_type i = 0; i < n; i++)
         {
-            _array[i + insert_idx] = val;
+            if (i + insert_idx < _size)
+                _alloc.destroy(&_array[i + insert_idx]);
+            _alloc.construct(&_array[i + insert_idx], val);
         }
         _size += n;
     }
@@ -472,9 +471,14 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             for (size_type i = _size - 1; i >= insert_idx; i--)
             {
-                _array[i + temp.size()] = _array[i];
-                _alloc.destroy(&_array[i]);
-                _alloc.construct(&_array[i], value_type());
+                if (i + temp.size() >= _size)
+                {
+                    _alloc.construct(&_array[i + temp.size()], _array[i]);
+                }
+                else
+                {
+                    _array[i + temp.size()] = _array[i];
+                }
                 if (i == 0)
                     break;
             }
@@ -487,13 +491,10 @@ template <class T, class Alloc = std::allocator<T> > class vector
     }
 
     // * Erases element at position pointed to by iterator
-    // ! CAN BE PROTECTED
     iterator erase(iterator position)
     {
         const size_type erase_idx = position - begin();
 
-        // _alloc.destroy(&_array[erase_idx]);
-        // _alloc.construct(&_array[erase_idx], value_type());
         if (_size > 1)
         {
             for (size_type i = erase_idx; i < _size - 1; i++)
@@ -523,7 +524,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
         for (iterator it = first; it != last; it++)
         {
             _alloc.destroy(it.base());
-            _alloc.construct(it.base(), value_type());
         }
         if (_size > 1)
         {
@@ -532,7 +532,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
             {
                 *replace.base() = *it;
                 _alloc.destroy(it.base());
-                _alloc.construct(it.base(), value_type());
                 replace++;
             }
         }
@@ -569,7 +568,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
     {
         if (_array != NULL)
         {
-            for (size_type i = 0; i < _capacity; i++)
+            for (size_type i = 0; i < _size; i++)
             {
                 _alloc.destroy(&_array[i]);
             }
@@ -597,15 +596,12 @@ template <class T, class Alloc = std::allocator<T> > class vector
         if (new_capacity >= max_size())
             throw std::length_error("big");
         value_type *new_array = _alloc.allocate(new_capacity);
-        for (size_type i = 0; i < new_capacity; i++)
-        {
-            _alloc.construct(&new_array[i], value_type());
-        }
+
         for (size_type i = 0; i < _size; i++)
         {
-            new_array[i] = _array[i];
+            _alloc.construct(&new_array[i], _array[i]);
         }
-        for (size_type i = 0; i < _capacity; i++)
+        for (size_type i = 0; i < _size; i++)
         {
             _alloc.destroy(&_array[i]);
         }

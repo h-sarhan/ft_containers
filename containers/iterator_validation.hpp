@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 19:22:48 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/06 03:25:03 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/06 04:37:37 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,42 @@ bool validate_iterators(PointerType *first, PointerType *last, size_t max_size)
     if (dist < 0 || dist >= (long) max_size)
         return false;
     return true;
+}
+
+bool one_way_check(std::input_iterator_tag cat)
+{
+    (void) cat;
+    return true;
+}
+
+bool one_way_check(std::random_access_iterator_tag cat)
+{
+    (void) cat;
+    return false;
+}
+
+bool one_way_check(std::forward_iterator_tag cat)
+{
+    (void) cat;
+    return false;
+}
+
+bool one_way_check(std::bidirectional_iterator_tag cat)
+{
+    (void) cat;
+    return false;
+}
+
+template <typename InputIterator> bool is_one_way(InputIterator it)
+{
+    (void) it;
+    return one_way_check(typename InputIterator::iterator_category());
+}
+
+template <typename PointerType> bool is_one_way(PointerType *it)
+{
+    (void) it;
+    return false;
 }
 
 }   // namespace ft

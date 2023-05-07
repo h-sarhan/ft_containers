@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/06 06:04:54 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/07 19:50:57 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <iterator>
 #include <limits>
 #include <memory>
+#include <vector>
 #include <stdexcept>
 
 #include "enable_if.hpp"
@@ -452,28 +453,30 @@ template <class T, class Alloc = std::allocator<T> > class vector
         }
         // ! REPLACE
         const size_type insert_idx = position - begin();
-        if (_size + n > _capacity)
+        if (_size + n > _capacity) // o(1)
         {
-            _realloc(_size + n);
+            _realloc(_size + n); // o(n)
         }
-        if (empty() == false)
+        if (empty() == false) // o(1)
         {
-            for (size_type i = _size - 1; i >= insert_idx; i--)
+            for (size_type i = _size - 1; i >= insert_idx; i--) // o(n)
             {
-                if (i + n < _size)
-                    _alloc.destroy(&_array[i + n]);
-                _alloc.construct(&_array[i + n], _array[i]);
-                if (i == 0)
-                    break;
+                if (i + n >= _size)
+                    _alloc.construct(&_array[i + n], _array[i]);
+                else
+                    _array[i + n] = _array[i];
             }
         }
+        _size += n;
         for (size_type i = 0; i < n; i++)
         {
-            if (i + insert_idx < _size)
-                _alloc.destroy(&_array[i + insert_idx]);
-            _alloc.construct(&_array[i + insert_idx], val);
+            //     _alloc.destroy(&_array[i + insert_idx]);
+            // _alloc.construct(&_array[i + insert_idx], val);
+            if (i + insert_idx >= _size)
+                _alloc.construct(&_array[i + insert_idx], val);
+            else
+                _array[i + insert_idx] = val;
         }
-        _size += n;
     }
 
     // * Inserts elements between first and last into the position specified by the given iterator
@@ -657,8 +660,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // * Rellocates the underlying array of elements
     void _realloc(size_type new_capacity)
     {
-        if (new_capacity <= _capacity)
-            return;
         if (new_capacity >= max_size())
             throw std::length_error("too big 😳");
         value_type *new_array = _alloc.allocate(new_capacity);

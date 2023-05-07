@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/05 19:05:38 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/07 19:43:56 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -724,32 +724,6 @@ void pushRandomValues(NAMESPACE::vector<T> &vector, size_t size) {
 	}
 }
 
-// void vectorTests(void)
-// {
-    // defaultConstructorTests();
-    // fillConstructorTests();
-    // copyConstructorTests();
-    // vectorInVectorTests();
-    // maxSizeTests();
-    // emptyTest();
-    // atTests();
-    // frontBackTests();
-    // dataTest();
-    // swapTest();
-    // clearTests();
-    // resizeTests();
-    // reserveTests();
-    // vectorIteratorTests();
-    // vectorReverseIteratorTests();
-    // vectorRelational();
-    // rangeConstructorTests();
-    // assignTests();
-    // pushBackTests();
-    // popBackTests();
-    // insertTests();
-    // eraseTests();
-// }
-
 void singleInsert(NAMESPACE::vector<int> &vector);
 void singleInsert(NAMESPACE::vector<std::string> &vector);
 
@@ -758,9 +732,31 @@ void rangeInsert(NAMESPACE::vector<std::string> &vector);
 
 void iteratorInsert(NAMESPACE::vector<int> &vector);
 void iteratorInsert(NAMESPACE::vector<std::string> &vector);
-
-void vectorTests() {
-	{
+void vectorTests(void)
+{
+    defaultConstructorTests();
+    fillConstructorTests();
+    copyConstructorTests();
+    vectorInVectorTests();
+    maxSizeTests();
+    emptyTest();
+    atTests();
+    frontBackTests();
+    dataTest();
+    swapTest();
+    clearTests();
+    resizeTests();
+    reserveTests();
+    vectorIteratorTests();
+    vectorReverseIteratorTests();
+    vectorRelational();
+    rangeConstructorTests();
+    assignTests();
+    pushBackTests();
+    popBackTests();
+    insertTests();
+    eraseTests();
+    	{
 		NAMESPACE::vector<int> test;
 
 		singleInsert(test);
@@ -786,6 +782,11 @@ void vectorTests() {
 		// printByOperator(test);
 	}
 }
+
+
+// void vectorTests() {
+
+// }
 
 void singleInsert(NAMESPACE::vector<int> &vector) {
 	vector.insert(vector.begin(), RNG);

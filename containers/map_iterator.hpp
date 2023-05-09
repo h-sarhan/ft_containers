@@ -65,6 +65,12 @@ template <class NodeType, class T> class map_iterator
         // ??
     }
 
+    node_pointer    base(void) const
+    {
+        return _node_ptr;
+    }
+
+
     // * Iterator traversal
     map_iterator &operator++(void)   // pre-increment
     {

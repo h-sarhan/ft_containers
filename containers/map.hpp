@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/09 14:57:44 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/09 17:08:41 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 namespace ft
 {
 template <class K, class V, class Compare = std::less<K>,
-          class Alloc = std::allocator<ft::pair<const K, V> > >
+          class Alloc = std::allocator<node<ft::pair<const K, V> > > >
 class map
 {
     // ** Member types
@@ -46,7 +46,7 @@ class map
   private:
     typedef node<value_type> node_type;
 
-    typedef tree<node_type> tree_type;
+    typedef tree<node_type, Compare, Alloc> tree_type;
 
   public:
     typedef typename allocator_type::pointer pointer;
@@ -240,13 +240,13 @@ class map
     // * Subscript operator overload
     mapped_type &operator[](const key_type &key)
     {
-        node_type *res = _tree->get(key);
+        node_type *res = _tree.get(key);
         if (res == NULL)
         {
             iterator ret = insert(ft::make_pair(key, mapped_type())).first;
             return ret->second;
         }
-        return res->data->second;
+        return res->data.second;
     }
 
     // ** Modifiers
@@ -254,7 +254,7 @@ class map
     // * Single element insert
     ft::pair<iterator, bool> insert(const value_type &val)
     {
-        ft::pair<node_type *, bool> res = _tree->insert(val);
+        ft::pair<node_type *, bool> res = _tree.insert(node<value_type>(val, BLACK));
 
         if (res.second == true)
         {
@@ -283,12 +283,12 @@ class map
     // * Single element insert based on key
     size_type erase(const key_type &k)
     {
-        node_type *to_delete = _tree->get(k);
+        node_type *to_delete = _tree.get(k);
         if (to_delete == NULL)
         {
             return 0;
         }
-        _tree->delete_node(to_delete);
+        _tree.delete_node(to_delete);
         _size -= 1;
         return 1;
     }
@@ -298,12 +298,12 @@ class map
     {
         if (_size == 0 || _tree.root == NULL)
             return;
-        node_type *to_delete = _tree->get(position->first);
+        node_type *to_delete = _tree.get(position->first);
         if (to_delete == NULL)
         {
             return;
         }
-        _tree->delete_node(to_delete);
+        _tree.delete_node(to_delete);
         _size -= 1;
     }
 
@@ -376,7 +376,7 @@ class map
     // * Find a an element based on a key
     iterator find(const key_type &k)
     {
-        node_type *search = _tree->get(k);
+        node_type *search = _tree.get(k);
         if (search == NULL)
         {
             return end();
@@ -385,7 +385,7 @@ class map
     }
     const_iterator find(const key_type &k) const
     {
-        node_type *search = _tree->get(k);
+        node_type *search = _tree.get(k);
         if (search == NULL)
         {
             return end();
@@ -396,7 +396,7 @@ class map
     // * Count number of elements matching key. For this container this will be 1 or 0
     size_type count(const key_type &k) const
     {
-        if (_tree->get(k) == NULL)
+        if (_tree.get(k) == NULL)
         {
             return 0;
         }
@@ -470,7 +470,7 @@ class map
     // ? For debugging
     void printTree(void) const
     {
-        _tree->traverse(_tree.root);
+        _tree.traverse(_tree.root);
     }
 };
 

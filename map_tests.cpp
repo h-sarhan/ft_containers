@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/09 15:02:34 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/09 17:10:18 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,24 @@
 #include <set>
 #include <string>
 
-// void mapDefaultConstructor(void)
-// {
-//     ft::map<std::string, int> a;
-//     ft::map<std::string, int> b(a);
-// }
+void mapDefaultConstructor(void)
+{
+    ft::map<std::string, int> a;
+    ft::map<std::string, int> b(a);
+}
 
-// void mapSingleInsertNew(void)
-// {
-//     ft::map<std::string, int> a;
-//     a.insert(ft::make_pair("d", 4));
-//     a.insert(ft::make_pair("b", 2));
-//     a.insert(ft::make_pair("e", 5));
-//     a.insert(ft::make_pair("c", 3));
-//     a.insert(ft::make_pair("a", 1));
+void mapSingleInsertNew(void)
+{
+    ft::map<std::string, int> a;
+    a.insert(ft::make_pair("d", 4));
+    a.insert(ft::make_pair("b", 2));
+    a.insert(ft::make_pair("e", 5));
+    a.insert(ft::make_pair("c", 3));
+    a.insert(ft::make_pair("a", 1));
 
-//     // a.printTree();
-//     std::cout << a["b"] << std::endl;
-// }
+    a.printTree();
+    std::cout << a["b"] << std::endl;
+}
 
 // void mapSingleErase(void)
 // {
@@ -73,16 +73,16 @@
 //     }
 // }
 
-// void mapCount(void)
-// {
-//     ft::map<int, std::string> strToInt;
-//     strToInt.insert(ft::make_pair(1, "one"));
-//     strToInt.insert(ft::make_pair(2, "two"));
-//     strToInt.insert(ft::make_pair(3, "three"));
-//     strToInt.insert(ft::make_pair(4, "four"));
-//     assert(strToInt.count(1) == 1);
-//     assert(strToInt.count(5) == 0);
-// }
+void mapCount(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    assert(strToInt.count(1) == 1);
+    assert(strToInt.count(5) == 0);
+}
 
 // void mapRangeErase(void)
 // {
@@ -474,7 +474,9 @@
 
 void mapTests(void)
 {
-
+    mapDefaultConstructor();
+    mapSingleInsertNew();
+    mapCount();
     // hassanErase();
     // gerardErase();
     // mapIterators();
@@ -508,8 +510,4 @@ void mapTests(void)
     // {
     //     std::cout << "Node == " << it->second << std::endl;
     // }
-    ft::map<int, int> a;
-    ft::map<int, int>::iterator it = a.begin();
-
-    std::cout << it->first << std::endl;
 }

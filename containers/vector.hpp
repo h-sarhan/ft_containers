@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/07 19:50:57 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/09 11:03:47 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@
 #include <iterator>
 #include <limits>
 #include <memory>
-#include <vector>
 #include <stdexcept>
+#include <vector>
+#include <cstring>
 
 #include "enable_if.hpp"
 #include "is_integral.hpp"
@@ -370,13 +371,19 @@ template <class T, class Alloc = std::allocator<T> > class vector
         if (validate_iterators(first, last, max_size()) == false)
             return;
         const size_type dist = std::distance(first, last);
-        _realloc(dist);
-        size_type i;
-        _size = 0;
-        for (i = 0; first != last; i++)
+        if (dist > _capacity)
+            _realloc(dist);
+        for (size_type i = 0; first != last; i++)
         {
-            _alloc.construct(&_array[i], *first);
+            if (i >= _size)
+                _alloc.construct(&_array[i], *first);
+            else
+                _array[i] = *first;
             first++;
+        }
+        for (size_type i = dist; i < _size; i++)
+        {
+            _alloc.destroy(&_array[i]);
         }
         _size = dist;
     }
@@ -453,21 +460,29 @@ template <class T, class Alloc = std::allocator<T> > class vector
         }
         // ! REPLACE
         const size_type insert_idx = position - begin();
-        if (_size + n > _capacity) // o(1)
+        if (_size + n > _capacity)
         {
-            _realloc(_size + n); // o(n)
+            _realloc(_size + n);
         }
-        if (empty() == false) // o(1)
+        // ! REPLACE
+        if (_size + n > _capacity)
         {
-            for (size_type i = _size - 1; i >= insert_idx; i--) // o(n)
+            _realloc(_size + n);
+        }
+        if (empty() == false)
+        {
+            for (size_type i = _size - 1; i >= insert_idx; i--)
             {
                 if (i + n >= _size)
                     _alloc.construct(&_array[i + n], _array[i]);
                 else
                     _array[i + n] = _array[i];
+                if (i == 0)
+                    break;
             }
+            // * std::memmove(_array + insert_idx + n, _array + insert_idx, (_size - insert_idx) * sizeof(value_type));
         }
-        _size += n;
+        (void)val;
         for (size_type i = 0; i < n; i++)
         {
             //     _alloc.destroy(&_array[i + insert_idx]);
@@ -477,6 +492,11 @@ template <class T, class Alloc = std::allocator<T> > class vector
             else
                 _array[i + insert_idx] = val;
         }
+        // for (size_type i = 0; i < n; i++)
+        // {
+        //     _alloc.construct(&_array[i + insert_idx], val);
+        // }
+        _size += n;
     }
 
     // * Inserts elements between first and last into the position specified by the given iterator
@@ -515,7 +535,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
                 _alloc.construct(&_array[i + insert_idx], temp[i]);
             }
             _size += temp.size();
-            return ;
+            return;
         }
         // ! REPLACE
         const size_type insert_idx = position - begin();

@@ -6,9 +6,12 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 16:25:38 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/01 11:27:16 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/09 15:01:55 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef STACK_HPP
+#define STACK_HPP
 
 #include "vector.hpp"
 #include <cstddef>
@@ -118,3 +121,4 @@ bool operator>=(const stack<T, Container> &lhs, const stack<T, Container> &rhs)
     return lhs.c >= rhs.c;
 }
 }   // namespace ft
+#endif

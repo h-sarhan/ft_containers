@@ -6,10 +6,12 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 19:22:48 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/06 04:37:37 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/09 15:01:00 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef ITERATOR_VALIDATION_HPP
+#define ITERATOR_VALIDATION_HPP
 #include "iterator_traits.hpp"
 #include <iterator>
 
@@ -107,3 +109,5 @@ template <typename PointerType> bool is_one_way(PointerType *it)
 }
 
 }   // namespace ft
+
+#endif

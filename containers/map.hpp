@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/09 17:08:41 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/09 19:12:19 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,8 @@ class map
         {
             return iterator(NULL, _tree.root);
         }
-        // * return iterator(min_node(_tree.root), _tree.root);
-        return iterator(NULL, _tree.root);
+        return iterator(min_node(_tree.root), _tree.root);
+        // return iterator(NULL, _tree.root);
     }
     const_iterator begin(void) const
     {
@@ -153,8 +153,8 @@ class map
         {
             return const_iterator(NULL, _tree.root);
         }
-        // * return const_iterator(min_node(_tree.root), _tree.root);
-        return const_iterator(NULL, _tree.root);
+        return const_iterator(min_node(_tree.root), _tree.root);
+        // return const_iterator(NULL, _tree.root);
     }
 
     // * End iterator
@@ -314,7 +314,6 @@ class map
         while (it != last)
         {
             iterator next = it;
-            std::cout << it->first << std::endl;
             next++;
             erase(it);
             it = next;

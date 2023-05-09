@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/09 17:09:48 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/09 19:29:34 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ template <class T, class Compare, class Alloc> class tree
                 else
                 {
                     node->child[LEFT] = new_node;
+                    new_node->parent = node;
                     return ft::make_pair(new_node, true);
                 }
             }
@@ -106,6 +107,7 @@ template <class T, class Compare, class Alloc> class tree
                 else
                 {
                     node->child[RIGHT] = new_node;
+                    new_node->parent = node;
                     return ft::make_pair(new_node, true);
                 }
             }
@@ -129,7 +131,7 @@ template <class T, class Compare, class Alloc> class tree
             return;
         }
         traverse(node->child[LEFT]);
-        std::cout << "Key: " << node->data.first << "\nValue: " << node->data.second << std::endl;
+        std::cout << "Key: " << node->data.first << " | Value: " << node->data.second << std::endl;
         traverse(node->child[RIGHT]);
     }
 

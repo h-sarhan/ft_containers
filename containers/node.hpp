@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:07:03 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/09 14:30:00 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/09 18:59:33 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,24 +32,25 @@ template <class T> struct node
   public:
     data_type data;
     node<T> *child[2];
+    node<T> *parent;
     color col;
 
     // * Default constructor
-    node(void) : data(), col(BLACK)
+    node(void) : data(), parent(NULL), col(BLACK)
     {
         child[LEFT] = NULL;
         child[RIGHT] = NULL;
     }
 
     // * Constructor
-    node(const data_type &val, bool color) : data(val), col(color)
+    node(const data_type &val, bool color) : data(val), parent(NULL), col(color)
     {
         child[LEFT] = NULL;
         child[RIGHT] = NULL;
     }
 
     // * Copy constructor
-    node(const node &old) : data(old.data), col(old.col)
+    node(const node &old) : data(old.data), parent(old.parent), col(old.col)
     {
         child[LEFT] = old.child[LEFT];
         child[RIGHT] = old.child[RIGHT];
@@ -60,8 +61,8 @@ template <class T> struct node
     {
         if (this == &rhs)
             return *this;
-        data_type old_data = data;
         data = rhs.data;
+        parent = rhs.parent;
         child[LEFT] = rhs.child[LEFT];
         child[RIGHT] = rhs.child[RIGHT];
         col = rhs.col;

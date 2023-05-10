@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/09 19:29:34 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/10 11:41:10 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "make_pair.hpp"
 #include "node.hpp"
+#include "node_traversal.hpp"
 #include "pair.hpp"
 #include <cstddef>
 #include <iostream>
@@ -48,6 +49,7 @@ template <class T, class Compare, class Alloc> class tree
     // * Destructor
     ~tree(void)
     {
+        clear(root);
     }
 
     // * Copy assignment constructor
@@ -157,15 +159,114 @@ template <class T, class Compare, class Alloc> class tree
         return NULL;
     }
 
+    // void transplant(node_type *n1, node_type *n2)
+    // {
+    //     if (n1 == n1->parent->child[LEFT])
+    //     {
+    //         n1->parent->child[LEFT] = n2;
+    //     }
+    //     else
+    //         n1->parent->child[RIGHT] = n2;
+    //     if (n2 != NULL)
+    //         n2->parent = n1->parent;
+    // }
+
+    // ! Explain the cases here
     void delete_node(node_type *node)
     {
-        (void) node;
+        if (node == NULL)
+            return;
+        // ? Check if the node is the root
+        if (node == root)
+        {
+            _alloc.destroy(node);
+            _alloc.deallocate(node, 1);
+            root = NULL;
+            return;
+        }
+        // ? Check if case 1
+        if (node->child[LEFT] == NULL && node->child[RIGHT] == NULL)
+        {
+            node_type *parent = node->parent;
+            bool dir;
+            if (parent->child[LEFT] == node)
+                dir = LEFT;
+            else
+                dir = RIGHT;
+            _alloc.destroy(node);
+            _alloc.deallocate(node, 1);
+            parent->child[dir] = NULL;
+            return;
+        }
+        // ? Check if case 2
+        if ((node->child[LEFT] != NULL) != (node->child[RIGHT] != NULL))
+        {
+            node_type *parent = node->parent;
+            bool node_dir;
+            if (parent->child[LEFT] == node)
+                node_dir = LEFT;
+            else
+                node_dir = RIGHT;
+            bool child_dir;
+            if (node->child[LEFT] != NULL)
+                child_dir = LEFT;
+            else
+                child_dir = RIGHT;
+            parent->child[node_dir] = node->child[child_dir];
+            _alloc.destroy(node);
+            _alloc.deallocate(node, 1);
+            return;
+        }
+        // ? This is case 3
+        node_type *successor = successor_node(node);
+        node_type *parent = node->parent;
+        bool node_dir;
+        if (parent->child[LEFT] == node)
+            node_dir = LEFT;
+        else
+            node_dir = RIGHT;
+        // ? Checking for subcase 1
+        if (successor == node->child[RIGHT])
+        {
+            successor->child[LEFT] = node->child[LEFT];
+            parent->child[node_dir] = node->child[RIGHT];
+            _alloc.destroy(node);
+            _alloc.deallocate(node, 1);
+            return;
+        }
+        // ? This is subcase 2
+        // * Replace successor with its right child
+        bool successor_dir;
+        if (successor == successor->parent->child[LEFT])
+            successor_dir = LEFT;
+        else
+            successor_dir = RIGHT;
+        successor->parent->child[successor_dir] = successor->child[RIGHT];
+        successor->child[RIGHT]->parent = successor->parent;
+
+        // Set the successor to be the parent of the node's right child
+        node->child[RIGHT]->parent = successor;
+
+        // Set the successor's parent to be the node's parent
+        successor->parent = node->parent;
+    
+        // Set the parent of the left child of the node to be the node's successor
+        node->child[LEFT]->parent = successor;
+        _alloc.destroy(node);
+        _alloc.deallocate(node, 1);
     }
 
     // * Free the nodes from a tree
     void clear(node_type *node)
     {
-        (void) node;
+        if (node == NULL)
+        {
+            return;
+        }
+        clear(node->child[LEFT]);
+        clear(node->child[RIGHT]);
+        _alloc.destroy(node);
+        _alloc.deallocate(node, 1);
     }
 };
 }   // namespace ft

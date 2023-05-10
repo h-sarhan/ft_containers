@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/09 19:12:19 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/10 11:36:43 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,7 +332,7 @@ class map
         value_compare temp_val_comp = x.value_comp();
         allocator_type temp_allocator = x.get_allocator();
         size_type temp_size = x._size;
-        tree_type *temp_bst = x._tree;
+        tree_type temp_bst = x._tree;
 
         x._key_comp = _key_comp;
         x._val_comp = _val_comp;

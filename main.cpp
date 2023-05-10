@@ -7,7 +7,7 @@ void mapTests(void);
 
 int main(void)
 {
-    // vectorTests();
-    mapTests();
+    vectorTests();
+    // mapTests();
     return 0;
 }

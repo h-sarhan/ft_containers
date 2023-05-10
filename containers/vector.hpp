@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/09 11:03:47 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/10 09:28:39 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 #include "reverse_iterator.hpp"
 #include "vector_iterator.hpp"
 
+// ! Check all reallocs
+// ! Run the testers again
 namespace ft
 {
 template <class T, class Alloc = std::allocator<T> > class vector
@@ -462,12 +464,7 @@ template <class T, class Alloc = std::allocator<T> > class vector
         const size_type insert_idx = position - begin();
         if (_size + n > _capacity)
         {
-            _realloc(_size + n);
-        }
-        // ! REPLACE
-        if (_size + n > _capacity)
-        {
-            _realloc(_size + n);
+            _realloc((_size + n) * 2);
         }
         if (empty() == false)
         {
@@ -485,17 +482,11 @@ template <class T, class Alloc = std::allocator<T> > class vector
         (void)val;
         for (size_type i = 0; i < n; i++)
         {
-            //     _alloc.destroy(&_array[i + insert_idx]);
-            // _alloc.construct(&_array[i + insert_idx], val);
             if (i + insert_idx >= _size)
                 _alloc.construct(&_array[i + insert_idx], val);
             else
                 _array[i + insert_idx] = val;
         }
-        // for (size_type i = 0; i < n; i++)
-        // {
-        //     _alloc.construct(&_array[i + insert_idx], val);
-        // }
         _size += n;
     }
 
@@ -504,18 +495,14 @@ template <class T, class Alloc = std::allocator<T> > class vector
     void insert(iterator position, InputIterator first, InputIterator last,
                 typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
     {
-        if (first == last || validate_iterators(first, last, max_size()) == false)
-        {
-            return;
-        }
-        if (is_one_way(first))
+        if (is_one_way(first) && first != last)
         {
             // ! REPLACE
             const size_type insert_idx = position - begin();
             vector<value_type> temp(first, last);
             if (_size + temp.size() > _capacity)
             {
-                _realloc(_size + temp.size());
+                _realloc((_size + temp.size()) * 2);
             }
             if (empty() == false)
             {
@@ -537,29 +524,40 @@ template <class T, class Alloc = std::allocator<T> > class vector
             _size += temp.size();
             return;
         }
+        const size_type dist = std::distance(first, last);
+        if (dist < 0 || dist >= max_size())
+        {
+            return;
+        }
+
         // ! REPLACE
         const size_type insert_idx = position - begin();
-        const size_type dist = std::distance(first, last);
         if (_size + dist > _capacity)
         {
-            _realloc(_size + dist);
+            _realloc((_size + dist) * 4);
         }
         if (empty() == false)
         {
             for (size_type i = _size - 1; i >= insert_idx; i--)
             {
-                if (i + dist < _size)
-                    _alloc.destroy(&_array[i + dist]);
-                _alloc.construct(&_array[i + dist], _array[i]);
+                if (i + dist >= _size)
+                {
+                    _alloc.construct(&_array[i + dist], _array[i]);
+                }
+                else
+                    _array[i + dist] = _array[i];
                 if (i == 0)
                     break;
             }
         }
         for (size_type i = 0; i < dist; i++)
         {
-            if (i + insert_idx < _size)
-                _alloc.destroy(&_array[i + insert_idx]);
-            _alloc.construct(&_array[i + insert_idx], *first);
+            if (i + insert_idx >= _size)
+            {
+                _alloc.construct(&_array[i + insert_idx], *first);
+            }
+            else
+                _array[i + insert_idx] = *first;
             first++;
         }
         _size += dist;

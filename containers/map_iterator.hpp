@@ -35,20 +35,19 @@ template <class NodeType, class T> class map_iterator
   private:
     // * Private attributes
     node_pointer _node_ptr;
-    node_pointer _root;
 
   public:
     // * Constructors and destructors
-    map_iterator(void)
+    map_iterator(void) : _node_ptr(NULL)
     {
     }
 
-    map_iterator(node_pointer ptr, node_pointer root) : _node_ptr(ptr), _root(root)
+    map_iterator(node_pointer ptr) : _node_ptr(ptr)
     {
     }
 
     template <class T2>
-    map_iterator(const map_iterator<NodeType, T2> &old) : _node_ptr(old._node_ptr), _root(old._root)
+    map_iterator(const map_iterator<NodeType, T2> &old) : _node_ptr(old._node_ptr)
     {
     }
 
@@ -58,6 +57,7 @@ template <class NodeType, class T> class map_iterator
         {
             return *this;
         }
+        _node_ptr = rhs._node_ptr;
         return *this;
     }
 
@@ -71,15 +71,25 @@ template <class NodeType, class T> class map_iterator
         return _node_ptr;
     }
 
+    node_pointer get_root(void) const
+    {
+        node_pointer root = _node_ptr;
+        while (root->parent != NULL)
+        {
+            root = root->parent;
+        }
+        return root;
+    }
+
     // * Iterator traversal
     map_iterator &operator++(void)   // pre-increment
     {
         // ? If the passed node was one behind the first element then incrementing it should give
-        // you the first element.
+        // ? you the first element.
         if (_node_ptr == NULL)
         {
             // ? Get the first element of the map
-            _node_ptr = min_node(_root);
+            // _node_ptr = min_node(get_root());
             return *this;
         }
         _node_ptr = successor_node(_node_ptr);
@@ -89,11 +99,11 @@ template <class NodeType, class T> class map_iterator
     map_iterator &operator--(void)   // pre-decrement
     {
         // ? If the passed node was one after the first element then incrementing it should give
-        // you the last element.
+        // ? you the last element.
         if (_node_ptr == NULL)
         {
             // ? Get the last element of the map
-            _node_ptr = max_node(_root);
+            // _node_ptr = max_node(get_root());
             return *this;
         }
         _node_ptr = ft::predecessor_node(_node_ptr);

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/12 12:19:01 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/12 16:42:32 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,10 @@ template <class T, class Compare, class Alloc> class tree
   public:
     typedef T node_type;
     node_type *root;
+    typedef Compare compare_type;
 
   private:
-    Compare _comp;
+    compare_type _comp;
     Alloc _alloc;
 
   public:
@@ -60,6 +61,7 @@ template <class T, class Compare, class Alloc> class tree
             return *this;
         root = rhs.root;
         _comp = rhs._comp;
+        _alloc = rhs._alloc;
         return *this;
     }
 

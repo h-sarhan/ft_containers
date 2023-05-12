@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/12 09:00:54 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/12 16:40:59 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -479,20 +479,20 @@ void hassanErase(void)
 
 void mapTests(void)
 {
-    // mapDefaultConstructor();
-    // mapSingleInsertNew();
-    // mapCount();
-    // hassanErase();
-    // gerardErase();
-    // mapIterators();
-    // mapSingleErase();
-    // mapRangeErase();
-    // mapClear();
-    // mapSwap();
-    // mapRangeBasedConstructor();
-    // mapInsertWithReturnedIterator();
-    // mapLowerBound();
-    // mapUpperBound();
+    mapDefaultConstructor();
+    mapSingleInsertNew();
+    mapCount();
+    hassanErase();
+    gerardErase();
+    mapIterators();
+    mapSingleErase();
+    mapRangeErase();
+    mapClear();
+    mapSwap();
+    mapRangeBasedConstructor();
+    mapInsertWithReturnedIterator();
+    mapLowerBound();
+    mapUpperBound();
     // mapFind();
     // mapSwap();
     // gerardSwap();

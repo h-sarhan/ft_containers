@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:06:35 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/11 03:44:18 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/12 16:35:59 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ class map
   public:
     typedef typename allocator_type::pointer pointer;
     typedef typename allocator_type::const_pointer const_pointer;
-    typedef map_iterator<node_type, value_type> iterator;
-    // ! typedef const_map_iterator<node_type, value_type> const_iterator;
-    typedef map_iterator<node_type, value_type> const_iterator;
+    typedef map_iterator<tree_type> iterator;
+    typedef const_map_iterator<tree_type> const_iterator;
+    // typedef map_iterator<tree_type> const_iterator;
     typedef ft::reverse_iterator<iterator> reverse_iterator;
     typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
     typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
@@ -141,9 +141,9 @@ class map
         // ! Check if this is correct behaviour with std::map on linux and mac
         if (empty())
         {
-            return iterator(NULL);
+            return iterator(NULL, &_tree);
         }
-        return iterator(min_node(_tree.root));
+        return iterator(min_node(_tree.root), &_tree);
     }
     const_iterator begin(void) const
     {
@@ -151,9 +151,9 @@ class map
         // sentinel node instead??
         if (empty())
         {
-            return const_iterator(NULL);
+            return const_iterator(NULL, &_tree);
         }
-        return const_iterator(min_node(_tree.root));
+        return const_iterator(min_node(_tree.root), &_tree);
     }
 
     // * End iterator
@@ -165,7 +165,7 @@ class map
         {
             return begin();
         }
-        return iterator(NULL);
+        return iterator(NULL, &_tree);
     }
     const_iterator end(void) const
     {
@@ -173,7 +173,7 @@ class map
         {
             return begin();
         }
-        return const_iterator(NULL);
+        return const_iterator(NULL, &_tree);
     }
 
     // * Reverse begin iterator
@@ -184,7 +184,7 @@ class map
             // idk
         }
 
-        return reverse_iterator(iterator(max_node(_tree.root)));
+        return reverse_iterator(iterator(max_node(_tree.root), &_tree));
     }
     const_reverse_iterator rbegin(void) const
     {
@@ -193,7 +193,7 @@ class map
             // idk
         }
 
-        return const_reverse_iterator(iterator(max_node(_tree.root)));
+        return const_reverse_iterator(iterator(max_node(_tree.root), &_tree));
     }
 
     // * Reverse end iterator
@@ -203,7 +203,7 @@ class map
         {
             // idk
         }
-        return reverse_iterator(iterator(min_node(_tree.root)));
+        return reverse_iterator(iterator(min_node(_tree.root), &_tree));
     }
     const_reverse_iterator rend(void) const
     {
@@ -211,7 +211,7 @@ class map
         {
             // idk
         }
-        return const_reverse_iterator(iterator(min_node(_tree.root)));
+        return const_reverse_iterator(iterator(min_node(_tree.root), &_tree));
     }
 
     // ** Capacity
@@ -258,9 +258,9 @@ class map
         if (res.second == true)
         {
             _size += 1;
-            return ft::make_pair(iterator(res.first), true);
+            return ft::make_pair(iterator(res.first, &_tree), true);
         }
-        return ft::make_pair(iterator(res.first), false);
+        return ft::make_pair(iterator(res.first, &_tree), false);
     }
 
     // * Single element insert with hint. Hint is just ignored lol!
@@ -379,7 +379,7 @@ class map
         {
             return end();
         }
-        return iterator(search);
+        return iterator(search, &_tree);
     }
     const_iterator find(const key_type &k) const
     {
@@ -388,7 +388,7 @@ class map
         {
             return end();
         }
-        return const_iterator(search);
+        return const_iterator(search, &_tree);
     }
 
     // * Count number of elements matching key. For this container this will be 1 or 0
@@ -408,7 +408,7 @@ class map
         {
             if (_key_comp(it->first, k) == false)
             {
-                return iterator(it.base());
+                return iterator(it.base(), &_tree);
             }
         }
         return end();
@@ -419,7 +419,7 @@ class map
         {
             if (_key_comp(it->first, k) == false)
             {
-                return const_iterator(it.base());
+                return const_iterator(it.base(), &_tree);
             }
         }
         return end();
@@ -432,7 +432,7 @@ class map
         {
             if (_key_comp(k, it->first) == true)
             {
-                return iterator(it.base());
+                return iterator(it.base(), &_tree);
             }
         }
         return end();
@@ -443,7 +443,7 @@ class map
         {
             if (_key_comp(k, it->first) == true)
             {
-                return const_iterator(it.base());
+                return const_iterator(it.base(), &_tree);
             }
         }
         return end();

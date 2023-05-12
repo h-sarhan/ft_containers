@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/11 03:36:04 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/12 12:19:01 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,10 +137,72 @@ template <class T, class Compare, class Alloc> class tree
         return NULL;
     }
 
-    // ! Explain the cases here
     void delete_node(node_type *node)
     {
-       (void)node;
+        node_type *search;
+        node_type *parent;
+        bool dir;
+
+        if (node == NULL)
+            return;
+        search = this->root;
+        // Find the parent of the node we want to delete
+        while (true)
+        {
+            if (_comp(search->data.first, node->data.first) == true)
+                dir = RIGHT;
+            else if (_comp(node->data.first, search->data.first) == true)
+                dir = LEFT;
+            else
+                break;
+            parent = search;
+            search = search->child[dir];
+            if (search == NULL)
+                return;
+        }
+        // If the node has no right child, then replace the node by its left child
+        if (node->child[RIGHT] == NULL)
+        {
+            // Replace node by its left child
+            parent->child[dir] = node->child[LEFT];
+        }
+        // If the node has no right child, then replace the node by its left child
+        else
+        {
+            node_type *right_child = node->child[RIGHT];
+            // If the node's right child has no left child then we move the node's right child into
+            // the node's place
+            if (right_child->child[LEFT] == NULL)
+            {
+                // The right child's left child is now the left child of the node to be deleted
+                right_child->child[LEFT] = node->child[LEFT];
+                // Replace node by its right child
+                parent->child[dir] = right_child;
+            }
+            // If the node's right child has a left child then we have to replace the node by its
+            // successor
+            else
+            {
+                // Find the successor node
+                // The successor node is the smallest node greater than the current node
+                // It is found in the leftmost leaf of the right subtree
+                node_type *successor = node;
+                while (true)
+                {
+                    successor = right_child->child[LEFT];
+                    if (successor->child[LEFT] == NULL)
+                        break;
+                    right_child = successor;
+                }
+                // Replace successor with 
+                right_child->child[LEFT] = successor->child[RIGHT];
+                successor->child[LEFT] = node->child[LEFT];
+                successor->child[RIGHT] = node->child[RIGHT];
+                parent->child[dir] = successor;
+            }
+        }
+        _alloc.destroy(node);
+        _alloc.deallocate(node, 1);
     }
 
     // * Free the nodes from a tree

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/12 16:42:32 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/14 20:20:15 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ template <class T, class Compare, class Alloc> class tree
         if (node == NULL)
             return;
         search = this->root;
+        parent = NULL;
         // Find the parent of the node we want to delete
         while (true)
         {
@@ -165,8 +166,13 @@ template <class T, class Compare, class Alloc> class tree
         // If the node has no right child, then replace the node by its left child
         if (node->child[RIGHT] == NULL)
         {
-            // Replace node by its left child
-            parent->child[dir] = node->child[LEFT];
+            if (parent == NULL)
+            {
+                root = node->child[LEFT];
+            }
+            else
+                // Replace node by its left child
+                parent->child[dir] = node->child[LEFT];
         }
         // If the node has no right child, then replace the node by its left child
         else
@@ -178,8 +184,15 @@ template <class T, class Compare, class Alloc> class tree
             {
                 // The right child's left child is now the left child of the node to be deleted
                 right_child->child[LEFT] = node->child[LEFT];
-                // Replace node by its right child
-                parent->child[dir] = right_child;
+
+                if (parent == NULL)
+                {
+                    // We are deleting the root
+                    root = right_child;
+                }
+                else
+                    // Replace node by its right child
+                    parent->child[dir] = right_child; // ! BAD LINE
             }
             // If the node's right child has a left child then we have to replace the node by its
             // successor
@@ -200,7 +213,12 @@ template <class T, class Compare, class Alloc> class tree
                 right_child->child[LEFT] = successor->child[RIGHT];
                 successor->child[LEFT] = node->child[LEFT];
                 successor->child[RIGHT] = node->child[RIGHT];
-                parent->child[dir] = successor;
+                if (parent == NULL)
+                {
+                    root = successor;
+                }
+                else
+                    parent->child[dir] = successor;
             }
         }
         _alloc.destroy(node);

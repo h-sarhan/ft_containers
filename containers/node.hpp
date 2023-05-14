@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:07:03 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/12 16:14:54 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/14 20:43:50 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@
 #define LEFT  0
 #define RIGHT 1
 
+// ! ADD POINTER TO TREE ROOT TO THE NODE CLASS
 namespace ft
 {
 template <class T> struct node
 {
-public:
+  public:
     typedef bool color;
     typedef T data_type;
 

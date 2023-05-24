@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 19:16:13 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/03/31 12:26:23 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/24 16:24:00 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,6 @@ template <class T1, class T2> struct pair
 
     pair(const pair &old) : first(old.first), second(old.second)
     {
-    }
-
-    // * Copy assignment
-    pair &operator=(const pair &pr)
-    {
-        first = pr.first;
-        second = pr.second;
-        return *this;
     }
 };
 

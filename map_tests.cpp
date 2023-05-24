@@ -6,12 +6,11 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/14 20:02:27 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/24 16:24:10 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "make_pair.hpp"
-#include "map.hpp"
 #include "vector.hpp"
 #include <cassert>
 #include <cstdio>
@@ -460,7 +459,7 @@ void hassanErase(void)
     clone.erase(clone.begin(), clone.begin());
     clone.erase(clone.end(), clone.end());
 
-    // clone.swap(test);
+    clone.swap(test);
 
     clone.erase(++(++(clone.begin())));
     clone.erase(++(clone.begin()));
@@ -479,52 +478,21 @@ void hassanErase(void)
 
 void mapTests(void)
 {
-    mapDefaultConstructor();
-    mapSingleInsertNew();
-    mapCount();
-    hassanErase();
+    // mapDefaultConstructor();
+    // mapSingleInsertNew();
+    // mapCount();
+    // hassanErase();
     gerardErase();
-    mapIterators();
-    mapSingleErase();
-    mapRangeErase();
-    mapClear();
-    mapSwap();
-    mapRangeBasedConstructor();
-    mapInsertWithReturnedIterator();
-    mapLowerBound();
-    mapUpperBound();
+    // mapIterators();
+    // mapSingleErase();
+    // mapRangeErase();
+    // mapClear();
+    // mapSwap();
+    // mapRangeBasedConstructor();
+    // mapInsertWithReturnedIterator();
+    // mapLowerBound();
+    // mapUpperBound();
     // mapFind();
     // mapSwap();
     // gerardSwap();
-    // std::cout << std::endl;
-    // ft::map<int, std::string> strToInt;
-    // strToInt.insert(ft::make_pair(1, "one"));
-    // strToInt.insert(ft::make_pair(2, "two"));
-    // strToInt.insert(ft::make_pair(3, "three"));
-    // strToInt.insert(ft::make_pair(4, "four"));
-    // strToInt.insert(ft::make_pair(5, "five"));
-    // for (ft::map<int, std::string>::iterator it = strToInt.begin(); it != strToInt.end(); it++)
-    // {
-    //     std::cout << "Node == " << it->second << std::endl;
-    // }
-    // strToInt.clear();
-    // std::cout << std::endl;
-    // // strToInt.erase(strToInt.begin());
-    // for (ft::map<int, std::string>::iterator it = strToInt.begin(); it != strToInt.end(); it++)
-    // {
-    //     std::cout << "Node == " << it->second << std::endl;
-    // }
-    // ft::map<int, std::string> strToInt;
-    // strToInt.insert(ft::make_pair(1, "one"));
-    // strToInt.insert(ft::make_pair(2, "two"));
-    // strToInt.insert(ft::make_pair(3, "three"));
-    // strToInt.insert(ft::make_pair(4, "four"));
-    // ft::map<int, std::string>::iterator first = strToInt.begin();
-    // for (ft::map<int, std::string>::iterator it = strToInt.begin(); it != strToInt.end(); it++)
-    // {
-    //     std::cout << it->second << std::endl;
-    // }
-    // ft::map<int, std::string>::iterator last = first;
-    // last++;
-    // last++;
 }

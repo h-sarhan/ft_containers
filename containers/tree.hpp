@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 03:04:59 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/14 20:20:15 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/24 15:58:02 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,88 +141,123 @@ template <class T, class Compare, class Alloc> class tree
 
     void delete_node(node_type *node)
     {
-        node_type *search;
-        node_type *parent;
-        bool dir;
+        // pointer to store the parent of the current node
+        node_type *parent = NULL;
 
-        if (node == NULL)
-            return;
-        search = this->root;
-        parent = NULL;
-        // Find the parent of the node we want to delete
-        while (true)
+        // start with the root node
+        node_type *curr = root;
+        bool dir = LEFT;
+
+        // search key in the BST and set its parent pointer
+        // traverse the tree and search for the key
+        while (curr != NULL && (_comp(curr->data.first, node->data.first) == true ||
+                                _comp(node->data.first, curr->data.first) == true))
         {
-            if (_comp(search->data.first, node->data.first) == true)
-                dir = RIGHT;
-            else if (_comp(node->data.first, search->data.first) == true)
-                dir = LEFT;
-            else
-                break;
-            parent = search;
-            search = search->child[dir];
-            if (search == NULL)
-                return;
-        }
-        // If the node has no right child, then replace the node by its left child
-        if (node->child[RIGHT] == NULL)
-        {
-            if (parent == NULL)
+            // update the parent to the current node
+            parent = curr;
+
+            // if the given key is less than the current node, go to the left subtree;
+            // otherwise, go to the right subtree
+            if (_comp(node->data.first, curr->data.first) == true)
             {
-                root = node->child[LEFT];
+                curr = curr->child[LEFT];
+                dir = LEFT;
             }
-            else
-                // Replace node by its left child
-                parent->child[dir] = node->child[LEFT];
+            else if (_comp(curr->data.first, node->data.first) == true)
+            {
+                curr = curr->child[RIGHT];
+                dir = RIGHT;
+            }
         }
-        // If the node has no right child, then replace the node by its left child
+
+        // return if the key is not found in the tree
+        // This should never happen
+        if (curr == NULL)
+        {
+            return;
+        }
+
+        // Case 1: node to be deleted has no children, i.e., it is a leaf node
+        if (curr->child[LEFT] == NULL && curr->child[RIGHT] == NULL)
+        {
+            // if the node to be deleted is not a root node, then set its
+            // parent left/right child to null
+            if (curr != root)
+            {
+                if (parent->child[LEFT] == curr)
+                {
+                    parent->child[LEFT] = NULL;
+                }
+                else
+                {
+                    parent->child[RIGHT] = NULL;
+                }
+            }
+            // if the tree has only a root node, set it to null
+            else
+            {
+                root = NULL;
+            }
+
+            // deallocate the memory
+            // free(curr);   // or delete curr;
+            _alloc.destroy(curr);
+            _alloc.deallocate(curr, 1);
+        }
+
+        // Case 2: node to be deleted has two children
+        else if (curr->child[LEFT] && curr->child[RIGHT])
+        {
+            // find its inorder successor node
+            node_type *successor = min_node(curr->child[RIGHT]);
+
+            // store successor value
+            typename node_type::data_type val = successor->data;
+
+            // recursively delete the successor. Note that the successor
+            // will have at most one child (right child)
+            delete_node(successor);
+
+            // copy value of the successor to the current node
+            // curr->data = val;
+            node_type *new_node_to_replace_curr = _alloc.allocate(1);
+            _alloc.construct(new_node_to_replace_curr, node_type(val, curr->col));
+            parent->child[dir] = new_node_to_replace_curr;
+            _alloc.destroy(curr);
+            _alloc.deallocate(curr, 1);
+        }
+
+        // Case 3: node to be deleted has only one child
         else
         {
-            node_type *right_child = node->child[RIGHT];
-            // If the node's right child has no left child then we move the node's right child into
-            // the node's place
-            if (right_child->child[LEFT] == NULL)
-            {
-                // The right child's left child is now the left child of the node to be deleted
-                right_child->child[LEFT] = node->child[LEFT];
+            // choose a child node
+            node_type *child = (curr->child[LEFT]) ? curr->child[LEFT] : curr->child[RIGHT];
 
-                if (parent == NULL)
+            // if the node to be deleted is not a root node, set its parent
+            // to its child
+            if (curr != root)
+            {
+                if (curr == parent->child[LEFT])
                 {
-                    // We are deleting the root
-                    root = right_child;
+                    parent->child[LEFT] = child;
                 }
                 else
-                    // Replace node by its right child
-                    parent->child[dir] = right_child; // ! BAD LINE
+                {
+                    parent->child[RIGHT] = child;
+                }
             }
-            // If the node's right child has a left child then we have to replace the node by its
-            // successor
+
+            // if the node to be deleted is a root node, then set the root to the child
             else
             {
-                // Find the successor node
-                // The successor node is the smallest node greater than the current node
-                // It is found in the leftmost leaf of the right subtree
-                node_type *successor = node;
-                while (true)
-                {
-                    successor = right_child->child[LEFT];
-                    if (successor->child[LEFT] == NULL)
-                        break;
-                    right_child = successor;
-                }
-                // Replace successor with 
-                right_child->child[LEFT] = successor->child[RIGHT];
-                successor->child[LEFT] = node->child[LEFT];
-                successor->child[RIGHT] = node->child[RIGHT];
-                if (parent == NULL)
-                {
-                    root = successor;
-                }
-                else
-                    parent->child[dir] = successor;
+                root = child;
             }
+
+            // deallocate the memory
+            // free(curr);
+            _alloc.destroy(curr);
+            _alloc.deallocate(curr, 1);
         }
-        _alloc.destroy(node);
-        _alloc.deallocate(node, 1);
     }
 
     // * Free the nodes from a tree
@@ -232,10 +267,15 @@ template <class T, class Compare, class Alloc> class tree
         {
             return;
         }
-        clear(node->child[LEFT]);
+        node_type *right = node->child[RIGHT];
+        node_type *left = node->child[LEFT];
+        clear(left);
+        // node->child[LEFT] = NULL;
         _alloc.destroy(node);
         _alloc.deallocate(node, 1);
-        clear(node->child[RIGHT]);
+        node = NULL;
+        clear(right);
+        // node->child[RIGHT] = NULL;
     }
 };
 }   // namespace ft

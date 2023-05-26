@@ -13,6 +13,7 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
+#include "node.hpp"
 #include "pair.hpp"
 #include <functional>
 #include <memory>
@@ -20,7 +21,7 @@
 namespace ft
 {
 template <class Key, class T, class Compare = std::less<Key>,
-          class Alloc = std::allocator<ft::pair<const Key, T> > >
+          class Alloc = std::allocator<ft::map_node<const Key, T> > >
 class map
 {
   public:
@@ -45,8 +46,8 @@ class map
         friend class map;
 
       protected:
-        Compare _comp;
-        value_compare(Compare c) : _comp(c)
+        key_compare _comp;
+        value_compare(key_compare c) : _comp(c)
         {
         }   // constructed with map's comparison object
       public:

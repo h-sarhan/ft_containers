@@ -13,17 +13,24 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 
+#include "pair.hpp"
 #include <cstddef>
 
 namespace ft
 {
 
-template <class NodeData> struct node
+template <class Key, class Value> struct map_node
 {
-    NodeData data;
-    node *left;
-    node *right;
-    node *parent;
+    typedef ft::pair<Key, Value> node_data;
+
+    node_data data;
+    map_node *left;
+    map_node *right;
+    map_node *parent;
+
+    map_node(const node_data &data) : data(data), left(NULL), right(NULL), parent(NULL)
+    {
+    }
 };
 
 }   // namespace ft

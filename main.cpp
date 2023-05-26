@@ -1,7 +1,7 @@
-#include <string>
-#include <map>
-#include <iostream>
 #include "map.hpp"
+#include <iostream>
+#include <map>
+#include <string>
 void vectorTests(void);
 void mapTests(void);
 

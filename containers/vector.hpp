@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/10 09:28:39 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/26 19:54:14 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <cstring>
 #include <iostream>
 #include <iterator>
 #include <limits>
 #include <memory>
 #include <stdexcept>
 #include <vector>
-#include <cstring>
 
 #include "enable_if.hpp"
 #include "is_integral.hpp"
@@ -477,9 +477,10 @@ template <class T, class Alloc = std::allocator<T> > class vector
                 if (i == 0)
                     break;
             }
-            // * std::memmove(_array + insert_idx + n, _array + insert_idx, (_size - insert_idx) * sizeof(value_type));
+            // * std::memmove(_array + insert_idx + n, _array + insert_idx, (_size - insert_idx) *
+            // sizeof(value_type));
         }
-        (void)val;
+        (void) val;
         for (size_type i = 0; i < n; i++)
         {
             if (i + insert_idx >= _size)

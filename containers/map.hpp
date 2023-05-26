@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 16:25:48 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/26 15:04:07 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/26 19:52:58 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,11 @@ class map
         }
     };
 
+  private:
+    size_type _size;
+    allocator_type _alloc;
+
+  public:
     //** *** CONSTRUCTORS *** *//
     // empty container constructor (default constructor)
     explicit map(const key_compare &comp = key_compare(),

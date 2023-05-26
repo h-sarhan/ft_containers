@@ -128,6 +128,43 @@ template <class Key, class Value, class KeyCompare, class NodeAllocator> class m
         return false;
     }
 
+    void delete_node(key_type key)
+    {
+        node_pointer node = _root;
+        node_pointer parent = NULL;
+
+        while (node != NULL && !_node_equal(node, key))
+        {
+            parent = node;
+            if (_node_greater(node, key))
+            {
+                node = node->left;
+            }
+            else if (_node_less(node, key))
+            {
+                node = node->right;
+            }
+        }
+
+        if (node == NULL)
+        {
+            return;
+        }
+
+        if (node->left == NULL && node->right == NULL)
+        {
+            _delete_leaf_node(node, parent);
+        }
+        else if (node->left == NULL || node->right == NULL)
+        {
+            _delete_single_child(node, parent);
+        }
+        else
+        {
+            _delete_two_childs(node, parent);
+        }
+    }
+
     ~map_tree(void)
     {
         _tree_pruner(_root);
@@ -135,6 +172,114 @@ template <class Key, class Value, class KeyCompare, class NodeAllocator> class m
     }
 
   private:
+    void _delete_leaf_node(node_pointer to_delete, node_pointer parent)
+    {
+        // special case if the node we want to delete is the root
+        if (to_delete == root())
+        {
+            _root = NULL;
+        }
+        // if the parent node is smaller than the node we want to delete then
+        // the parent's right child is the node we want to delete
+        else if (_node_less(parent, to_delete))
+        {
+            parent->right = NULL;
+        }
+        else
+            parent->left = NULL;
+        _alloc.destroy(to_delete);
+        _alloc.deallocate(to_delete, 1);
+    }
+
+    void _delete_single_child(node_pointer to_delete, node_pointer parent)
+    {
+        node_pointer child;
+        if (to_delete->right == NULL)
+        {
+            child = to_delete->left;
+        }
+        else
+        {
+            child = to_delete->right;
+        }
+        // special case if the node we want to delete is the root
+        if (to_delete == root())
+        {
+            _root = child;
+        }
+        // if the parent node is smaller than the node we want to delete then
+        // the parent's right child is the node we want to delete
+        else if (_node_less(parent, to_delete))
+        {
+            parent->right = child;
+        }
+        else
+        {
+            parent->left = child;
+        }
+        _alloc.destroy(to_delete);
+        _alloc.deallocate(to_delete, 1);
+    }
+
+    void _delete_two_childs(node_pointer to_delete, node_pointer parent)
+    {
+        // Find minimum node of right subtree ("inorder successor" of current node)
+        node_pointer succ;
+        node_pointer succ_parent;
+
+        succ = to_delete->right;
+        succ_parent = to_delete;
+
+        while (succ->left != NULL)
+        {
+            succ_parent = succ;
+            succ = succ->left;
+        }
+        _node_data_reassign(to_delete, parent, succ->data);
+
+        // Case a) Inorder successor is the deleted node's right child
+        if (succ == to_delete->right)
+        {
+            // --> Replace right child with inorder successor's right child
+            to_delete->right = succ->right;
+        }
+
+        // Case b) Inorder successor is further down, meaning, it's a left child
+        else
+        {
+            // --> Replace inorder successor's parent's left child
+            //     with inorder successor's right child
+            succ_parent->left = succ->right;
+        }
+    }
+
+    // disgusting hack to reassign a node's data, I cant do this the obvious way because the
+    // data for a map is a pair and the first type of the pair is const so the copy assignment
+    // operator for pair does not compile 😊
+    void _node_data_reassign(node_pointer node, node_pointer parent, const node_data &data)
+    {
+        node_pointer new_node = _alloc.allocate(1);
+        _alloc.construct(new_node, node_type(data));
+
+        new_node->left = node->left;
+        new_node->right = node->right;
+        new_node->parent = node->parent;
+        if (node == _root)
+        {
+            _root = new_node;
+        }
+        else if (_node_less(node, parent))
+        {
+            parent->left = new_node;
+        }
+        else
+        {
+            parent->right = new_node;
+        }
+        _alloc.destroy(node);
+        _alloc.deallocate(node, 1);
+    }
+
     void _tree_pruner(node_pointer &node)
     {
         if (node == NULL)

@@ -15,6 +15,7 @@
 
 #include "node.hpp"
 #include "pair.hpp"
+#include "vector.hpp"
 #include <cstddef>
 
 namespace ft
@@ -127,7 +128,26 @@ template <class Key, class Value, class KeyCompare, class NodeAllocator> class m
         return false;
     }
 
+    ~map_tree(void)
+    {
+        _tree_pruner(_root);
+        _root = NULL;
+    }
+
   private:
+    void _tree_pruner(node_pointer &node)
+    {
+        if (node == NULL)
+            return;
+        node_pointer left = node->left;
+        node_pointer right = node->right;
+        _alloc.destroy(node);
+        _alloc.deallocate(node, 1);
+        node = NULL;
+        _tree_pruner(left);
+        _tree_pruner(right);
+    }
+
     const key_type &_get_key(const node_pointer node) const
     {
         return node->data.first;

@@ -32,13 +32,6 @@ static void treeInsertTests(void)
     s.insert_node(ft::make_pair(2, ""));
     s.insert_node(ft::make_pair(-165789, ""));
     s.insert_node(ft::make_pair(4, ""));
-    // s.insert_node(ft::make_pair(2, "two"));
-    // s.insert_node(ft::make_pair(2, "two"));
-    // s.insert_node(ft::make_pair(2, "two"));
-    // s.insert_node(ft::make_pair(2, "two"));
-    // s.insert_node(ft::make_pair(2, "two"));
-    // s.insert_node(ft::make_pair(2, "two"));
-    // s.insert_node(ft::make_pair(2, "two"));
 
     assert(s.search_node(2) != NULL);
     assert(s.search_node(3) == NULL);

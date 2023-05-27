@@ -28,6 +28,8 @@ namespace ft
 // 4. A red node must not have red children.
 // 5. All paths from a node to the leaves below contain the same number of black
 // nodes.
+// The red black tree implementation based on
+// https://www.happycoders.eu/algorithms/red-black-tree-java/
 template <class Key, class Value, class KeyCompare, class NodeAllocator>
 class map_tree
 {
@@ -101,32 +103,22 @@ class map_tree
             return true;
         }
 
-        node_pointer node = root();
-        while (true)
+        // Traverse the tree to the left or
+        // right depending on the key
+        node_pointer node = _root;
+        node_pointer parent = NULL;
+        while (node != NULL)
         {
+            parent = node;
+            // if (key < node.data)
             if (_node_greater(node, new_node))
             {
-                if (node->left != NULL)
-                {
-                    node = node->left;
-                }
-                else
-                {
-                    node->left = new_node;
-                    return true;
-                }
+                node = node->left;
             }
+            // else if (key > node.data)
             else if (_node_less(node, new_node))
             {
-                if (node->right != NULL)
-                {
-                    node = node->right;
-                }
-                else
-                {
-                    node->right = new_node;
-                    return false;
-                }
+                node = node->right;
             }
             else
             {
@@ -135,8 +127,25 @@ class map_tree
                 return false;
             }
         }
-        // In theory we will never reach this line, but in practice...
-        return false;
+
+        // Insert new node
+        new_node->color = RED;
+        if (parent == NULL)
+        {
+            _root = new_node;
+        }
+        else if (_node_greater(parent, new_node))
+        {
+            parent->left = new_node;
+        }
+        else if (_node_less(parent, new_node))
+        {
+            parent->right = new_node;
+        }
+        new_node->parent = parent;
+
+        _balance_after_insert(new_node);
+        return true;
     }
 
     void delete_node(key_type key)
@@ -183,7 +192,104 @@ class map_tree
     }
 
   private:
-    void _right_rotate(node_pointer node)
+    void _balance_after_insert(node_pointer inserted_node)
+    {
+        node_pointer parent = inserted_node->parent;
+
+        // Case 1: New node is the root, the root has to be black so we color it
+        // black
+        if (parent == NULL)
+        {
+            inserted_node->color = BLACK;
+            return;
+        }
+
+        // If the parent is black, then there is no violation of the red black
+        // tree rules when inserting a red node
+        if (parent->color == BLACK)
+        {
+            return;
+        }
+        // If the parent color is red then there is a violation and we need to
+        // fix it
+
+        // Get the grandparent and uncle these will help us fix the rest of the
+        // cases
+        node_pointer grandparent = parent->parent;
+        node_pointer uncle = _get_uncle(parent);
+
+        // Case 2: Parent and uncle nodes are red
+        // For this case we color the parent and the uncle to black and the
+        // grandparent to be red
+        if (uncle != NULL && uncle->color == RED)
+        {
+            parent->color = BLACK;
+            uncle->color = BLACK;
+            grandparent->color = RED;
+            // Coloring the grandparent red can cause more red black tree
+            // violations so what we can do is recursively call this function on
+            // the grandparent until all violations have been fixed
+            _balance_after_insert(grandparent);
+        }
+
+        // Parent is a left child
+        else if (parent == grandparent->left)
+        {
+            // Case 3a: Parent is red, uncle is black, and the inserted_node is
+            // an inner grandchild, i.e. The path from the grandparent to the
+            // inserted_node forms a triangle
+            // For this case we have to rotate the parent in the opposite
+            // direction of the inserted_node, (so left) and then we rotate the
+            // grandparent in the opposite direction of the previous rotation,
+            // (so right) and finally we color the inserted_node black and the
+            // original grandparent red
+            if (inserted_node == parent->right)
+            {
+                _rotate_left(parent);
+                parent = inserted_node;
+            }
+
+            // Case 4a: Parent is red, uncle is black, and the inserted_node is
+            // an outer grandchild, i.e. The path from the grandparent to the
+            // inserted_node forms a line. In this case we just need to rotate
+            // the grandparent in the opposite direction of the parent and
+            // inserted_node
+            _rotate_right(grandparent);
+
+            // Recolor original parent and grandparent
+            parent->color = BLACK;
+            grandparent->color = RED;
+        }
+        // This is the symmetrical case if the parent is a right child
+        else
+        {
+            if (inserted_node == parent->left)
+            {
+                _rotate_right(parent);
+                parent = inserted_node;
+            }
+            _rotate_left(grandparent);
+
+            parent->color = BLACK;
+            grandparent->color = RED;
+        }
+    }
+
+    node_pointer _get_uncle(node_pointer parent)
+    {
+        node_pointer grandparent = parent->parent;
+
+        if (grandparent->left == parent)
+        {
+            return grandparent->right;
+        }
+        else
+        {
+            return grandparent->left;
+        }
+    }
+
+    void _rotate_right(node_pointer node)
     {
         node_pointer parent = node->parent;
         node_pointer left = node->left;
@@ -200,7 +306,7 @@ class map_tree
         _replace_child(parent, node, left);
     }
 
-    void _left_rotate(node_pointer node)
+    void _rotate_left(node_pointer node)
     {
         node_pointer parent = node->parent;
         node_pointer right = node->right;

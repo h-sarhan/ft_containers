@@ -16,6 +16,9 @@
 #include "pair.hpp"
 #include <cstddef>
 
+#define BLACK false
+#define RED true
+
 namespace ft
 {
 
@@ -27,8 +30,12 @@ template <class Key, class Value> struct map_node
     map_node *left;
     map_node *right;
     map_node *parent;
+    bool      color;
 
-    map_node(const node_data &data) : data(data), left(NULL), right(NULL), parent(NULL)
+    map_node(const node_data &data) : data(data), left(NULL), right(NULL), parent(NULL), color(BLACK)
+    {
+    }
+    map_node(const map_node &old) : data(old.data), left(old.left), right(old.right), parent(old.parent), color(old.color)
     {
     }
 };

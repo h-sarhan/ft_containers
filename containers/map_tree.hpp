@@ -110,12 +110,12 @@ class map_tree
         while (node != NULL)
         {
             parent = node;
-            // if (key < node.data)
+            // if (key < node->data)
             if (_node_greater(node, new_node))
             {
                 node = node->left;
             }
-            // else if (key > node.data)
+            // else if (key > node->data)
             else if (_node_less(node, new_node))
             {
                 node = node->right;
@@ -151,37 +151,69 @@ class map_tree
     void delete_node(key_type key)
     {
         node_pointer node = _root;
-        node_pointer parent = NULL;
 
-        while (node != NULL && !_node_equal(node, key))
+        // Find the node to be deleted
+        while (node != NULL && node->data != key)
         {
-            parent = node;
-            if (_node_greater(node, key))
+            // Traverse the tree to the left or right depending on the key
+            if (key < node->data)
             {
                 node = node->left;
             }
-            else if (_node_less(node, key))
+            else
             {
                 node = node->right;
             }
         }
 
+        // Node not found?
         if (node == NULL)
         {
             return;
         }
 
-        if (node->left == NULL && node->right == NULL)
+        // At this point, "node" is the node to be deleted
+
+        // In this variable, we'll store the node at which we're going to start
+        // to fix the R-B properties after deleting a node->
+        node_pointer replacement_node;
+        bool deleted_color;
+
+        // Node has zero or one child
+        if (node->left == NULL || node->right == NULL)
         {
-            _delete_leaf_node(node, parent);
+            replacement_node = _delete_leaf_or_single_node(node);
+            deleted_color = node->color;
         }
-        else if (node->left == NULL || node->right == NULL)
-        {
-            _delete_single_child(node, parent);
-        }
+
+        // Node has two children
         else
         {
-            _delete_two_childs(node, parent);
+            // Find minimum node of right subtree ("inorder successor" of
+            // current node)
+            node_pointer successor = _minimum_node(node->right);
+
+            // Copy inorder successor's data to current node (keep its color!)
+            // node->data = successor->data;
+            _node_data_reassign(node, node->parent, successor->data);
+
+            // Delete inorder successor just as we would delete a node with 0 or
+            // 1 child
+            replacement_node = _delete_leaf_or_single_node(successor);
+            deleted_color = successor->color;
+        }
+
+        if (deleted_color == BLACK)
+        {
+            _balance_after_delete(replacement_node);
+
+            // Remove the temporary NIL node
+            // ! ??
+            // ! if (moved_up_node->getClass() == NilNode->class)
+            // ! {
+            // !     replaceParentsChild(replacement_node->parent, replacement_node,
+            // !                         NULL);
+            // ! }
         }
     }
 
@@ -345,86 +377,9 @@ class map_tree
         }
     }
 
-    void _delete_leaf_node(node_pointer to_delete, node_pointer parent)
+    void _delete_leaf_or_single_node(node_pointer to_delete,
+                                     node_pointer parent)
     {
-        // special case if the node we want to delete is the root
-        if (to_delete == root())
-        {
-            _root = NULL;
-        }
-        // if the parent node is smaller than the node we want to delete then
-        // the parent's right child is the node we want to delete
-        else if (_node_less(parent, to_delete))
-        {
-            parent->right = NULL;
-        }
-        else
-            parent->left = NULL;
-        _alloc.destroy(to_delete);
-        _alloc.deallocate(to_delete, 1);
-    }
-
-    void _delete_single_child(node_pointer to_delete, node_pointer parent)
-    {
-        node_pointer child;
-        if (to_delete->right == NULL)
-        {
-            child = to_delete->left;
-        }
-        else
-        {
-            child = to_delete->right;
-        }
-        // special case if the node we want to delete is the root
-        if (to_delete == root())
-        {
-            _root = child;
-        }
-        // if the parent node is smaller than the node we want to delete then
-        // the parent's right child is the node we want to delete
-        else if (_node_less(parent, to_delete))
-        {
-            parent->right = child;
-        }
-        else
-        {
-            parent->left = child;
-        }
-        _alloc.destroy(to_delete);
-        _alloc.deallocate(to_delete, 1);
-    }
-
-    void _delete_two_childs(node_pointer to_delete, node_pointer parent)
-    {
-        // Find minimum node of right subtree ("inorder successor" of current
-        // node)
-        node_pointer succ;
-        node_pointer succ_parent;
-
-        succ = to_delete->right;
-        succ_parent = to_delete;
-
-        while (succ->left != NULL)
-        {
-            succ_parent = succ;
-            succ = succ->left;
-        }
-        _node_data_reassign(to_delete, parent, succ->data);
-
-        // Case a) Inorder successor is the deleted node's right child
-        if (succ == to_delete->right)
-        {
-            // --> Replace right child with inorder successor's right child
-            to_delete->right = succ->right;
-        }
-
-        // Case b) Inorder successor is further down, meaning, it's a left child
-        else
-        {
-            // --> Replace inorder successor's parent's left child
-            //     with inorder successor's right child
-            succ_parent->left = succ->right;
-        }
     }
 
     // disgusting hack to reassign a node's data, I cant do this the obvious way

@@ -20,7 +20,16 @@
 
 namespace ft
 {
-template <class Key, class Value, class KeyCompare, class NodeAllocator> class map_tree
+
+// Red black tree rules
+// 1. Each node is either red or black.
+// 2. (The root is black.)
+// 3. All NIL leaves are black.
+// 4. A red node must not have red children.
+// 5. All paths from a node to the leaves below contain the same number of black
+// nodes.
+template <class Key, class Value, class KeyCompare, class NodeAllocator>
+class map_tree
 {
   public:
     typedef ft::pair<Key, Value> node_data;
@@ -41,7 +50,8 @@ template <class Key, class Value, class KeyCompare, class NodeAllocator> class m
     {
     }
 
-    map_tree(const map_tree &old) : _root(old._root), _key_comp(old._key_comp), _alloc(old._alloc)
+    map_tree(const map_tree &old)
+        : _root(old._root), _key_comp(old._key_comp), _alloc(old._alloc)
     {
     }
 
@@ -57,19 +67,20 @@ template <class Key, class Value, class KeyCompare, class NodeAllocator> class m
         // We start traversing from the root
         while (node != NULL)
         {
-            // If the node's key matches then this is the node we are looking for so we return it
+            // If the node's key matches then this is the node we are looking
+            // for so we return it
             if (_node_equal(node, key) == true)
             {
                 return node;
             }
-            // If the node we are looking at is bigger than the key then we have to go to a node
-            // smaller than it
+            // If the node we are looking at is bigger than the key then we have
+            // to go to a node smaller than it
             else if (_node_greater(node, key) == true)
             {
                 node = node->left;
             }
-            // If the node we are looking at is smaller than the key then we have to go to a node
-            // bigger than it
+            // If the node we are looking at is smaller than the key then we
+            // have to go to a node bigger than it
             else if (_node_less(node, key) == true)
             {
                 node = node->right;
@@ -172,6 +183,62 @@ template <class Key, class Value, class KeyCompare, class NodeAllocator> class m
     }
 
   private:
+    void _right_rotate(node_pointer node)
+    {
+        node_pointer parent = node->parent;
+        node_pointer left = node->left;
+
+        node->left = left->right;
+        if (left->right != NULL)
+        {
+            left->right->parent = node;
+        }
+
+        left->right = node;
+        node->parent = left;
+
+        _replace_child(parent, node, left);
+    }
+
+    void _left_rotate(node_pointer node)
+    {
+        node_pointer parent = node->parent;
+        node_pointer right = node->right;
+
+        node->right = right->left;
+        if (right->left != NULL)
+        {
+            right->left->parent = node;
+        }
+
+        right->left = node;
+        node->parent = right;
+
+        _replace_child(parent, node, right);
+    }
+
+    void _replace_child(node_pointer parent, node_pointer old_child,
+                        node_pointer new_child)
+    {
+        if (parent == NULL)
+        {
+            _root = new_child;
+        }
+        else if (parent->left == old_child)
+        {
+            parent->left = new_child;
+        }
+        else if (parent->right == old_child)
+        {
+            parent->right = new_child;
+        }
+
+        if (new_child != NULL)
+        {
+            new_child->parent = parent;
+        }
+    }
+
     void _delete_leaf_node(node_pointer to_delete, node_pointer parent)
     {
         // special case if the node we want to delete is the root
@@ -223,7 +290,8 @@ template <class Key, class Value, class KeyCompare, class NodeAllocator> class m
 
     void _delete_two_childs(node_pointer to_delete, node_pointer parent)
     {
-        // Find minimum node of right subtree ("inorder successor" of current node)
+        // Find minimum node of right subtree ("inorder successor" of current
+        // node)
         node_pointer succ;
         node_pointer succ_parent;
 
@@ -253,10 +321,11 @@ template <class Key, class Value, class KeyCompare, class NodeAllocator> class m
         }
     }
 
-    // disgusting hack to reassign a node's data, I cant do this the obvious way because the
-    // data for a map is a pair and the first type of the pair is const so the copy assignment
-    // operator for pair does not compile 😊
-    void _node_data_reassign(node_pointer node, node_pointer parent, const node_data &data)
+    // disgusting hack to reassign a node's data, I cant do this the obvious way
+    // because the data for a map is a pair and the first type of the pair is
+    // const so the copy assignment operator for pair does not compile 😊
+    void _node_data_reassign(node_pointer node, node_pointer parent,
+                             const node_data &data)
     {
         node_pointer new_node = _alloc.allocate(1);
         _alloc.construct(new_node, node_type(data));

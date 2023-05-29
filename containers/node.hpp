@@ -17,7 +17,7 @@
 #include <cstddef>
 
 #define BLACK false
-#define RED true
+#define RED   true
 
 namespace ft
 {
@@ -30,13 +30,17 @@ template <class Key, class Value> struct map_node
     map_node *left;
     map_node *right;
     map_node *parent;
-    bool      color;
-    bool      fake_node;
+    bool color;
+    bool fake_node;
 
-    map_node(const node_data &data = node_data()) : data(data), left(NULL), right(NULL), parent(NULL), color(BLACK), fake_node(false)
+    map_node(const node_data &data = node_data())
+        : data(data), left(NULL), right(NULL), parent(NULL), color(BLACK),
+          fake_node(false)
     {
     }
-    map_node(const map_node &old) : data(old.data), left(old.left), right(old.right), parent(old.parent), color(old.color), fake_node(old.fake_node)
+    map_node(const map_node &old)
+        : data(old.data), left(old.left), right(old.right), parent(old.parent),
+          color(old.color), fake_node(old.fake_node)
     {
     }
 };

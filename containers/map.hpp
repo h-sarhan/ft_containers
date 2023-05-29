@@ -13,6 +13,8 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
+#include "map_iterator.hpp"
+#include "map_tree.hpp"
 #include "node.hpp"
 #include "pair.hpp"
 #include <functional>
@@ -34,14 +36,10 @@ class map
     typedef typename allocator_type::const_reference const_reference;
     typedef typename allocator_type::pointer pointer;
     typedef typename allocator_type::const_pointer const_pointer;
-    // typedef map_iterator iterator;
-    // typedef map_iterator const_iterator;
-    // typedef reverse_iterator<iterator> reverse_iterator;
-    // typedef reverse_iterator<const_iterator> const_reverse_iterator;
-    // typedef iterator_traits<iterator>::difference_type difference_type;
     typedef size_t size_type;
 
-    class value_compare : public std::binary_function<value_type, value_type, bool>
+    class value_compare
+        : public std::binary_function<value_type, value_type, bool>
     {
         friend class map;
 
@@ -61,8 +59,20 @@ class map
     };
 
   private:
+    typedef map_tree<key_type, mapped_type, key_compare, allocator_type>
+        tree_type;
     size_type _size;
     allocator_type _alloc;
+    tree_type _tree;
+    tree_type *_tree_ptr;
+
+  public:
+    typedef ft::map_iterator<tree_type> iterator;
+    typedef ft::map_iterator<tree_type> const_iterator;
+    typedef ft::reverse_iterator<iterator> reverse_iterator;
+    typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+    typedef
+        typename ft::iterator_traits<iterator>::difference_type difference_type;
 
   public:
     //** *** CONSTRUCTORS *** *//
@@ -72,7 +82,8 @@ class map
 
     // range constructor
     template <class InputIterator>
-    map(InputIterator first, InputIterator last, const key_compare &comp = key_compare(),
+    map(InputIterator first, InputIterator last,
+        const key_compare &comp = key_compare(),
         const allocator_type &alloc = allocator_type());
 
     // copy constructor
@@ -85,17 +96,17 @@ class map
     ~map(void);
 
     //** *** ITERATOR METHODS *** //
-    // iterator begin();
-    // const_iterator begin() const;
+    iterator begin(void);
+    const_iterator begin(void) const;
 
-    // iterator end();
-    // const_iterator end() const;
+    iterator end(void);
+    const_iterator end(void) const;
 
-    // reverse_iterator rbegin();
-    // const_reverse_iterator rbegin() const;
+    reverse_iterator rbegin(void);
+    const_reverse_iterator rbegin(void) const;
 
-    //  reverse_iterator rend();
-    // const_reverse_iterator rend() const;
+    reverse_iterator rend(void);
+    const_reverse_iterator rend(void) const;
 
     //** *** CAPACITY METHODS *** //
     bool empty(void) const;
@@ -108,17 +119,18 @@ class map
     mapped_type &operator[](const key_type &k);
 
     //** *** MODIFIERS  *** //
-    // pair<iterator, bool> insert (const value_type& val);
+    pair<iterator, bool> insert(const value_type &val);
 
-    // iterator insert (iterator position, const value_type& val);
+    iterator insert(iterator position, const value_type &val);
 
-    template <class InputIterator> void insert(InputIterator first, InputIterator last);
+    template <class InputIterator>
+    void insert(InputIterator first, InputIterator last);
 
-    // void erase(iterator position);
+    void erase(iterator position);
 
     size_type erase(const key_type &k);
 
-    // void erase(iterator first, iterator last);
+    void erase(iterator first, iterator last);
 
     void swap(map &x);
 
@@ -131,19 +143,19 @@ class map
 
     //** *** OPERATIONS  *** //
 
-    // iterator find(const key_type &k);
-    // const_iterator find(const key_type &k) const;
+    iterator find(const key_type &k);
+    const_iterator find(const key_type &k) const;
 
     size_type count(const key_type &k) const;
 
-    // iterator lower_bound(const key_type &k);
-    // const_iterator lower_bound(const key_type &k) const;
+    iterator lower_bound(const key_type &k);
+    const_iterator lower_bound(const key_type &k) const;
 
-    // iterator upper_bound(const key_type &k);
-    // const_iterator upper_bound(const key_type &k) const;
+    iterator upper_bound(const key_type &k);
+    const_iterator upper_bound(const key_type &k) const;
 
-    // pair<const_iterator, const_iterator> equal_range(const key_type &k) const;
-    // pair<iterator, iterator> equal_range(const key_type &k);
+    pair<const_iterator, const_iterator> equal_range(const key_type &k) const;
+    pair<iterator, iterator> equal_range(const key_type &k);
 
     allocator_type get_allocator(void) const;
 };

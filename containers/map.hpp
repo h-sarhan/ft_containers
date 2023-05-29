@@ -61,8 +61,10 @@ class map
   private:
     typedef map_tree<key_type, mapped_type, key_compare, allocator_type>
         tree_type;
+
     size_type _size;
     allocator_type _alloc;
+    key_compare _comp;
     tree_type _tree;
     tree_type *_tree_ptr;
 
@@ -78,18 +80,32 @@ class map
     //** *** CONSTRUCTORS *** *//
     // empty container constructor (default constructor)
     explicit map(const key_compare &comp = key_compare(),
-                 const allocator_type &alloc = allocator_type());
+                 const allocator_type &alloc = allocator_type())
+        : _size(0), _alloc(alloc), _comp(comp),
+          _tree(tree_type(NULL, comp, alloc)), _tree_ptr(&_tree)
+    {
+    }
 
     // range constructor
     template <class InputIterator>
     map(InputIterator first, InputIterator last,
         const key_compare &comp = key_compare(),
-        const allocator_type &alloc = allocator_type());
+        const allocator_type &alloc = allocator_type())
+        : _size(0), _alloc(alloc), _comp(comp),
+          _tree(tree_type(NULL, comp, alloc)), _tree_ptr(&_tree)
+    {
+        // for (InputIterator it = first; it != last; it++)
+        // {
+        //     _tree.insert_node();
+        // }
+    }
 
     // copy constructor
+    // Insert everything in old map into the new map in a for loop
     map(const map &x);
 
     // Copy assignment constructor
+    // Insert everything in old map into the new map in a for loop
     map &operator=(const map &x);
 
     //** *** DESTRUCTOR *** //
@@ -109,7 +125,10 @@ class map
     const_reverse_iterator rend(void) const;
 
     //** *** CAPACITY METHODS *** //
-    bool empty(void) const;
+    bool empty(void) const
+    {
+        return _size == 0 || _tree.root() == NULL;
+    }
 
     size_type size(void) const;
 
@@ -137,9 +156,15 @@ class map
     void clear(void);
 
     //** *** OBSERVERS  *** //
-    key_compare key_comp(void) const;
+    key_compare key_comp(void) const
+    {
+        return _comp;
+    }
 
-    value_compare value_comp(void) const;
+    value_compare value_comp(void) const
+    {
+        return value_compare();
+    }
 
     //** *** OPERATIONS  *** //
 
@@ -157,7 +182,10 @@ class map
     pair<const_iterator, const_iterator> equal_range(const key_type &k) const;
     pair<iterator, iterator> equal_range(const key_type &k);
 
-    allocator_type get_allocator(void) const;
+    allocator_type get_allocator(void) const
+    {
+        return _alloc;
+    }
 };
 }   // namespace ft
 #endif

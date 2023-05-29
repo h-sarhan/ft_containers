@@ -228,6 +228,48 @@ class map_tree
         _root = NULL;
     }
 
+    node_pointer next_node(node_pointer node)
+    {
+        if (node == NULL)
+            return NULL;
+
+        if (node->right != NULL)
+        {
+            return _minimum_node(node->right);
+        }
+        else
+        {
+            node_pointer parent = node->parent;
+            while (parent != NULL && node == parent->right)
+            {
+                node = parent;
+                parent = parent->parent;
+            }
+            return parent;
+        }
+    }
+
+    node_pointer previous_node(node_pointer node)
+    {
+        if (node == NULL)
+            return NULL;
+
+        if (node->right != NULL)
+        {
+            return _maximum_node(node->right);
+        }
+        else
+        {
+            node_pointer parent = node->parent;
+            while (parent != NULL && node == parent->left)
+            {
+                node = parent;
+                parent = parent->parent;
+            }
+            return parent;
+        }
+    }
+
   private:
     void _balance_after_delete(node_pointer to_delete)
     {
@@ -285,8 +327,8 @@ class map_tree
             is_left_child = false;
         }
 
-        // Case 5: Black sibling with at least one red child + "outer nephew" is
-        // black
+        // Case 5: Black sibling with at least one red child + "outer
+        // nephew" is black
         // --> Recolor sibling and its child, and rotate around sibling
         if (is_left_child && _is_black(sibling->right))
         {
@@ -305,8 +347,8 @@ class map_tree
 
         // Fall-through to case 6...
 
-        // Case 6: Black sibling with at least one red child + "outer nephew" is
-        // red
+        // Case 6: Black sibling with at least one red child + "outer
+        // nephew" is red
         // --> Recolor sibling + parent + sibling's child, and rotate around
         // parent
         sibling->color = node->parent->color;

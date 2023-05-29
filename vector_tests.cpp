@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:43:47 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/26 19:53:01 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/29 23:57:46 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
  * @param vec The vector that you want to print the contents of
  * @param message Message to print before printing the contents of the vector
  */
-template <typename Vec> void printVec(const Vec &vec, const std::string &message)
+template <typename Vec>
+void printVec(const Vec &vec, const std::string &message)
 {
     std::cout << message << std::endl;
     for (size_t i = 0; i < vec.size(); i++)
@@ -78,7 +79,8 @@ void fillConstructorTests(void)
 
     std::vector<int> stdVecDef(10);
 
-    printVec(stdVecDef, "std::vector after fill constructor with default value");
+    printVec(stdVecDef,
+             "std::vector after fill constructor with default value");
     std::cout << "STDLIB Vector" << std::endl;
     std::cout << "Capacity = " << stdVecDef.capacity() << std::endl;
     std::cout << "Size = " << stdVecDef.size() << std::endl;
@@ -92,14 +94,16 @@ void fillConstructorTests(void)
 
     std::vector<int> stdVecFill(10, 20);
 
-    printVec(stdVecFill, "std::vector after fill constructor with optional value");
+    printVec(stdVecFill,
+             "std::vector after fill constructor with optional value");
     std::cout << "STDLIB Vector" << std::endl;
     std::cout << "Capacity = " << stdVecFill.capacity() << std::endl;
     std::cout << "Size = " << stdVecFill.size() << std::endl;
 
     ft::vector<int> ftVecFill(10, 20);
 
-    printVec(ftVecFill, "ft::vector after fill constructor with optional value");
+    printVec(ftVecFill,
+             "ft::vector after fill constructor with optional value");
     std::cout << "FT Vector" << std::endl;
     std::cout << "Capacity = " << ftVecFill.capacity() << std::endl;
     std::cout << "Size = " << ftVecFill.size() << std::endl;
@@ -342,7 +346,8 @@ void swapTest(void)
     printVec(vec1, "vec1 after swap 2");
     printVec(vec2, "vec2 after swap 2");
 
-    std::cout << "Testing vec::swap() with different sized vectors" << std::endl;
+    std::cout << "Testing vec::swap() with different sized vectors"
+              << std::endl;
     ft::vector<ft::vector<int> > vec3(5, vec1);
     ft::vector<ft::vector<int> > vec4(10, vec2);
     printVec(vec3[4], "vec3[4] before swap");
@@ -375,7 +380,8 @@ void swapTest(void)
     vec5.swap(vec5);
     vec6.swap(vec6);
 
-    std::cout << "Testing overloaded swap() with the different sized vectors" << std::endl;
+    std::cout << "Testing overloaded swap() with the different sized vectors"
+              << std::endl;
     ft::vector<double> vec7(4, 9.87);
     ft::vector<double> vec8(11, 6.7);
     printVec(vec7, "vec7 before swap");
@@ -583,7 +589,8 @@ void vectorReverseIteratorTests(void)
 {
     ft::vector<int> vec(10, 10);
 
-    for (ft::vector<int>::reverse_iterator it = vec.rbegin(); it != vec.rend(); it++)
+    for (ft::vector<int>::reverse_iterator it = vec.rbegin(); it != vec.rend();
+         it++)
     {
         std::cout << *it << std::endl;
     }

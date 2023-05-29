@@ -45,7 +45,8 @@ template <class Tree> class map_iterator
     {
     }
 
-    map_iterator(node_pointer ptr, tree_type *tree) : _node_ptr(ptr), _tree(tree), _comp()
+    map_iterator(node_pointer ptr, tree_type *tree)
+        : _node_ptr(ptr), _tree(tree), _comp()
     {
     }
 
@@ -80,8 +81,8 @@ template <class Tree> class map_iterator
     // * Iterator traversal
     map_iterator &operator++(void)   // pre-increment
     {
-        // ? If the passed node was one behind the first element then incrementing it should give
-        // ? you the first element.
+        // ? If the passed node was one behind the first element then
+        // incrementing it should give ? you the first element.
         if (_node_ptr == NULL)
         {
             // ? Get the first element of the map
@@ -94,8 +95,8 @@ template <class Tree> class map_iterator
 
     map_iterator &operator--(void)   // pre-decrement
     {
-        // ? If the passed node was one after the first element then incrementing it should give
-        // ? you the last element.
+        // ? If the passed node was one after the first element then
+        // incrementing it should give ? you the last element.
         if (_node_ptr == NULL)
         {
             // ? Get the last element of the map
@@ -176,7 +177,8 @@ template <class Tree> class const_map_iterator
     {
     }
 
-    const_map_iterator(node_pointer ptr, tree_type *tree) : _node_ptr(ptr), _tree(tree), _comp()
+    const_map_iterator(node_pointer ptr, tree_type *tree)
+        : _node_ptr(ptr), _tree(tree), _comp()
     {
     }
 
@@ -205,8 +207,8 @@ template <class Tree> class const_map_iterator
     // * Iterator traversal
     const_map_iterator &operator++(void)   // pre-increment
     {
-        // ? If the passed node was one behind the first element then incrementing it should give
-        // ? you the first element.
+        // ? If the passed node was one behind the first element then
+        // incrementing it should give ? you the first element.
         if (_node_ptr == NULL)
         {
             // ? Get the first element of the map
@@ -219,8 +221,8 @@ template <class Tree> class const_map_iterator
 
     const_map_iterator &operator--(void)   // pre-decrement
     {
-        // ? If the passed node was one after the first element then incrementing it should give
-        // ? you the last element.
+        // ? If the passed node was one after the first element then
+        // incrementing it should give ? you the last element.
         if (_node_ptr == NULL)
         {
             // ? Get the last element of the map

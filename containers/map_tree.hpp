@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tree.hpp                                           :+:      :+:    :+:   */
+/*   map_tree.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:41:27 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/26 22:53:19 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 01:03:46 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_TREE_HPP
 #define MAP_TREE_HPP
 
+#include "make_pair.hpp"
 #include "node.hpp"
 #include "pair.hpp"
 #include "vector.hpp"
@@ -35,37 +36,33 @@ template <class Key, class Value, class KeyCompare, class NodeAllocator>
 class map_tree
 {
   public:
-    typedef ft::pair<Key, Value> node_data;
-    typedef ft::map_node<Key, Value> node_type;
+    typedef ft::pair<const Key, Value> node_data;
+    typedef ft::map_node<const Key, Value> node_type;
     typedef node_type *node_pointer;
     typedef KeyCompare key_compare;
     typedef NodeAllocator node_allocator;
     typedef Key key_type;
 
+    node_pointer root;
   private:
-    node_pointer _root;
     key_compare _key_comp;
     node_allocator _alloc;
 
   public:
+
     map_tree(node_pointer root, key_compare comp, const node_allocator &alloc)
-        : _root(root), _key_comp(comp), _alloc(alloc)
+        : root(root), _key_comp(comp), _alloc(alloc)
     {
     }
 
     map_tree(const map_tree &old)
-        : _root(old._root), _key_comp(old._key_comp), _alloc(old._alloc)
+        : root(old.root), _key_comp(old._key_comp), _alloc(old._alloc)
     {
-    }
-
-    node_pointer root(void) const
-    {
-        return _root;
     }
 
     node_pointer search_node(key_type key) const
     {
-        node_pointer node = root();
+        node_pointer node = root;
 
         // We start traversing from the root
         while (node != NULL)
@@ -93,20 +90,20 @@ class map_tree
     }
 
     // Returns true if the node was inserted
-    bool insert_node(const node_data &data)
+    ft::pair<node_pointer, bool> insert_node(const node_data &data)
     {
         node_pointer new_node = _alloc.allocate(1);
         _alloc.construct(new_node, node_type(data));
 
-        if (root() == NULL)
+        if (root == NULL)
         {
-            _root = new_node;
-            return true;
+            root = new_node;
+            return ft::make_pair(root, true);
         }
 
         // Traverse the tree to the left or
         // right depending on the key
-        node_pointer node = _root;
+        node_pointer node = root;
         node_pointer parent = NULL;
         while (node != NULL)
         {
@@ -125,7 +122,7 @@ class map_tree
             {
                 _alloc.destroy(new_node);
                 _alloc.deallocate(new_node, 1);
-                return false;
+                return ft::make_pair(node, false);
             }
         }
 
@@ -133,7 +130,7 @@ class map_tree
         new_node->color = RED;
         if (parent == NULL)
         {
-            _root = new_node;
+            root = new_node;
         }
         else if (_node_greater(parent, new_node))
         {
@@ -146,12 +143,12 @@ class map_tree
         new_node->parent = parent;
 
         _balance_after_insert(new_node);
-        return true;
+        return ft::make_pair(new_node, true);
     }
 
     void delete_node(key_type key)
     {
-        node_pointer node = _root;
+        node_pointer node = root;
 
         // Find the node to be deleted
         while (node != NULL && !_node_equal(node, key))
@@ -194,7 +191,7 @@ class map_tree
         {
             // Find minimum node of right subtree ("inorder successor" of
             // current node)
-            node_pointer successor = _minimum_node(node->right);
+            node_pointer successor = minimum_node(node->right);
 
             // Copy inorder successor's data to current node (keep its color!)
             _node_data_reassign(node, node->parent, successor->data);
@@ -224,18 +221,18 @@ class map_tree
 
     ~map_tree(void)
     {
-        _tree_pruner(_root);
-        _root = NULL;
+        _tree_pruner(root);
+        root = NULL;
     }
 
-    node_pointer next_node(node_pointer node)
+    node_pointer next_node(node_pointer node) const
     {
         if (node == NULL)
             return NULL;
 
         if (node->right != NULL)
         {
-            return _minimum_node(node->right);
+            return minimum_node(node->right);
         }
         else
         {
@@ -249,14 +246,14 @@ class map_tree
         }
     }
 
-    node_pointer previous_node(node_pointer node)
+    node_pointer previous_node(node_pointer node) const
     {
         if (node == NULL)
             return NULL;
 
-        if (node->right != NULL)
+        if (node->left != NULL)
         {
-            return _maximum_node(node->right);
+            return maximum_node(node->left);
         }
         else
         {
@@ -270,11 +267,31 @@ class map_tree
         }
     }
 
+    node_pointer minimum_node(node_pointer node) const
+    {
+        node_pointer min = node;
+        while (min->left != NULL)
+        {
+            min = min->left;
+        }
+        return min;
+    }
+
+    node_pointer maximum_node(node_pointer node) const
+    {
+        node_pointer max = node;
+        while (max->right != NULL)
+        {
+            max = max->right;
+        }
+        return max;
+    }
+
   private:
     void _balance_after_delete(node_pointer to_delete)
     {
         // Case 1: Examined node is root, end of recursion
-        if (to_delete == _root)
+        if (to_delete == root)
         {
             to_delete->color = BLACK;
             return;
@@ -365,14 +382,14 @@ class map_tree
         }
     }
 
-    bool _is_black(node_pointer node)
+    bool _is_black(const node_pointer node) const
     {
         if (node == NULL || node->color == BLACK)
             return true;
         return false;
     }
 
-    node_pointer _get_sibling(node_pointer node)
+    node_pointer _get_sibling(const node_pointer node) const
     {
         node_pointer parent = node->parent;
         if (node == parent->left)
@@ -486,7 +503,7 @@ class map_tree
         }
     }
 
-    node_pointer _get_uncle(node_pointer parent)
+    node_pointer _get_uncle(const node_pointer parent) const
     {
         node_pointer grandparent = parent->parent;
 
@@ -539,7 +556,7 @@ class map_tree
     {
         if (parent == NULL)
         {
-            _root = new_child;
+            root = new_child;
         }
         else if (parent->left == old_child)
         {
@@ -609,9 +626,9 @@ class map_tree
         new_node->left = node->left;
         new_node->right = node->right;
         new_node->parent = node->parent;
-        if (node == _root)
+        if (node == root)
         {
-            _root = new_node;
+            root = new_node;
         }
         else if (_node_less(node, parent))
         {
@@ -623,26 +640,6 @@ class map_tree
         }
         _alloc.destroy(node);
         _alloc.deallocate(node, 1);
-    }
-
-    node_pointer _minimum_node(node_pointer node)
-    {
-        node_pointer min = node;
-        while (min->left != NULL)
-        {
-            min = min->left;
-        }
-        return min;
-    }
-
-    node_pointer _maximum_node(node_pointer node)
-    {
-        node_pointer max = node;
-        while (max->right != NULL)
-        {
-            max = max->right;
-        }
-        return max;
     }
 
     void _tree_pruner(node_pointer &node)

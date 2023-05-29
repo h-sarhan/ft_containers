@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/26 19:54:14 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 01:24:55 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,10 @@ template <class T, class Alloc = std::allocator<T> > class vector
 
     // * Iterator range constructor
     template <class InputIterator>
-    vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(),
-           typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
+    vector(InputIterator first, InputIterator last,
+           const allocator_type &alloc = allocator_type(),
+           typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type
+               * = 0)
         : _alloc(alloc), _array(NULL), _size(0), _capacity(0)
     {
         if (is_one_way(first))
@@ -122,7 +124,8 @@ template <class T, class Alloc = std::allocator<T> > class vector
     }
 
     // * Copy constructor
-    vector(const vector &old) : _alloc(old._alloc), _size(old._size), _capacity(old._capacity)
+    vector(const vector &old)
+        : _alloc(old._alloc), _size(old._size), _capacity(old._capacity)
     {
         _array = _alloc.allocate(old._capacity);
         for (size_type i = 0; i < _size; i++)
@@ -195,25 +198,25 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // * Reverse iterator to last element
     reverse_iterator rbegin(void)
     {
-        return reverse_iterator(end());
+        return reverse_iterator(iterator(&_array[_size - 1]));
     }
 
     // * Const reverse iterator to last element
     const_reverse_iterator rbegin(void) const
     {
-        return const_reverse_iterator(end());
+        return const_reverse_iterator(const_iterator(&_array[_size - 1]));
     }
 
     // * Reverse iterator to first element
     reverse_iterator rend(void)
     {
-        return reverse_iterator(begin());
+        return reverse_iterator(iterator(&_array[- 1]));
     }
 
     // * Const reverse iterator to first element
     const_reverse_iterator rend(void) const
     {
-        return const_reverse_iterator(begin());
+        return const_reverse_iterator(const_iterator(&_array[- 1]));
     }
 
     // * Capacity
@@ -227,10 +230,12 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // * Max number of elements the vector can hold
     size_type max_size(void) const
     {
-        return std::min<size_type>(_alloc.max_size(), std::numeric_limits<difference_type>::max());
+        return std::min<size_type>(_alloc.max_size(),
+                                   std::numeric_limits<difference_type>::max());
     }
 
-    // * Resize the vector, adding extra elements if the new size is greater than the old size
+    // * Resize the vector, adding extra elements if the new size is greater
+    // than the old size
     // * Deletes elements if the new size is lower than the old one
     void resize(size_type n, value_type val = value_type())
     {
@@ -296,7 +301,8 @@ template <class T, class Alloc = std::allocator<T> > class vector
         return _array[i];
     }
 
-    // * Get element at index n of the vector, throws exception if n is out of range
+    // * Get element at index n of the vector, throws exception if n is out of
+    // range
     reference at(size_type n)
     {
         if (n >= _size)
@@ -344,8 +350,10 @@ template <class T, class Alloc = std::allocator<T> > class vector
 
     // * Iterator-based range assign
     template <class InputIterator>
-    void assign(InputIterator first, InputIterator last,
-                typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
+    void assign(
+        InputIterator first, InputIterator last,
+        typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * =
+            0)
     {
         if (is_one_way(first))
         {
@@ -477,8 +485,8 @@ template <class T, class Alloc = std::allocator<T> > class vector
                 if (i == 0)
                     break;
             }
-            // * std::memmove(_array + insert_idx + n, _array + insert_idx, (_size - insert_idx) *
-            // sizeof(value_type));
+            // * std::memmove(_array + insert_idx + n, _array + insert_idx,
+            // (_size - insert_idx) * sizeof(value_type));
         }
         (void) val;
         for (size_type i = 0; i < n; i++)
@@ -491,10 +499,13 @@ template <class T, class Alloc = std::allocator<T> > class vector
         _size += n;
     }
 
-    // * Inserts elements between first and last into the position specified by the given iterator
+    // * Inserts elements between first and last into the position specified by
+    // the given iterator
     template <class InputIterator>
-    void insert(iterator position, InputIterator first, InputIterator last,
-                typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * = 0)
+    void insert(
+        iterator position, InputIterator first, InputIterator last,
+        typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type * =
+            0)
     {
         if (is_one_way(first) && first != last)
         {
@@ -731,7 +742,8 @@ bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
     {
         return false;
     }
-    return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+    return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(),
+                                       rhs.end());
 }
 
 template <class T, class Alloc>
@@ -753,7 +765,8 @@ bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
 }
 
 // * Non-member functions
-template <class T, class Alloc> void swap(vector<T, Alloc> &x, vector<T, Alloc> &y)
+template <class T, class Alloc>
+void swap(vector<T, Alloc> &x, vector<T, Alloc> &y)
 {
     x.swap(y);
 }

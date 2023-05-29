@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tree_iterator.hpp                                  :+:      :+:    :+:   */
+/*   map_iterator.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 14:56:58 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/26 19:52:59 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 01:01:58 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ template <class MapTree> class map_iterator
 
   private:
     node_pointer _ptr;
-    tree_type *_tree;
+    const tree_type *_tree;
 
   public:
     map_iterator(void) : _ptr(NULL), _tree(NULL)
     {
     }
 
-    map_iterator(node_pointer ptr, tree_type *tree) : _ptr(ptr), _tree(tree)
+    map_iterator(node_pointer ptr, const tree_type *tree) : _ptr(ptr), _tree(tree)
     {
     }
 
@@ -81,7 +81,7 @@ template <class MapTree> class map_iterator
         if (_ptr == NULL)
         {
             // ? Get the first element of the map
-            // _ptr = min_node(get_root());
+            _ptr = _tree->minimum_node(_tree->root);
             return *this;
         }
         _ptr = _tree->next_node(_ptr);
@@ -95,7 +95,7 @@ template <class MapTree> class map_iterator
         if (_ptr == NULL)
         {
             // ? Get the last element of the map
-            // _ptr = max_node(get_root());
+            _ptr = _tree->maximum_node(_tree->root);
             return *this;
         }
         _ptr = _tree->previous_node(_ptr);

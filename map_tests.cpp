@@ -6,127 +6,268 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/26 22:32:15 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 01:22:07 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "make_pair.hpp"
-#include "map_tree.hpp"
-#include "node.hpp"
-#include "pair.hpp"
+#include "map.hpp"
+#include "vector.hpp"
 #include <cassert>
-#include <memory>
+#include <cstdio>
+#include <iostream>
+#include <map>
+#include <ostream>
+#include <set>
 #include <string>
 
-typedef ft::map_tree<int, std::string, std::less<int>,
-                     std::allocator<ft::map_node<int, std::string> > >
-    intToStrTree;
-
-static void treeInsertTests(void)
+void mapDefaultConstructor(void)
 {
-    intToStrTree s(NULL, std::less<int>(),
-                   std::allocator<ft::map_node<int, std::string> >());
-
-    s.insert_node(ft::make_pair(2, "two"));
-    s.insert_node(ft::make_pair(5, "five"));
-    s.insert_node(ft::make_pair(7, "seven"));
-    s.insert_node(ft::make_pair(8, ""));
-    s.insert_node(ft::make_pair(1, ""));
-    s.insert_node(ft::make_pair(7, ""));
-    s.insert_node(ft::make_pair(2, ""));
-    s.insert_node(ft::make_pair(-165789, ""));
-    s.insert_node(ft::make_pair(4, ""));
-
-    assert(s.search_node(2) != NULL);
-    assert(s.search_node(3) == NULL);
-    assert(s.search_node(2)->data.first == 2);
-    assert(s.search_node(2)->data.second == "two");
-    assert(s.search_node(-165789)->data.first == -165789);
-    assert(s.search_node(-165789)->data.second == "");
+    ft::map<std::string, int> a;
+    ft::map<std::string, int> b(a);
 }
 
-static void insertRandom(intToStrTree &tree)
+void mapSingleInsertNew(void)
 {
-    tree.insert_node(ft::make_pair(6, "six"));
-    tree.insert_node(ft::make_pair(14, "fourteen"));
-    tree.insert_node(ft::make_pair(12, "twelve"));
-    tree.insert_node(ft::make_pair(1, "one"));
-    tree.insert_node(ft::make_pair(19, "nineteen"));
-    tree.insert_node(ft::make_pair(10, "ten"));
-    tree.insert_node(ft::make_pair(3, "three"));
-    tree.insert_node(ft::make_pair(18, "eighteen"));
-    tree.insert_node(ft::make_pair(8, "eight"));
-    tree.insert_node(ft::make_pair(15, "fifteen"));
-    tree.insert_node(ft::make_pair(11, "eleven"));
-    tree.insert_node(ft::make_pair(4, "four"));
-    tree.insert_node(ft::make_pair(5, "five"));
-    tree.insert_node(ft::make_pair(17, "seventeen"));
-    tree.insert_node(ft::make_pair(16, "sixteen"));
-    tree.insert_node(ft::make_pair(7, "seven"));
-    tree.insert_node(ft::make_pair(2, "two"));
-    tree.insert_node(ft::make_pair(9, "nine"));
-    tree.insert_node(ft::make_pair(20, "twenty"));
-    tree.insert_node(ft::make_pair(13, "thirteen"));
+    ft::map<std::string, int> a;
+    a.insert(ft::make_pair("d", 4));
+    a.insert(ft::make_pair("b", 2));
+    a.insert(ft::make_pair("e", 5));
+    a.insert(ft::make_pair("c", 3));
+    a.insert(ft::make_pair("a", 1));
+
 }
 
-static void insertOrdered(intToStrTree &tree)
+void mapSingleErase(void)
 {
-    tree.insert_node(ft::make_pair(1, "one"));
-    tree.insert_node(ft::make_pair(2, "two"));
-    tree.insert_node(ft::make_pair(3, "three"));
-    tree.insert_node(ft::make_pair(4, "four"));
-    tree.insert_node(ft::make_pair(5, "five"));
-    tree.insert_node(ft::make_pair(6, "six"));
-    tree.insert_node(ft::make_pair(7, "seven"));
-    tree.insert_node(ft::make_pair(8, "eight"));
-    tree.insert_node(ft::make_pair(9, "nine"));
-    tree.insert_node(ft::make_pair(10, "ten"));
-    tree.insert_node(ft::make_pair(11, "eleven"));
-    tree.insert_node(ft::make_pair(12, "twelve"));
-    tree.insert_node(ft::make_pair(13, "thirteen"));
-    tree.insert_node(ft::make_pair(14, "fourteen"));
-    tree.insert_node(ft::make_pair(15, "fifteen"));
-    tree.insert_node(ft::make_pair(16, "sixteen"));
-    tree.insert_node(ft::make_pair(17, "seventeen"));
-    tree.insert_node(ft::make_pair(18, "eighteen"));
-    tree.insert_node(ft::make_pair(19, "nineteen"));
-    tree.insert_node(ft::make_pair(20, "twenty"));
+    ft::map<std::string, int> a;
+    a.insert(ft::make_pair("d", 4));
+    a.insert(ft::make_pair("b", 2));
+    a.insert(ft::make_pair("e", 5));
+    a.insert(ft::make_pair("c", 3));
+    a.insert(ft::make_pair("a", 1));
+
+    // assert(a.begin()->first == "a");
+    // a.erase("d");
+    a.erase(a.begin());
+    // a.erase(a.begin());
+    // assert(a.begin()->first == "c");
 }
 
-static void treeDeleteTests(void)
+void mapIterators(void)
 {
-    intToStrTree s(NULL, std::less<int>(),
-                   std::allocator<ft::map_node<int, std::string> >());
-
-    insertRandom(s);
-
-    for (int i = 1; i <= 50; i++)
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    for (ft::map<int, std::string>::reverse_iterator it = strToInt.rbegin(); it != strToInt.rend();
+         it++)
     {
-        s.delete_node(i);
-    }
-    for (int i = 1; i <= 20; i++)
-    {
-        assert(s.search_node(i) == NULL);
-    }
-
-    insertOrdered(s);
-    for (int i = 1; i <= 50; i++)
-    {
-        s.delete_node(i);
-    }
-    for (int i = 1; i <= 20; i++)
-    {
-        assert(s.search_node(i) == NULL);
+        std::cout << "Key " << it->first << std::endl;
+        std::cout << "Value " << it->second << std::endl;
     }
 }
 
-static void treeTests(void)
+void mapCount(void)
 {
-    treeInsertTests();
-    treeDeleteTests();
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    assert(strToInt.count(1) == 1);
+    assert(strToInt.count(5) == 0);
 }
+
+void mapRangeErase(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    ft::map<int, std::string>::iterator first = strToInt.begin();
+    ft::map<int, std::string>::iterator last = first;
+    last++;
+    last++;
+    strToInt.erase(first, last);
+    assert(strToInt.count(1) == 0);
+    assert(strToInt.count(2) == 0);
+    assert(strToInt.count(3) == 1);
+    assert(strToInt.count(4) == 1);
+}
+
+void mapClear(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    strToInt.insert(ft::make_pair(5, "five"));
+    strToInt.clear();
+    assert(strToInt.empty() == true);
+    assert(strToInt.size() == 0);
+    // strToInt.printTree();
+}
+
+void mapSwap(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    strToInt.insert(ft::make_pair(5, "five"));
+    ft::map<int, std::string> strToInt2;
+    strToInt2.insert(ft::make_pair(6, "six"));
+    strToInt2.insert(ft::make_pair(7, "seven"));
+    strToInt2.insert(ft::make_pair(8, "eight"));
+    strToInt2.insert(ft::make_pair(9, "nine"));
+    strToInt2.insert(ft::make_pair(10, "ten"));
+
+    strToInt2.swap(strToInt);
+    assert(strToInt.count(6) == 1);
+    assert(strToInt2.count(6) == 0);
+    assert(strToInt2.count(1) == 1);
+    assert(strToInt.count(1) == 0);
+}
+
+void mapRangeBasedConstructor(void)
+{
+    ft::vector<ft::pair<int, std::string> > vec;
+    vec.insert(vec.end(), ft::make_pair(3, "three"));
+    vec.insert(vec.end(), ft::make_pair(4, "four"));
+    vec.insert(vec.end(), ft::make_pair(1, "one"));
+    vec.insert(vec.end(), ft::make_pair(5, "five"));
+    vec.insert(vec.end(), ft::make_pair(2, "two"));
+    ft::map<int, std::string> strToInt(vec.begin(), vec.end());
+    // strToInt.printTree();
+    assert(strToInt.size() == 5);
+}
+
+void mapInsertWithReturnedIterator(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    ft::pair<ft::map<int, std::string>::iterator, bool> res =
+        strToInt.insert(ft::make_pair(5, "five"));
+    ft::map<int, std::string>::iterator lastIt = strToInt.end();
+    lastIt--;
+    assert(res.second == true);
+    assert(lastIt == res.first);
+    ft::pair<ft::map<int, std::string>::iterator, bool> res2 =
+        strToInt.insert(ft::make_pair(4, "four"));
+    assert(res2.second == false);
+    lastIt--;
+    assert(lastIt == res2.first);
+    ft::map<int, std::string>::iterator it = strToInt.insert(lastIt, ft::make_pair(7, "seven"));
+    lastIt = strToInt.end();
+    lastIt--;
+    assert(it == lastIt);
+    // strToInt.printTree();
+}
+
+void mapLowerBound(void)
+{
+    std::map<int, std::string> strToIntStd;
+    strToIntStd.insert(std::make_pair(1, "one"));
+    strToIntStd.insert(std::make_pair(3, "three"));
+    strToIntStd.insert(std::make_pair(4, "four"));
+    std::map<int, std::string>::iterator itStd = strToIntStd.lower_bound(4);
+    // it = strToInt.end();
+    std::cout << "std lower_bound == " << itStd->first << std::endl;
+
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    ft::map<int, std::string>::iterator it = strToInt.lower_bound(4);
+    // it = strToInt.end();
+    std::cout << "lower_bound == " << it->first << std::endl;
+
+    // std::map<int, std::string> strToInt2;
+    // strToInt2.insert(std::make_pair(1, "one"));
+    // strToInt2.insert(std::make_pair(3, "three"));
+    // strToInt2.insert(std::make_pair(4, "four"));
+    // std::map<int, std::string>::iterator it2 = strToInt2.lower_bound(5);
+    // // it = strToInt.end();
+    // std::cout << "lower_bound == " << it2->first << std::endl;
+}
+
+void mapUpperBound(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    ft::map<int, std::string>::iterator it = strToInt.upper_bound(3);
+    // it = strToInt.end();
+    std::cout << "upper_bound == " << it->first << std::endl;
+
+    std::map<int, std::string> strToInt2;
+    strToInt2.insert(std::make_pair(1, "one"));
+    strToInt2.insert(std::make_pair(3, "three"));
+    strToInt2.insert(std::make_pair(4, "four"));
+    std::map<int, std::string>::iterator it2 = strToInt2.upper_bound(3);
+    // it = strToInt.end();
+    std::cout << "upper_bound == " << it2->first << std::endl;
+}
+
+void mapFind(void)
+{
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    // strToInt.insert(ft::make_pair(3, "three"));
+    // strToInt.insert(ft::make_pair(3, "three"));
+    // strToInt.insert(ft::make_pair(3, "three"));
+    // strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(345534, "three"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(31212, "three"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(321, "three"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(5, "three"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    ft::map<int, std::string>::iterator it = strToInt.find(5);
+    std::cout << "Key == " << it->first << std::endl;
+}
+
 
 void mapTests(void)
 {
-    treeTests();
+    mapDefaultConstructor();
+    mapSingleInsertNew();
+    mapCount();
+    // ! PROBLEM TEST  
+    mapIterators();
+    mapSingleErase();
+    mapRangeErase();
+    mapClear();
+    mapSwap();
+    mapRangeBasedConstructor();
+    mapInsertWithReturnedIterator();
+    mapLowerBound();
+    mapUpperBound();
+
+
+    ft::map<int, std::string> strToInt;
+    strToInt.insert(ft::make_pair(1, "one"));
+    strToInt.insert(ft::make_pair(2, "two"));
+    strToInt.insert(ft::make_pair(3, "three"));
+    strToInt.insert(ft::make_pair(4, "four"));
+    for (ft::map<int, std::string>::iterator it = strToInt.begin(); it != strToInt.end();
+         it++)
+    {
+        std::cout << "Key " << it->first << std::endl;
+        std::cout << "Value " << it->second << std::endl;
+    }
 }

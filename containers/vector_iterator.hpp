@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 15:44:24 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/26 19:53:00 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/29 23:57:44 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ template <class T> class vector_iterator
     {
     }
 
-    template <class U> vector_iterator(const vector_iterator<U> &old) : _ptr(old.base())
+    template <class U>
+    vector_iterator(const vector_iterator<U> &old) : _ptr(old.base())
     {
     }
     template <class U> vector_iterator &operator=(const vector_iterator<U> &rhs)
@@ -135,7 +136,8 @@ template <class T> class vector_iterator
     }
 
     // * Iterator arithmetic
-    template <class U> difference_type operator-(const vector_iterator<U> &rhs) const
+    template <class U>
+    difference_type operator-(const vector_iterator<U> &rhs) const
     {
         return _ptr - rhs.base();
     }

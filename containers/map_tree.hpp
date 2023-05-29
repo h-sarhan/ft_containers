@@ -28,8 +28,9 @@ namespace ft
 // 4. A red node must not have red children.
 // 5. All paths from a node to the leaves below contain the same number of black
 // nodes.
-// The red black tree implementation based on
+// The red black tree implementation was based on
 // https://www.happycoders.eu/algorithms/red-black-tree-java/
+// ! WRITE BETTER COMMENTS
 template <class Key, class Value, class KeyCompare, class NodeAllocator>
 class map_tree
 {
@@ -206,7 +207,7 @@ class map_tree
 
         if (deleted_color == BLACK)
         {
-            // _balance_after_delete(replacement_node);
+            _balance_after_delete(replacement_node);
 
             // Remove the temporary NIL node
             if (replacement_node->fake_node == true)
@@ -228,29 +229,160 @@ class map_tree
     }
 
   private:
+    void _balance_after_delete(node_pointer to_delete)
+    {
+        // Case 1: Examined node is root, end of recursion
+        if (to_delete == _root)
+        {
+            to_delete->color = BLACK;
+            return;
+        }
+
+        node_pointer sibling = _get_sibling(to_delete);
+
+        // Case 2: Red sibling
+        if (sibling->color == RED)
+        {
+            _case_2(to_delete, sibling);
+            // Get new sibling for fall-through to cases 3-6
+            sibling = _get_sibling(to_delete);
+        }
+
+        // Cases 3+4: Black sibling with two black children
+        if (_is_black(sibling->left) && _is_black(sibling->right))
+        {
+            sibling->color = RED;
+
+            // Case 3: Black sibling with two black children + red parent
+            if (to_delete->parent->color == RED)
+            {
+                to_delete->parent->color = BLACK;
+            }
+
+            // Case 4: Black sibling with two black children + black parent
+            else
+            {
+                _balance_after_delete(to_delete->parent);
+            }
+        }
+
+        // Case 5+6: Black sibling with at least one red child
+        else
+        {
+            _case_5_6(to_delete, sibling);
+        }
+    }
+
+    void _case_5_6(node_pointer node, node_pointer sibling)
+    {
+        bool is_left_child;
+        if (node == node->parent->left)
+        {
+            is_left_child = true;
+        }
+        else
+        {
+            is_left_child = false;
+        }
+
+        // Case 5: Black sibling with at least one red child + "outer nephew" is
+        // black
+        // --> Recolor sibling and its child, and rotate around sibling
+        if (is_left_child && _is_black(sibling->right))
+        {
+            sibling->left->color = BLACK;
+            sibling->color = RED;
+            _rotate_right(sibling);
+            sibling = node->parent->right;
+        }
+        else if (!is_left_child && _is_black(sibling->left))
+        {
+            sibling->right->color = BLACK;
+            sibling->color = RED;
+            _rotate_left(sibling);
+            sibling = node->parent->left;
+        }
+
+        // Fall-through to case 6...
+
+        // Case 6: Black sibling with at least one red child + "outer nephew" is
+        // red
+        // --> Recolor sibling + parent + sibling's child, and rotate around
+        // parent
+        sibling->color = node->parent->color;
+        node->parent->color = BLACK;
+        if (is_left_child)
+        {
+            sibling->right->color = BLACK;
+            _rotate_left(node->parent);
+        }
+        else
+        {
+            sibling->left->color = BLACK;
+            _rotate_right(node->parent);
+        }
+    }
+
+    bool _is_black(node_pointer node)
+    {
+        if (node == NULL || node->color == BLACK)
+            return true;
+        return false;
+    }
+
+    node_pointer _get_sibling(node_pointer node)
+    {
+        node_pointer parent = node->parent;
+        if (node == parent->left)
+        {
+            return parent->right;
+        }
+        else
+        {
+            return parent->left;
+        }
+    }
+
+    void _case_2(node_pointer node, node_pointer sibling)
+    {
+        // Recolor...
+        sibling->color = BLACK;
+        node->parent->color = RED;
+
+        // ... and rotate
+        if (node == node->parent->left)
+        {
+            _rotate_left(node->parent);
+        }
+        else
+        {
+            _rotate_right(node->parent);
+        }
+    }
+
     void _balance_after_insert(node_pointer inserted_node)
     {
         node_pointer parent = inserted_node->parent;
 
-        // Case 1: New node is the root, the root has to be black so we color it
-        // black
+        // Case 1: New node is the root, the root has to be black so we
+        // color it black
         if (parent == NULL)
         {
             inserted_node->color = BLACK;
             return;
         }
 
-        // If the parent is black, then there is no violation of the red black
-        // tree rules when inserting a red node
+        // If the parent is black, then there is no violation of the red
+        // black tree rules when inserting a red node
         if (parent->color == BLACK)
         {
             return;
         }
-        // If the parent color is red then there is a violation and we need to
-        // fix it
+        // If the parent color is red then there is a violation and we need
+        // to fix it
 
-        // Get the grandparent and uncle these will help us fix the rest of the
-        // cases
+        // Get the grandparent and uncle these will help us fix the rest of
+        // the cases
         node_pointer grandparent = parent->parent;
         node_pointer uncle = _get_uncle(parent);
 
@@ -263,21 +395,22 @@ class map_tree
             uncle->color = BLACK;
             grandparent->color = RED;
             // Coloring the grandparent red can cause more red black tree
-            // violations so what we can do is recursively call this function on
-            // the grandparent until all violations have been fixed
+            // violations so what we can do is recursively call this
+            // function on the grandparent until all violations have been
+            // fixed
             _balance_after_insert(grandparent);
         }
 
         // Parent is a left child
         else if (parent == grandparent->left)
         {
-            // Case 3a: Parent is red, uncle is black, and the inserted_node is
-            // an inner grandchild, i.e. The path from the grandparent to the
-            // inserted_node forms a triangle
-            // For this case we have to rotate the parent in the opposite
-            // direction of the inserted_node, (so left) and then we rotate the
-            // grandparent in the opposite direction of the previous rotation,
-            // (so right) and finally we color the inserted_node black and the
+            // Case 3a: Parent is red, uncle is black, and the inserted_node
+            // is an inner grandchild, i.e. The path from the grandparent to
+            // the inserted_node forms a triangle For this case we have to
+            // rotate the parent in the opposite direction of the
+            // inserted_node, (so left) and then we rotate the grandparent
+            // in the opposite direction of the previous rotation, (so
+            // right) and finally we color the inserted_node black and the
             // original grandparent red
             if (inserted_node == parent->right)
             {
@@ -285,11 +418,11 @@ class map_tree
                 parent = inserted_node;
             }
 
-            // Case 4a: Parent is red, uncle is black, and the inserted_node is
-            // an outer grandchild, i.e. The path from the grandparent to the
-            // inserted_node forms a line. In this case we just need to rotate
-            // the grandparent in the opposite direction of the parent and
-            // inserted_node
+            // Case 4a: Parent is red, uncle is black, and the inserted_node
+            // is an outer grandchild, i.e. The path from the grandparent to
+            // the inserted_node forms a line. In this case we just need to
+            // rotate the grandparent in the opposite direction of the
+            // parent and inserted_node
             _rotate_right(grandparent);
 
             // Recolor original parent and grandparent
@@ -383,15 +516,15 @@ class map_tree
 
     node_pointer _delete_leaf_or_single_child(node_pointer to_delete)
     {
-        // If the node only has a left child then replace the node by its left
-        // child
+        // If the node only has a left child then replace the node by its
+        // left child
         if (to_delete->left)
         {
             _replace_child(to_delete->parent, to_delete, to_delete->left);
             return to_delete->left;
         }
-        // If the node only has a right child then replace the node by its right
-        // child
+        // If the node only has a right child then replace the node by its
+        // right child
         else if (to_delete->right)
         {
             _replace_child(to_delete->parent, to_delete, to_delete->right);
@@ -399,8 +532,8 @@ class map_tree
         }
         // Node has no children -->
         // * node is red --> just remove it
-        // * node is black --> replace it by a temporary NIL node (needed to fix
-        // the R-B rules)
+        // * node is black --> replace it by a temporary NIL node (needed to
+        // fix the R-B rules)
         else
         {
             // Node newChild = node.color == BLACK ? new NilNode() : null;
@@ -421,9 +554,10 @@ class map_tree
         }
     }
 
-    // disgusting hack to reassign a node's data, I cant do this the obvious way
-    // because the data for a map is a pair and the first type of the pair is
-    // const so the copy assignment operator for pair does not compile 😊
+    // Disgusting hack to reassign a node's data, I cant do this the obvious
+    // way because the data for a map is a pair and the first type of the
+    // pair is const so the copy assignment operator for pair does not
+    // compile 😊
     void _node_data_reassign(node_pointer node, node_pointer parent,
                              const node_data &data)
     {

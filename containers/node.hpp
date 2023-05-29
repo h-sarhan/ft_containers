@@ -31,11 +31,12 @@ template <class Key, class Value> struct map_node
     map_node *right;
     map_node *parent;
     bool      color;
+    bool      fake_node;
 
-    map_node(const node_data &data) : data(data), left(NULL), right(NULL), parent(NULL), color(BLACK)
+    map_node(const node_data &data = node_data()) : data(data), left(NULL), right(NULL), parent(NULL), color(BLACK), fake_node(false)
     {
     }
-    map_node(const map_node &old) : data(old.data), left(old.left), right(old.right), parent(old.parent), color(old.color)
+    map_node(const map_node &old) : data(old.data), left(old.left), right(old.right), parent(old.parent), color(old.color), fake_node(old.fake_node)
     {
     }
 };

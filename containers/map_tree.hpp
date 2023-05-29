@@ -153,10 +153,10 @@ class map_tree
         node_pointer node = _root;
 
         // Find the node to be deleted
-        while (node != NULL && node->data != key)
+        while (node != NULL && !_node_equal(node, key))
         {
             // Traverse the tree to the left or right depending on the key
-            if (key < node->data)
+            if (_node_greater(node, key))
             {
                 node = node->left;
             }
@@ -172,17 +172,19 @@ class map_tree
             return;
         }
 
+        node_pointer temp = node;
+
         // At this point, "node" is the node to be deleted
 
         // In this variable, we'll store the node at which we're going to start
-        // to fix the R-B properties after deleting a node->
+        // to fix the R-B properties after deleting a node
         node_pointer replacement_node;
         bool deleted_color;
 
         // Node has zero or one child
         if (node->left == NULL || node->right == NULL)
         {
-            replacement_node = _delete_leaf_or_single_node(node);
+            replacement_node = _delete_leaf_or_single_child(node);
             deleted_color = node->color;
         }
 
@@ -194,27 +196,29 @@ class map_tree
             node_pointer successor = _minimum_node(node->right);
 
             // Copy inorder successor's data to current node (keep its color!)
-            // node->data = successor->data;
             _node_data_reassign(node, node->parent, successor->data);
 
             // Delete inorder successor just as we would delete a node with 0 or
             // 1 child
-            replacement_node = _delete_leaf_or_single_node(successor);
+            replacement_node = _delete_leaf_or_single_child(successor);
             deleted_color = successor->color;
         }
 
         if (deleted_color == BLACK)
         {
-            _balance_after_delete(replacement_node);
+            // _balance_after_delete(replacement_node);
 
             // Remove the temporary NIL node
-            // ! ??
-            // ! if (moved_up_node->getClass() == NilNode->class)
-            // ! {
-            // !     replaceParentsChild(replacement_node->parent, replacement_node,
-            // !                         NULL);
-            // ! }
+            if (replacement_node->fake_node == true)
+            {
+                _replace_child(replacement_node->parent, replacement_node,
+                               NULL);
+                _alloc.destroy(replacement_node);
+                _alloc.deallocate(replacement_node, 1);
+            }
         }
+        _alloc.destroy(temp);
+        _alloc.deallocate(temp, 1);
     }
 
     ~map_tree(void)
@@ -377,9 +381,44 @@ class map_tree
         }
     }
 
-    void _delete_leaf_or_single_node(node_pointer to_delete,
-                                     node_pointer parent)
+    node_pointer _delete_leaf_or_single_child(node_pointer to_delete)
     {
+        // If the node only has a left child then replace the node by its left
+        // child
+        if (to_delete->left)
+        {
+            _replace_child(to_delete->parent, to_delete, to_delete->left);
+            return to_delete->left;
+        }
+        // If the node only has a right child then replace the node by its right
+        // child
+        else if (to_delete->right)
+        {
+            _replace_child(to_delete->parent, to_delete, to_delete->right);
+            return to_delete->right;
+        }
+        // Node has no children -->
+        // * node is red --> just remove it
+        // * node is black --> replace it by a temporary NIL node (needed to fix
+        // the R-B rules)
+        else
+        {
+            // Node newChild = node.color == BLACK ? new NilNode() : null;
+            // replaceParentsChild(node.parent, node, newChild);
+            node_pointer child;
+            if (to_delete->color == BLACK)
+            {
+                child = _alloc.allocate(1);
+                _alloc.construct(child, node_type());
+                child->fake_node = true;
+            }
+            else
+            {
+                child = NULL;
+            }
+            _replace_child(to_delete->parent, to_delete, child);
+            return child;
+        }
     }
 
     // disgusting hack to reassign a node's data, I cant do this the obvious way
@@ -408,6 +447,26 @@ class map_tree
         }
         _alloc.destroy(node);
         _alloc.deallocate(node, 1);
+    }
+
+    node_pointer _minimum_node(node_pointer node)
+    {
+        node_pointer min = node;
+        while (min->left != NULL)
+        {
+            min = min->left;
+        }
+        return min;
+    }
+
+    node_pointer _maximum_node(node_pointer node)
+    {
+        node_pointer max = node;
+        while (max->right != NULL)
+        {
+            max = max->right;
+        }
+        return max;
     }
 
     void _tree_pruner(node_pointer &node)

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 16:25:48 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 05:59:58 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 07:33:06 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ class map
     typedef Compare key_compare;
     typedef typename Alloc::template rebind<
         ft::map_node<const key_type, mapped_type> >::other allocator_type;
-    typedef typename allocator_type::reference reference;
-    typedef typename allocator_type::const_reference const_reference;
-    typedef typename allocator_type::pointer pointer;
-    typedef typename allocator_type::const_pointer const_pointer;
+    typedef typename Alloc::reference reference;
+    typedef typename Alloc::const_reference const_reference;
+    typedef typename Alloc::pointer pointer;
+    typedef typename Alloc::const_pointer const_pointer;
     typedef size_t size_type;
 
     class value_compare
@@ -49,7 +49,8 @@ class map
         key_compare _comp;
         value_compare(key_compare c) : _comp(c)
         {
-        }   // constructed with map's comparison object
+        }
+
       public:
         typedef bool result_type;
         typedef value_type first_argument_type;
@@ -312,19 +313,16 @@ class map
         allocator_type temp_allocator = x.get_allocator();
         size_type temp_size = x._size;
         node_pointer temp_bst_root = x._tree.root;
-        // tree_type *temp_tree_ptr = x._tree_ptr;
 
         x._comp = _comp;
         x._alloc = _alloc;
         x._size = _size;
         x._tree.root = _tree.root;
-        // x._tree_ptr = _tree_ptr;
 
         _comp = temp_comp;
         _alloc = temp_allocator;
         _size = temp_size;
         _tree.root = temp_bst_root;
-        // _tree_ptr = temp_tree_ptr;
         _tree_ptr = &_tree;
         x._tree_ptr = &x._tree;
     }
@@ -334,7 +332,6 @@ class map
         if (_size != 0 || _tree.root != NULL)
         {
             erase(begin(), end());
-            // _tree.root = NULL;
             _size = 0;
         }
     }
@@ -426,11 +423,12 @@ class map
         return end();
     }
 
-    pair<const_iterator, const_iterator> equal_range(const key_type &k) const
+    ft::pair<const_iterator, const_iterator> equal_range(
+        const key_type &k) const
     {
         return ft::make_pair(lower_bound(k), upper_bound(k));
     }
-    pair<iterator, iterator> equal_range(const key_type &k)
+    ft::pair<iterator, iterator> equal_range(const key_type &k)
     {
         return ft::make_pair(lower_bound(k), upper_bound(k));
     }

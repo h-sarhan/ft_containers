@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/19 16:25:38 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/29 23:57:44 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 07:19:37 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 
 namespace ft
 {
-
 template <class T, class Container = vector<T> > class stack
 {
   public:

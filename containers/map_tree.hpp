@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:41:27 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 04:07:59 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 07:14:19 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ namespace ft
 // nodes.
 // The red black tree implementation was based on
 // https://www.happycoders.eu/algorithms/red-black-tree-java/
-// ! WRITE BETTER COMMENTS
 template <class Key, class Value, class KeyCompare, class NodeAllocator>
 class map_tree
 {
@@ -109,12 +108,10 @@ class map_tree
         while (node != NULL)
         {
             parent = node;
-            // if (key < node->data)
             if (_node_greater(node, new_node))
             {
                 node = node->left;
             }
-            // else if (key > node->data)
             else if (_node_less(node, new_node))
             {
                 node = node->right;
@@ -171,12 +168,11 @@ class map_tree
             return;
         }
 
-
         // At this point, "node" is the node to be deleted
 
-        // In this variable, we'll store the node at which we're going to start
-        // to fix the R-B properties after deleting a node
+        // replacement_node is where a red black tree violation could occur
         node_pointer replacement_node;
+        // color of the deleted node
         bool deleted_color;
 
         // Node has zero or one child
@@ -185,27 +181,27 @@ class map_tree
             deleted_color = node->color;
             replacement_node = _delete_leaf_or_single_child(node);
         }
-
         // Node has two children
         else
         {
-            // Find minimum node of right subtree ("inorder successor" of
-            // current node)
+            // 1. find successor
+            // 2. copy successor data into the node
+            // 3. Delete successor
             node_pointer successor = minimum_node(node->right);
 
-            // Copy inorder successor's data to current node (keep its color!)
             node = _node_data_reassign(node, node->parent, successor->data);
 
-            // Delete inorder successor just as we would delete a node with 0 or
-            // 1 child
             deleted_color = successor->color;
             replacement_node = _delete_leaf_or_single_child(successor);
         }
+        // if the node we deleted was black in color then there was a violation,
+        // if it was red then there was no violation
         if (deleted_color == BLACK)
         {
+            // fix red black violations
             _balance_after_delete(replacement_node);
 
-            // Remove the temporary NIL node
+            // remove temporary node
             if (replacement_node->nil_node == true)
             {
                 _replace_child(replacement_node->parent, replacement_node,
@@ -222,17 +218,22 @@ class map_tree
         root = NULL;
     }
 
+    // successor node
     node_pointer next_node(node_pointer node) const
     {
         if (node == NULL)
             return NULL;
 
+        // if the node has a right subtree then the successor is the smallest
+        // node in that tree
         if (node->right != NULL)
         {
             return minimum_node(node->right);
         }
         else
         {
+            // otherwise we just have to traverse up the tree to find the first
+            // parent that is a left child
             node_pointer parent = node->parent;
             while (parent != NULL && node == parent->right)
             {
@@ -248,12 +249,16 @@ class map_tree
         if (node == NULL)
             return NULL;
 
+        // if the node has a left subtree then the predecessor is the largest
+        // node in that tree
         if (node->left != NULL)
         {
             return maximum_node(node->left);
         }
         else
         {
+            // otherwise we just have to traverse up the tree to find the first
+            // parent that is a right child
             node_pointer parent = node->parent;
             while (parent != NULL && node == parent->left)
             {
@@ -264,6 +269,7 @@ class map_tree
         }
     }
 
+    // find the smallest node in the test
     node_pointer minimum_node(node_pointer node) const
     {
         node_pointer min = node;
@@ -274,6 +280,7 @@ class map_tree
         return min;
     }
 
+    // find the largest node in the test
     node_pointer maximum_node(node_pointer node) const
     {
         node_pointer max = node;
@@ -287,50 +294,75 @@ class map_tree
   private:
     void _balance_after_delete(node_pointer to_delete)
     {
-        // Case 1: Examined node is root, end of recursion
+        // Case 1. If the node is root then we just color it black
         if (to_delete == root)
         {
             to_delete->color = BLACK;
             return;
         }
 
+        // Get the sibling node cuz it is used a lot in fixing the violations
         node_pointer sibling = _get_sibling(to_delete);
 
-        // Case 2: Red sibling
+        // Case 2. Red sibling
         if (sibling->color == RED)
         {
             _case_2(to_delete, sibling);
             // Get new sibling for fall-through to cases 3-6
             sibling = _get_sibling(to_delete);
+
+            // After fixing case 2 which involves some recolors and a rotation
+            // we will end up in one of cases 3 to 6
         }
 
-        // Cases 3+4: Black sibling with two black children
+        // Case 3/4. Two black children
         if (_is_black(sibling->left) && _is_black(sibling->right))
         {
+            // color the sibling red
             sibling->color = RED;
 
-            // Case 3: Black sibling with two black children + red parent
+            // Case 3. Two black children with a red parent
             if (to_delete->parent->color == RED)
             {
+                // Recolor the parent black
                 to_delete->parent->color = BLACK;
             }
 
-            // Case 4: Black sibling with two black children + black parent
+            // Case 4. Two black children and a black parent
             else
             {
+                // Recursively fix violations at the parent of the node we are
+                // deleting
                 _balance_after_delete(to_delete->parent);
             }
         }
-
-        // Case 5+6: Black sibling with at least one red child
+        // Case 5/6 Black sibling with a red child
         else
         {
             _case_5_6(to_delete, sibling);
         }
     }
 
+    // Fixing case 2 of the red black violation
+    void _case_2(node_pointer node, node_pointer sibling)
+    {
+        sibling->color = BLACK;
+        node->parent->color = RED;
+
+        if (node == node->parent->left)
+        {
+            _rotate_left(node->parent);
+        }
+        else
+        {
+            _rotate_right(node->parent);
+        }
+    }
+
+    // Fixing case 5 and 6 of potential violations after deleting a node
     void _case_5_6(node_pointer node, node_pointer sibling)
     {
+        // We check if the node we are deleting is a left child
         bool is_left_child;
         if (node == node->parent->left)
         {
@@ -341,9 +373,10 @@ class map_tree
             is_left_child = false;
         }
 
-        // Case 5: Black sibling with at least one red child + "outer
-        // nephew" is black
-        // --> Recolor sibling and its child, and rotate around sibling
+        // Case 5. "outer nephew is black" case
+        // to fix this we recolor the sibling node and its child
+        // and we rotate the sibling in the opposite direction of the node we
+        // want to delete
         if (is_left_child && _is_black(sibling->right))
         {
             sibling->left->color = BLACK;
@@ -359,12 +392,9 @@ class map_tree
             sibling = node->parent->left;
         }
 
-        // Fall-through to case 6...
-
-        // Case 6: Black sibling with at least one red child + "outer
-        // nephew" is red
-        // --> Recolor sibling + parent + sibling's child, and rotate around
-        // parent
+        // Case 6. "outer nephew is red" case
+        // to fix this we recolor the sibling, parent, sibling's child and we
+        // rotate the parent in the same direction of as the node
         sibling->color = node->parent->color;
         node->parent->color = BLACK;
         if (is_left_child)
@@ -379,6 +409,7 @@ class map_tree
         }
     }
 
+    // returns whether the node is black
     bool _is_black(const node_pointer node) const
     {
         if (node == NULL || node->color == BLACK)
@@ -386,6 +417,7 @@ class map_tree
         return false;
     }
 
+    // Get the opposite sibling node
     node_pointer _get_sibling(const node_pointer node) const
     {
         node_pointer parent = node->parent;
@@ -403,37 +435,21 @@ class map_tree
         }
     }
 
-    void _case_2(node_pointer node, node_pointer sibling)
-    {
-        // Recolor...
-        sibling->color = BLACK;
-        node->parent->color = RED;
-
-        // ... and rotate
-        if (node == node->parent->left)
-        {
-            _rotate_left(node->parent);
-        }
-        else
-        {
-            _rotate_right(node->parent);
-        }
-    }
-
+    // Fixing red black tree violations after inserting
     void _balance_after_insert(node_pointer inserted_node)
     {
         node_pointer parent = inserted_node->parent;
 
-        // Case 1: New node is the root, the root has to be black so we
-        // color it black
+        // if the parent is NULL then we are inserting the root node
+        // we color it black to satisfy the red black tree rules
         if (parent == NULL)
         {
             inserted_node->color = BLACK;
             return;
         }
 
-        // If the parent is black, then there is no violation of the red
-        // black tree rules when inserting a red node
+        // there are no possible violations after inserting a red node whose
+        // parent is black
         if (parent->color == BLACK)
         {
             return;
@@ -446,7 +462,7 @@ class map_tree
         node_pointer grandparent = parent->parent;
         node_pointer uncle = _get_uncle(parent);
 
-        // Case 2: Parent and uncle nodes are red
+        // Case 2. Parent and uncle nodes are red
         // For this case we color the parent and the uncle to black and the
         // grandparent to be red
         if (uncle != NULL && uncle->color == RED)
@@ -460,7 +476,6 @@ class map_tree
             // fixed
             _balance_after_insert(grandparent);
         }
-
         // Parent is a left child
         else if (parent == grandparent->left)
         {
@@ -504,6 +519,7 @@ class map_tree
         }
     }
 
+    // get the uncle node
     node_pointer _get_uncle(const node_pointer parent) const
     {
         node_pointer grandparent = parent->parent;
@@ -518,6 +534,8 @@ class map_tree
         }
     }
 
+    // Perform a right rotation, which changes the positions of the nodes at a
+    // specific subtree without changing their order lexicographically
     void _rotate_right(node_pointer node)
     {
         node_pointer parent = node->parent;
@@ -535,6 +553,8 @@ class map_tree
         _replace_child(parent, node, left);
     }
 
+    // Perform a left rotation, which changes the positions of the nodes at a
+    // specific subtree without changing their order lexicographically
     void _rotate_left(node_pointer node)
     {
         node_pointer parent = node->parent;
@@ -552,6 +572,7 @@ class map_tree
         _replace_child(parent, node, right);
     }
 
+    // replace a node while setting its parent pointers correctly
     void _replace_child(node_pointer parent, node_pointer old_child,
                         node_pointer new_child)
     {
@@ -563,13 +584,9 @@ class map_tree
         {
             parent->left = new_child;
         }
-        else if (parent->right == old_child)
-        {
-            parent->right = new_child;
-        }
         else
         {
-            throw std::runtime_error("bad in replace_child");
+            parent->right = new_child;
         }
 
         if (new_child != NULL)
@@ -578,10 +595,9 @@ class map_tree
         }
     }
 
+    // delete a node that has 0 or 1 child
     node_pointer _delete_leaf_or_single_child(node_pointer to_delete)
     {
-        // If the node only has a left child then replace the node by its
-        // left child
         if (to_delete->left != NULL)
         {
             node_pointer temp = to_delete->left;
@@ -590,8 +606,6 @@ class map_tree
             _alloc.deallocate(to_delete, 1);
             return temp;
         }
-        // If the node only has a right child then replace the node by its
-        // right child
         else if (to_delete->right != NULL)
         {
             node_pointer temp = to_delete->right;
@@ -600,19 +614,14 @@ class map_tree
             _alloc.deallocate(to_delete, 1);
             return temp;
         }
-        // Node has no children -->
-        // * node is red --> just remove it
-        // * node is black --> replace it by a temporary NIL node (needed to
-        // fix the R-B rules)
         else
         {
-            // Node newChild = node.color == BLACK ? new NilNode() : null;
-            // replaceParentsChild(node.parent, node, newChild);
             node_pointer child;
             if (to_delete->color == BLACK)
             {
                 child = _alloc.allocate(1);
-                _alloc.construct(child, map_node_nil<const key_type, mapped_type>());
+                _alloc.construct(child,
+                                 map_node_nil<const key_type, mapped_type>());
                 child->nil_node = true;
                 child->color = BLACK;
             }
@@ -662,6 +671,8 @@ class map_tree
         return new_node;
     }
 
+    // recursice function to delete the nodes of the tree
+    // this is used in the destructor
     void _tree_pruner(node_pointer &node)
     {
         if (node == NULL)
@@ -674,6 +685,8 @@ class map_tree
         _tree_pruner(left);
         _tree_pruner(right);
     }
+
+    // the rest are helper functions to compare nodes
 
     const key_type &_get_key(const node_pointer node) const
     {

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 05:50:33 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 06:35:27 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@
 #include "reverse_iterator.hpp"
 #include "vector_iterator.hpp"
 
-// ! Check all reallocs
-// ! Run the testers again
 namespace ft
 {
 template <class T, class Alloc = std::allocator<T> > class vector
@@ -497,7 +495,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
                     break;
             }
         }
-        (void) val;
         for (size_type i = 0; i < n; i++)
         {
             if (i + insert_idx >= _size)
@@ -518,7 +515,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
     {
         if (is_one_way(first) && first != last)
         {
-            // ! REPLACE
             const size_type insert_idx = position - begin();
             vector<value_type> temp(first, last);
             if (_size + temp.size() > _capacity)
@@ -551,7 +547,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
             return;
         }
 
-        // ! REPLACE
         const size_type insert_idx = position - begin();
         if (_size + dist > _capacity)
         {
@@ -597,7 +592,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
         }
         if (_size > 1)
         {
-            // if (erase_idx < _size)
             for (size_type i = erase_idx; i < _size - 1; i++)
             {
                 _alloc.destroy(&_array[i]);

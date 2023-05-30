@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 03:59:54 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 05:20:37 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void mapSingleInsertNew(void)
     a.insert(ft::make_pair("e", 5));
     a.insert(ft::make_pair("c", 3));
     a.insert(ft::make_pair("a", 1));
-
 }
 
 void mapSingleErase(void)
@@ -61,8 +60,8 @@ void mapIterators(void)
     strToInt.insert(ft::make_pair(2, "two"));
     strToInt.insert(ft::make_pair(3, "three"));
     strToInt.insert(ft::make_pair(4, "four"));
-    for (ft::map<int, std::string>::reverse_iterator it = strToInt.rbegin(); it != strToInt.rend();
-         it++)
+    for (ft::map<int, std::string>::reverse_iterator it = strToInt.rbegin();
+         it != strToInt.rend(); it++)
     {
         std::cout << "Key " << it->first << std::endl;
         std::cout << "Value " << it->second << std::endl;
@@ -165,7 +164,8 @@ void mapInsertWithReturnedIterator(void)
     assert(res2.second == false);
     lastIt--;
     assert(lastIt == res2.first);
-    ft::map<int, std::string>::iterator it = strToInt.insert(lastIt, ft::make_pair(7, "seven"));
+    ft::map<int, std::string>::iterator it =
+        strToInt.insert(lastIt, ft::make_pair(7, "seven"));
     lastIt = strToInt.end();
     lastIt--;
     assert(it == lastIt);
@@ -241,11 +241,49 @@ void mapFind(void)
     std::cout << "Key == " << it->first << std::endl;
 }
 
-#define NAMESPACE ft
-#include "gerard/include/map_templates.hpp"
+#include "mli/srcs/map/common.hpp"
+
+#include <list>
+
+#define T1 char
+#define T2 int
+typedef ft::pair<const T1, T2> T3;
+
+int rite_map(void)
+{
+    std::list<T3> lst;
+    unsigned int lst_size = 5;
+    for (unsigned int i = 0; i < lst_size; ++i)
+        lst.push_back(T3('a' + i, (i + 1) * 7));
+
+    TESTED_NAMESPACE::map<T1, T2> mp(lst.begin(), lst.end());
+    TESTED_NAMESPACE::map<T1, T2>::iterator it_ = mp.begin();
+    TESTED_NAMESPACE::map<T1, T2>::reverse_iterator it(it_), ite;
+    printSize(mp);
+
+    std::cout << (it_ == it.base()) << std::endl;
+    std::cout << (it_ == dec(it, 3).base()) << std::endl;
+
+    printPair(it.base());
+    printPair(inc(it.base(), 1));
+
+    std::cout << "TEST OFFSET" << std::endl;
+    --it;
+    printPair(it);
+    printPair(it.base());
+
+    it = mp.rbegin();
+    ite = mp.rend();
+    while (it != ite)
+        std::cout << "[rev] " << printPair(it++, false) << std::endl;
+    printReverse(mp);
+
+    return (0);
+}
 
 void mapTests(void)
 {
+    rite_map();
     // mapDefaultConstructor();
     // mapSingleInsertNew();
     // mapCount();
@@ -258,39 +296,4 @@ void mapTests(void)
     // mapInsertWithReturnedIterator();
     // mapLowerBound();
     // mapUpperBound();
-
-
-	NAMESPACE::map<int, int> test;
-	insertRandomValues(test, 10);
-	// printContent(test);
-	
-	NAMESPACE::map<int, int> clone(test);
-	// printContent(clone);
-
-	// clone.erase(1234);
-	// clone.erase(2339);
-	// clone.erase(9876);
-	// clone.erase(3919);
-	// printContent(clone);
-
-	clone.erase(clone.begin(), clone.begin());
-	clone.erase(clone.end(), clone.end());
-	// printContent(clone);
-
-	clone.swap(test);
-	// printContent(test);
-	// printContent(clone);
-
-	clone.erase(++(++(clone.begin())));
-	clone.erase(++(clone.begin()));
-	clone.erase(--clone.end());
-	// printContent(clone);
-
-	clone.erase(++(++clone.begin()), clone.end());
-	// printContent(clone);
-
-	test.erase(test.begin(), test.end());
-	// printContent(test);
-
 }
-

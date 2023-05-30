@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 20:54:39 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 01:21:16 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 05:16:31 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ template <class Iterator> class reverse_iterator
     reference operator*(void) const
     {
         iterator_type temp = _base;
+        temp--;
         return *temp;
     }
     pointer operator->(void) const

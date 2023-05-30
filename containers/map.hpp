@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 16:25:48 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 04:46:07 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 05:27:54 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ class map
 
   public:
     typedef ft::map_iterator<tree_type> iterator;
-    typedef ft::map_iterator<tree_type> const_iterator;
+    typedef ft::const_map_iterator<const tree_type> const_iterator;
     typedef ft::reverse_iterator<iterator> reverse_iterator;
     typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
     typedef
@@ -180,7 +180,7 @@ class map
             // idk
         }
         return reverse_iterator(
-            iterator(_tree.maximum_node(_tree.root), &_tree));
+            iterator(NULL, &_tree));
     }
     const_reverse_iterator rbegin(void) const
     {
@@ -189,7 +189,7 @@ class map
             // idk
         }
         return const_reverse_iterator(
-            const_iterator(_tree.maximum_node(_tree.root), &_tree));
+            const_iterator(node_type(), &_tree));
     }
 
     reverse_iterator rend(void)
@@ -198,7 +198,7 @@ class map
         {
             // idk
         }
-        return reverse_iterator(iterator(NULL, &_tree));
+        return reverse_iterator(iterator(_tree.minimum_node(_tree.root), &_tree));
     }
     const_reverse_iterator rend(void) const
     {
@@ -206,7 +206,7 @@ class map
         {
             // idk
         }
-        return const_reverse_iterator(const_iterator(NULL, &_tree));
+        return const_reverse_iterator(const_iterator(_tree.maximum_node(_tree.root), &_tree));
     }
 
     //** *** CAPACITY METHODS *** //

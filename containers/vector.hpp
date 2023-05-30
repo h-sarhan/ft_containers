@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 01:24:55 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 05:22:57 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,25 +198,25 @@ template <class T, class Alloc = std::allocator<T> > class vector
     // * Reverse iterator to last element
     reverse_iterator rbegin(void)
     {
-        return reverse_iterator(iterator(&_array[_size - 1]));
+        return reverse_iterator(iterator(&_array[_size]));
     }
 
     // * Const reverse iterator to last element
     const_reverse_iterator rbegin(void) const
     {
-        return const_reverse_iterator(const_iterator(&_array[_size - 1]));
+        return const_reverse_iterator(const_iterator(&_array[_size]));
     }
 
     // * Reverse iterator to first element
     reverse_iterator rend(void)
     {
-        return reverse_iterator(iterator(&_array[- 1]));
+        return reverse_iterator(iterator(&_array[0]));
     }
 
     // * Const reverse iterator to first element
     const_reverse_iterator rend(void) const
     {
-        return const_reverse_iterator(const_iterator(&_array[- 1]));
+        return const_reverse_iterator(const_iterator(&_array[0]));
     }
 
     // * Capacity

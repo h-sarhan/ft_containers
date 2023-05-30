@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:10:18 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 04:12:43 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 05:27:58 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ template <class Key, class Value> struct map_node
     map_node *parent;
     bool color;
     bool nil_node;
+
 
     map_node(const node_data &data = node_data())
         : data(data), left(NULL), right(NULL), parent(NULL), color(BLACK),

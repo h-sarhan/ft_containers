@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 08:57:45 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 01:22:07 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 03:59:54 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,33 +241,56 @@ void mapFind(void)
     std::cout << "Key == " << it->first << std::endl;
 }
 
+#define NAMESPACE ft
+#include "gerard/include/map_templates.hpp"
 
 void mapTests(void)
 {
-    mapDefaultConstructor();
-    mapSingleInsertNew();
-    mapCount();
-    // ! PROBLEM TEST  
-    mapIterators();
-    mapSingleErase();
-    mapRangeErase();
-    mapClear();
-    mapSwap();
-    mapRangeBasedConstructor();
-    mapInsertWithReturnedIterator();
-    mapLowerBound();
-    mapUpperBound();
+    // mapDefaultConstructor();
+    // mapSingleInsertNew();
+    // mapCount();
+    // mapIterators();
+    // mapSingleErase();
+    // mapRangeErase();
+    // mapClear();
+    // mapSwap();
+    // mapRangeBasedConstructor();
+    // mapInsertWithReturnedIterator();
+    // mapLowerBound();
+    // mapUpperBound();
 
 
-    ft::map<int, std::string> strToInt;
-    strToInt.insert(ft::make_pair(1, "one"));
-    strToInt.insert(ft::make_pair(2, "two"));
-    strToInt.insert(ft::make_pair(3, "three"));
-    strToInt.insert(ft::make_pair(4, "four"));
-    for (ft::map<int, std::string>::iterator it = strToInt.begin(); it != strToInt.end();
-         it++)
-    {
-        std::cout << "Key " << it->first << std::endl;
-        std::cout << "Value " << it->second << std::endl;
-    }
+	NAMESPACE::map<int, int> test;
+	insertRandomValues(test, 10);
+	// printContent(test);
+	
+	NAMESPACE::map<int, int> clone(test);
+	// printContent(clone);
+
+	// clone.erase(1234);
+	// clone.erase(2339);
+	// clone.erase(9876);
+	// clone.erase(3919);
+	// printContent(clone);
+
+	clone.erase(clone.begin(), clone.begin());
+	clone.erase(clone.end(), clone.end());
+	// printContent(clone);
+
+	clone.swap(test);
+	// printContent(test);
+	// printContent(clone);
+
+	clone.erase(++(++(clone.begin())));
+	clone.erase(++(clone.begin()));
+	clone.erase(--clone.end());
+	// printContent(clone);
+
+	clone.erase(++(++clone.begin()), clone.end());
+	// printContent(clone);
+
+	test.erase(test.begin(), test.end());
+	// printContent(test);
+
 }
+

@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 16:25:48 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 01:17:14 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 04:46:07 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ class map
     key_compare _comp;
     tree_type _tree;
     tree_type *_tree_ptr;
+    value_compare _val_comp;
 
   public:
     typedef ft::map_iterator<tree_type> iterator;
@@ -86,7 +87,8 @@ class map
     explicit map(const key_compare &comp = key_compare(),
                  const allocator_type &alloc = allocator_type())
         : _size(0), _alloc(alloc), _comp(comp),
-          _tree(tree_type(NULL, comp, alloc)), _tree_ptr(&_tree)
+          _tree(tree_type(NULL, comp, alloc)), _tree_ptr(&_tree),
+          _val_comp(_comp)
     {
     }
 
@@ -96,7 +98,8 @@ class map
         const key_compare &comp = key_compare(),
         const allocator_type &alloc = allocator_type())
         : _size(0), _alloc(alloc), _comp(comp),
-          _tree(tree_type(NULL, comp, alloc)), _tree_ptr(&_tree)
+          _tree(tree_type(NULL, comp, alloc)), _tree_ptr(&_tree),
+          _val_comp(_comp)
     {
         insert(first, last);
     }
@@ -105,7 +108,8 @@ class map
     // Insert everything in old map into the new map in a for loop
     map(const map &x)
         : _size(0), _alloc(x._alloc), _comp(x._comp),
-          _tree(tree_type(NULL, _comp, _alloc)), _tree_ptr(&_tree)
+          _tree(tree_type(NULL, _comp, _alloc)), _tree_ptr(&_tree),
+          _val_comp(x._val_comp)
     {
         insert(x.begin(), x.end());
     }
@@ -120,6 +124,7 @@ class map
         }
         clear();
         _comp = x._comp;
+        _val_comp = x._val_comp;
         _alloc = x._alloc;
         _size = 0;
         _tree.root = NULL;
@@ -193,8 +198,7 @@ class map
         {
             // idk
         }
-        return reverse_iterator(
-            iterator(NULL, &_tree));
+        return reverse_iterator(iterator(NULL, &_tree));
     }
     const_reverse_iterator rend(void) const
     {
@@ -202,8 +206,7 @@ class map
         {
             // idk
         }
-        return const_reverse_iterator(
-            const_iterator(NULL, &_tree));
+        return const_reverse_iterator(const_iterator(NULL, &_tree));
     }
 
     //** *** CAPACITY METHODS *** //
@@ -287,13 +290,15 @@ class map
     void erase(iterator first, iterator last)
     {
         iterator it = first;
+        ft::vector<key_type> keys;
         while (it != last)
         {
-            iterator next = it;
-            next++;
-            erase(it);
-            it = next;
+            keys.push_back(it->first);
+            it++;
         }
+        for (typename ft::vector<key_type>::iterator key_it = keys.begin();
+             key_it != keys.end(); key_it++)
+            erase(*key_it);
     }
 
     void swap(map &x)
@@ -341,7 +346,7 @@ class map
 
     value_compare value_comp(void) const
     {
-        return value_compare();
+        return _val_comp;
     }
 
     //** *** OPERATIONS  *** //
@@ -429,10 +434,85 @@ class map
         return ft::make_pair(lower_bound(k), upper_bound(k));
     }
 
-    allocator_type get_allocator(void) const
+    typename Alloc::template rebind<
+        ft::pair<const key_type, mapped_type> >::other
+    get_allocator(void) const
     {
-        return _alloc;
+        typename Alloc::template rebind<
+            ft::pair<const key_type, mapped_type> >::other alloc;
+        return alloc;
     }
 };
+
+// ** Relational operators
+template <class Key, class T, class Compare, class Alloc>
+bool operator==(const map<Key, T, Compare, Alloc> &lhs,
+                const map<Key, T, Compare, Alloc> &rhs)
+{
+    if (lhs.size() == 0 && rhs.size() == 0)
+    {
+        return true;
+    }
+    if (lhs.size() != rhs.size())
+    {
+        return false;
+    }
+    return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template <class Key, class T, class Compare, class Alloc>
+bool operator!=(const map<Key, T, Compare, Alloc> &lhs,
+                const map<Key, T, Compare, Alloc> &rhs)
+{
+    return !(lhs == rhs);
+}
+
+template <class Key, class T, class Compare, class Alloc>
+bool operator<(const map<Key, T, Compare, Alloc> &lhs,
+               const map<Key, T, Compare, Alloc> &rhs)
+{
+    if (lhs.size() == 0 && rhs.size() == 0)
+    {
+        return false;
+    }
+    if (lhs.size() == 0 && rhs.size() != 0)
+    {
+        return true;
+    }
+    if (lhs.size() != 0 && rhs.size() == 0)
+    {
+        return false;
+    }
+    return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(),
+                                       rhs.end());
+}
+
+template <class Key, class T, class Compare, class Alloc>
+bool operator<=(const map<Key, T, Compare, Alloc> &lhs,
+                const map<Key, T, Compare, Alloc> &rhs)
+{
+    return lhs == rhs || lhs < rhs;
+}
+
+template <class Key, class T, class Compare, class Alloc>
+bool operator>(const map<Key, T, Compare, Alloc> &lhs,
+               const map<Key, T, Compare, Alloc> &rhs)
+{
+    return rhs < lhs;
+}
+
+template <class Key, class T, class Compare, class Alloc>
+bool operator>=(const map<Key, T, Compare, Alloc> &lhs,
+                const map<Key, T, Compare, Alloc> &rhs)
+{
+    return rhs < lhs || lhs == rhs;
+}
+
+template <class Key, class T, class Compare, class Alloc>
+void swap(map<Key, T, Compare, Alloc> &x, map<Key, T, Compare, Alloc> &y)
+{
+    x.swap(y);
+}
+
 }   // namespace ft
 #endif

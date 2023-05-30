@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 15:41:27 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 01:03:46 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 04:07:59 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,15 @@ class map_tree
     typedef KeyCompare key_compare;
     typedef NodeAllocator node_allocator;
     typedef Key key_type;
+    typedef Value mapped_type;
 
     node_pointer root;
+
   private:
     key_compare _key_comp;
     node_allocator _alloc;
 
   public:
-
     map_tree(node_pointer root, key_compare comp, const node_allocator &alloc)
         : root(root), _key_comp(comp), _alloc(alloc)
     {
@@ -170,7 +171,6 @@ class map_tree
             return;
         }
 
-        node_pointer temp = node;
 
         // At this point, "node" is the node to be deleted
 
@@ -182,8 +182,8 @@ class map_tree
         // Node has zero or one child
         if (node->left == NULL || node->right == NULL)
         {
-            replacement_node = _delete_leaf_or_single_child(node);
             deleted_color = node->color;
+            replacement_node = _delete_leaf_or_single_child(node);
         }
 
         // Node has two children
@@ -194,20 +194,19 @@ class map_tree
             node_pointer successor = minimum_node(node->right);
 
             // Copy inorder successor's data to current node (keep its color!)
-            _node_data_reassign(node, node->parent, successor->data);
+            node = _node_data_reassign(node, node->parent, successor->data);
 
             // Delete inorder successor just as we would delete a node with 0 or
             // 1 child
-            replacement_node = _delete_leaf_or_single_child(successor);
             deleted_color = successor->color;
+            replacement_node = _delete_leaf_or_single_child(successor);
         }
-
         if (deleted_color == BLACK)
         {
             _balance_after_delete(replacement_node);
 
             // Remove the temporary NIL node
-            if (replacement_node->fake_node == true)
+            if (replacement_node->nil_node == true)
             {
                 _replace_child(replacement_node->parent, replacement_node,
                                NULL);
@@ -215,8 +214,6 @@ class map_tree
                 _alloc.deallocate(replacement_node, 1);
             }
         }
-        _alloc.destroy(temp);
-        _alloc.deallocate(temp, 1);
     }
 
     ~map_tree(void)
@@ -396,9 +393,13 @@ class map_tree
         {
             return parent->right;
         }
-        else
+        else if (node == parent->right)
         {
             return parent->left;
+        }
+        else
+        {
+            throw std::runtime_error("bad");
         }
     }
 
@@ -566,6 +567,10 @@ class map_tree
         {
             parent->right = new_child;
         }
+        else
+        {
+            throw std::runtime_error("bad in replace_child");
+        }
 
         if (new_child != NULL)
         {
@@ -577,17 +582,23 @@ class map_tree
     {
         // If the node only has a left child then replace the node by its
         // left child
-        if (to_delete->left)
+        if (to_delete->left != NULL)
         {
+            node_pointer temp = to_delete->left;
             _replace_child(to_delete->parent, to_delete, to_delete->left);
-            return to_delete->left;
+            _alloc.destroy(to_delete);
+            _alloc.deallocate(to_delete, 1);
+            return temp;
         }
         // If the node only has a right child then replace the node by its
         // right child
-        else if (to_delete->right)
+        else if (to_delete->right != NULL)
         {
+            node_pointer temp = to_delete->right;
             _replace_child(to_delete->parent, to_delete, to_delete->right);
-            return to_delete->right;
+            _alloc.destroy(to_delete);
+            _alloc.deallocate(to_delete, 1);
+            return temp;
         }
         // Node has no children -->
         // * node is red --> just remove it
@@ -601,14 +612,17 @@ class map_tree
             if (to_delete->color == BLACK)
             {
                 child = _alloc.allocate(1);
-                _alloc.construct(child, node_type());
-                child->fake_node = true;
+                _alloc.construct(child, map_node_nil<const key_type, mapped_type>());
+                child->nil_node = true;
+                child->color = BLACK;
             }
             else
             {
                 child = NULL;
             }
             _replace_child(to_delete->parent, to_delete, child);
+            _alloc.destroy(to_delete);
+            _alloc.deallocate(to_delete, 1);
             return child;
         }
     }
@@ -617,8 +631,8 @@ class map_tree
     // way because the data for a map is a pair and the first type of the
     // pair is const so the copy assignment operator for pair does not
     // compile 😊
-    void _node_data_reassign(node_pointer node, node_pointer parent,
-                             const node_data &data)
+    node_pointer _node_data_reassign(node_pointer node, node_pointer parent,
+                                     const node_data &data)
     {
         node_pointer new_node = _alloc.allocate(1);
         _alloc.construct(new_node, node_type(data));
@@ -626,6 +640,11 @@ class map_tree
         new_node->left = node->left;
         new_node->right = node->right;
         new_node->parent = node->parent;
+        new_node->color = node->color;
+        if (node->left != NULL)
+            node->left->parent = new_node;
+        if (node->right != NULL)
+            node->right->parent = new_node;
         if (node == root)
         {
             root = new_node;
@@ -640,6 +659,7 @@ class map_tree
         }
         _alloc.destroy(node);
         _alloc.deallocate(node, 1);
+        return new_node;
     }
 
     void _tree_pruner(node_pointer &node)

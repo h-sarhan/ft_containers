@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/24 16:25:48 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 05:27:54 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 05:59:58 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 namespace ft
 {
 template <class Key, class T, class Compare = std::less<Key>,
-          class Alloc = std::allocator<ft::map_node<const Key, T> > >
+          class Alloc = std::allocator<ft::pair<const Key, T> > >
 class map
 {
   public:
@@ -32,7 +32,8 @@ class map
     typedef T mapped_type;
     typedef ft::pair<const key_type, mapped_type> value_type;
     typedef Compare key_compare;
-    typedef Alloc allocator_type;
+    typedef typename Alloc::template rebind<
+        ft::map_node<const key_type, mapped_type> >::other allocator_type;
     typedef typename allocator_type::reference reference;
     typedef typename allocator_type::const_reference const_reference;
     typedef typename allocator_type::pointer pointer;
@@ -179,8 +180,7 @@ class map
         {
             // idk
         }
-        return reverse_iterator(
-            iterator(NULL, &_tree));
+        return reverse_iterator(iterator(NULL, &_tree));
     }
     const_reverse_iterator rbegin(void) const
     {
@@ -188,8 +188,7 @@ class map
         {
             // idk
         }
-        return const_reverse_iterator(
-            const_iterator(node_type(), &_tree));
+        return const_reverse_iterator(const_iterator(node_type(), &_tree));
     }
 
     reverse_iterator rend(void)
@@ -198,7 +197,8 @@ class map
         {
             // idk
         }
-        return reverse_iterator(iterator(_tree.minimum_node(_tree.root), &_tree));
+        return reverse_iterator(
+            iterator(_tree.minimum_node(_tree.root), &_tree));
     }
     const_reverse_iterator rend(void) const
     {
@@ -206,7 +206,8 @@ class map
         {
             // idk
         }
-        return const_reverse_iterator(const_iterator(_tree.maximum_node(_tree.root), &_tree));
+        return const_reverse_iterator(
+            const_iterator(_tree.maximum_node(_tree.root), &_tree));
     }
 
     //** *** CAPACITY METHODS *** //

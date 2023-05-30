@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 19:22:48 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/29 23:57:42 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 05:53:58 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static bool validate(InputIterator first, InputIterator last, size_t max_size,
                      std::random_access_iterator_tag)
 {
     const long dist = std::distance(first, last);
-    if (dist < 0 || dist >= (long) max_size)
+    if (dist < 0 || (size_t) dist >= max_size)
         return false;
     return true;
 }
@@ -42,7 +42,7 @@ static bool validate(InputIterator first, InputIterator last, size_t max_size,
                      std::forward_iterator_tag)
 {
     const long dist = std::distance(first, last);
-    if (dist < 0 || dist >= (long) max_size)
+    if (dist < 0 || (size_t) dist >= max_size)
         return false;
     return true;
 }
@@ -52,7 +52,7 @@ static bool validate(InputIterator first, InputIterator last, size_t max_size,
                      std::bidirectional_iterator_tag)
 {
     const long dist = std::distance(first, last);
-    if (dist < 0 || dist >= (long) max_size)
+    if (dist < 0 || (size_t) dist >= max_size)
         return false;
     return true;
 }
@@ -69,7 +69,7 @@ template <typename PointerType>
 bool validate_iterators(PointerType *first, PointerType *last, size_t max_size)
 {
     const long dist = last - first;
-    if (dist < 0 || dist >= (long) max_size)
+    if (dist < 0 || (size_t) dist >= max_size)
         return false;
     return true;
 }

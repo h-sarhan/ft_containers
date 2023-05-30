@@ -6,7 +6,7 @@
 /*   By: hsarhan <hsarhan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/02 09:42:21 by hsarhan           #+#    #+#             */
-/*   Updated: 2023/05/30 05:22:57 by hsarhan          ###   ########.fr       */
+/*   Updated: 2023/05/30 05:50:33 by hsarhan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,18 @@ template <class T, class Alloc = std::allocator<T> > class vector
     {
         if (n >= max_size())
             throw std::length_error("big");
-        _array = _alloc.allocate(n);
-        for (size_type i = 0; i < n; i++)
+        try
         {
-            _alloc.construct(&_array[i], val);
+            _array = _alloc.allocate(n);
+            for (size_type i = 0; i < n; i++)
+            {
+                _alloc.construct(&_array[i], val);
+            }
+        }
+        catch (const std::bad_alloc &)
+        {
+
+            throw std::length_error("big");
         }
     }
 
@@ -468,7 +476,10 @@ template <class T, class Alloc = std::allocator<T> > class vector
         {
             return;
         }
-        // ! REPLACE
+        if (n >= max_size())
+        {
+            throw std::length_error("Too big 😳");
+        }
         const size_type insert_idx = position - begin();
         if (_size + n > _capacity)
         {
@@ -485,8 +496,6 @@ template <class T, class Alloc = std::allocator<T> > class vector
                 if (i == 0)
                     break;
             }
-            // * std::memmove(_array + insert_idx + n, _array + insert_idx,
-            // (_size - insert_idx) * sizeof(value_type));
         }
         (void) val;
         for (size_type i = 0; i < n; i++)
